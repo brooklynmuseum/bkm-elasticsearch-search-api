@@ -1,6 +1,6 @@
 import * as T from '@elastic/elasticsearch/lib/api/types';
-import { getEnvVar } from '../various';
-import { client } from './client';
+import { getEnvVar } from '@/lib/various';
+import { client } from '../client';
 import type {
   ApiSearchResponse,
   ApiSearchResponseMetadata,

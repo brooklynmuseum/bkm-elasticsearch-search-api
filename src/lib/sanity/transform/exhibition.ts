@@ -1,5 +1,5 @@
 import { JsonData } from '@/types';
-import { setIfHasValue, portableTextToPlaintext } from '../../various';
+import { setIfHasValue, portableTextToPlaintext } from '@/lib/various';
 
 export default function transformExhibition(exhibition: JsonData): JsonData {
   const esDoc: JsonData = {

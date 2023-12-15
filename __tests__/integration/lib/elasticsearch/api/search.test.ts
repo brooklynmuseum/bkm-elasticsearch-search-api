@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config({ path: '.env.test' });
-import { search } from '@/lib/elasticsearch/search';
+import { search } from '@/lib/elasticsearch/api/search';
 
 describe('search function', () => {
   it('searches "Yamashita" and returns the expected result', async () => {
@@ -29,7 +29,6 @@ describe('search function', () => {
       resultsPerPage: 10,
       query: 'Spike Lee',
     });
-    console.log(result);
     expect(result.data).toHaveLength(10);
     expect(result.metadata?.count).toEqual(65);
   });

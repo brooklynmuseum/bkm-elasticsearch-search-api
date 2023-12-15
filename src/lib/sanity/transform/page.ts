@@ -1,5 +1,5 @@
 import { JsonData } from '@/types';
-import { setIfHasValue, portableTextToPlaintext } from '../../various';
+import { setIfHasValue, portableTextToPlaintext } from '@/lib/various';
 import { transformPageRoute } from './pageRoute';
 
 export default function transformPage(page: JsonData): JsonData | undefined {
