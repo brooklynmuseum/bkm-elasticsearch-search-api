@@ -1,15 +1,16 @@
 import * as T from '@elastic/elasticsearch/lib/api/types';
 import { getEnvVar } from '../various';
 import { client } from './client';
-import type { SearchResponse, SearchResponseMetadata, ElasticsearchDocument } from '@/types';
+import type {
+  ApiSearchResponse,
+  ApiSearchResponseMetadata,
+  ApiSearchParams,
+  ElasticsearchDocument,
+} from '@/types';
+import { addQueryBoolFilterTerm } from './searchQueryBuilder';
 
 const INDEX_NAME = getEnvVar('ELASTIC_INDEX_NAME');
-
-export interface SearchParams {
-  pageNumber: number; // page number
-  resultsPerPage: number; // number of results per page
-  query?: string; // search query
-}
+const SANITY_TYPES = getEnvVar('SANITY_TYPES');
 
 /**
  * Search for documents in one or more indices
@@ -17,7 +18,7 @@ export interface SearchParams {
  * @param searchParams Search parameters
  * @returns Elasticsearch search response
  */
-export async function search(searchParams: SearchParams): Promise<SearchResponse> {
+export async function search(searchParams: ApiSearchParams): Promise<ApiSearchResponse> {
   const esQuery: T.SearchRequest = {
     index: INDEX_NAME,
     query: { bool: { must: {} } },
@@ -51,14 +52,15 @@ export async function search(searchParams: SearchParams): Promise<SearchResponse
     ];
   }
 
+  if (searchParams.type && SANITY_TYPES.includes(searchParams.type)) {
+    addQueryBoolFilterTerm(esQuery, 'type', searchParams.type);
+  }
+
   const response: T.SearchTemplateResponse = await client.search(esQuery);
   const options = {};
   const metadata = getResponseMetadata(response, searchParams.resultsPerPage);
-  const data = response.hits.hits.map((hit) => {
-    const doc = hit._source as ElasticsearchDocument;
-    return doc?.rawSource;
-  });
-  const res: SearchResponse = { query: esQuery, data, options, metadata };
+  const data = response.hits.hits.map((hit) => hit._source);
+  const res: ApiSearchResponse = { query: esQuery, data, options, metadata };
   return res;
 }
 
@@ -72,7 +74,7 @@ export async function search(searchParams: SearchParams): Promise<SearchResponse
 function getResponseMetadata(
   response: T.SearchTemplateResponse,
   size: number,
-): SearchResponseMetadata {
+): ApiSearchResponseMetadata {
   let count = response?.hits?.total || 0; // Returns either number or SearchTotalHits
   if (typeof count !== 'number') count = count.value;
   return {

@@ -1,7 +1,31 @@
-import * as T from '@elastic/elasticsearch/lib/api/types';
-import { format } from 'date-fns';
-import type { SearchParams } from './search';
+// import * as T from '@elastic/elasticsearch/lib/api/types';
+// import { format } from 'date-fns';
 
+/**
+ * Add a term to a bool filter query
+ *
+ * @param esQuery   The ES query
+ * @param name    The name of the field to filter on
+ * @param value   The value to filter on
+ * @returns  Void.  The ES Query is modified in place
+ */
+export function addQueryBoolFilterTerm(
+  esQuery: any,
+  name: string,
+  value: string | boolean | number | undefined,
+): void {
+  if (!value) return;
+  esQuery.query ??= {};
+  esQuery.query.bool ??= {};
+  esQuery.query.bool.filter ??= [];
+  esQuery.query.bool.filter.push({
+    term: {
+      [name]: value,
+    },
+  });
+}
+
+/*
 const SEARCH_AGG_SIZE = 20; // 20 results per aggregation
 
 export function addQueryBoolDateRange(
@@ -42,8 +66,8 @@ export function addQueryBoolDateRange(
  *
  * @param esQuery The ES query to modify in place
  * @param searchParams The search params
- */
-export function addQueryBoolYearRange(esQuery: any, searchParams: SearchParams) {
+ */ /*
+export function addQueryBoolYearRange(esQuery: any, searchParams: ApiSearchParams) {
   const ranges: T.QueryDslQueryContainer[] = [];
   if (searchParams.startYear !== undefined && searchParams.endYear !== undefined) {
     ranges.push({
@@ -92,8 +116,8 @@ export function addQueryBoolYearRange(esQuery: any, searchParams: SearchParams) 
  * have already started OR have no start date.
  * @param esQuery
  * @param searchParams
- */
-export function addDefaultQueryBoolDateRange(esQuery: any, searchParams: SearchParams) {
+ */ /*
+export function addDefaultQueryBoolDateRange(esQuery: any, searchParams: ApiSearchParams) {
   const boolQuery: T.QueryDslQueryContainer = {
     bool: {
       should: [
@@ -123,7 +147,7 @@ export function addDefaultQueryBoolDateRange(esQuery: any, searchParams: SearchP
   esQuery.query.bool.filter.push(boolQuery);
 }
 
-export function addQueryBoolFilterTerms(esQuery: any, searchParams: SearchParams) {
+export function addQueryBoolFilterTerms(esQuery: any, searchParams: ApiSearchParams) {
   if (indicesMeta[searchParams.index]?.filters?.length > 0) {
     for (const filter of indicesMeta[searchParams.index].filters) {
       switch (filter) {
@@ -151,29 +175,7 @@ export function addQueryBoolFilterTerms(esQuery: any, searchParams: SearchParams
   }
 }
 
-/**
- * Add a term to a bool filter query
- *
- * @param esQuery   The ES query
- * @param name    The name of the field to filter on
- * @param value   The value to filter on
- * @returns  Void.  The ES Query is modified in place
- */
-export function addQueryBoolFilterTerm(
-  esQuery: any,
-  name: string,
-  value: string | boolean | number | undefined,
-): void {
-  if (!value) return;
-  esQuery.query ??= {};
-  esQuery.query.bool ??= {};
-  esQuery.query.bool.filter ??= [];
-  esQuery.query.bool.filter.push({
-    term: {
-      [name]: value,
-    },
-  });
-}
+
 
 export function addQueryBoolFilter(esQuery: any, filter: any): void {
   if (!filter) return;
@@ -189,7 +191,7 @@ export function addQueryBoolFilter(esQuery: any, filter: any): void {
  * @param esQuery   The ES query
  * @param name    The name of the field to filter on
  * @returns  Void.  The ES Query is modified in place
- */
+ */ /*
 export function addQueryBoolFilterExists(esQuery: any, name: string): void {
   esQuery.query ??= {};
   esQuery.query.bool ??= {};
@@ -207,7 +209,7 @@ export function addQueryBoolFilterExists(esQuery: any, name: string): void {
  * @param esQuery The ES query
  * @param name  The name of the field that must exist
  * @returns  Void.  The ES Query is modified in place
- */
+ */ /*
 export function addQueryBoolMustNotFilter(
   esQuery: any,
   name: string,
@@ -239,3 +241,4 @@ export function addQueryAggs(esQuery: any, indexName: string | string[] | undefi
     esQuery.aggs = aggs;
   }
 }
+*/
