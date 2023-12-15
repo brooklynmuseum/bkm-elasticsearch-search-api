@@ -1,7 +1,7 @@
 import transformCollectionArtist from '@/lib/sanity/transform/collectionArtist';
 
 describe('transformCollectionArtist', () => {
-  it('transforms the raw source correctly', () => {
+  it('transforms collectionArtist raw source correctly', () => {
     const rawSource = {
       _createdAt: '2023-11-20T17:08:44Z',
       _id: 'collection_artist_21279',

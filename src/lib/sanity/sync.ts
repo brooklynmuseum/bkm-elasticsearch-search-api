@@ -3,7 +3,7 @@ import { importFromFile } from './importFile';
 import { getEnvVar } from '../various';
 import { bulkUpsert } from '../elasticsearch/es';
 import { createIndex } from '../elasticsearch/es';
-import { denormalizeDocument } from './denormalize';
+import { hydrateDocument } from './hydrate';
 import type { JsonData, DataMap } from '@/types';
 
 export async function sync(datafile?: string) {
@@ -12,6 +12,7 @@ export async function sync(datafile?: string) {
   const sanityTypes = getEnvVar('SANITY_TYPES').split(',');
   const indexName = getEnvVar('ELASTIC_INDEX_NAME');
   const chunkSize = parseInt(getEnvVar('CHUNK_SIZE'), 10);
+  const hydrationDepth = parseInt(getEnvVar('HYDRATION_DEPTH'), 10);
   try {
     let dataMap: DataMap;
     if (datafile) {
@@ -20,7 +21,7 @@ export async function sync(datafile?: string) {
       dataMap = await importSanityDataMap(sanityProjectId, sanityDataset, []);
     }
     await createIndex(indexName, true);
-    await processChunkedData(dataMap, sanityTypes, chunkSize, async (chunk) =>
+    await processChunkedData(dataMap, sanityTypes, chunkSize, hydrationDepth, async (chunk) =>
       bulkUpsert(indexName, chunk),
     );
   } catch (error) {
@@ -32,6 +33,7 @@ export async function processChunkedData(
   dataMap: DataMap,
   typesToIndex: string[],
   chunkSize: number,
+  hydrationDepth: number,
   asyncProcessChunk: (chunk: JsonData[]) => Promise<void>,
 ): Promise<void> {
   console.log(`Processing ${typesToIndex.length} types in chunks of ${chunkSize}...`);
@@ -50,8 +52,9 @@ export async function processChunkedData(
         }
       }
 
-      const denormalizedDocument = denormalizeDocument(dataMap, document);
+      const denormalizedDocument = hydrateDocument(dataMap, document, hydrationDepth);
       const transformedDocument = transformers[document._type](denormalizedDocument);
+      if (!transformedDocument) continue; // Some content, like unrouted pages, cannot be indexed
       currentChunk.push(transformedDocument);
 
       if (currentChunk.length === chunkSize) {

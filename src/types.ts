@@ -1,6 +1,20 @@
 export type JsonData = { [key: string]: any };
 export type DataMap = Map<string, JsonData>;
 
+export type SanityRoute = {
+  path?: Array<{
+    _key: string;
+    _type: string;
+    value: string;
+  }>;
+  subroutes?: SanityRoute[];
+};
+
+export type SanitySlug = {
+  _type: string;
+  current?: string; // Make current optional
+};
+
 export interface ElasticsearchConstituent {
   id?: string;
   name: string;

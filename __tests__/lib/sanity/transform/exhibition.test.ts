@@ -1,7 +1,7 @@
 import transformExhibition from '@/lib/sanity/transform/exhibition';
 
 describe('transformExhibition', () => {
-  it('transforms the raw source correctly', () => {
+  it('transforms exhibition raw source correctly', () => {
     const rawSource = {
       _createdAt: '2023-12-11T17:05:23Z',
       _id: '232b72a6-3b97-41fe-bfc4-33c5649dda83',

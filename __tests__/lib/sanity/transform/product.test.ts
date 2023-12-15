@@ -1,7 +1,7 @@
 import transformProduct from '@/lib/sanity/transform/product';
 
 describe('transformPage', () => {
-  it('transforms the raw source correctly', () => {
+  it('transforms product raw source correctly', () => {
     const rawSource = {
       _createdAt: '2023-10-31T17:44:22Z',
       _id: 'shopifyProduct-7480139612356',

@@ -1,7 +1,7 @@
 import transformPage from '@/lib/sanity/transform/page';
 
 describe('transformPage', () => {
-  it('transforms the raw source correctly', () => {
+  it('transforms page raw source correctly', () => {
     const rawSource = {
       _createdAt: '2023-12-06T23:29:39Z',
       _id: '37d28e2e-fa8c-4e27-9c72-f3d236125613',
@@ -47,8 +47,23 @@ describe('transformPage', () => {
         description: 'Meta description for spanish ticketing document',
       },
       route: {
-        _ref: '9a16ba63-9234-477a-92bd-09f57890aed1',
-        _type: 'reference',
+        _createdAt: '2023-12-05T22:08:16Z',
+        _id: '9a16ba63-9234-477a-92bd-09f57890aed1',
+        _rev: '0p5udQTPrqAQYKCTOZf0ak',
+        _type: 'route',
+        _updatedAt: '2023-12-07T02:04:24Z',
+        path: [
+          {
+            _key: 'en-US',
+            _type: 'internationalizedArrayStringValue',
+            value: 'admissions',
+          },
+          {
+            _key: 'es-US',
+            _type: 'internationalizedArrayStringValue',
+            value: 'admisiones',
+          },
+        ],
       },
       slug: { _type: 'slug', current: 'boletos' },
       title: 'Boletos',
@@ -57,11 +72,13 @@ describe('transformPage', () => {
     const expected = {
       _id: '37d28e2e-fa8c-4e27-9c72-f3d236125613',
       title: 'Boletos',
+      url: '/admisiones/boletos',
       searchText: '', // TODO: Fix this
       language: 'es-US',
       rawSource,
     };
     const result = transformPage(rawSource);
+    console.log('xxx', result);
     expect(result).toEqual(expected);
   });
 });

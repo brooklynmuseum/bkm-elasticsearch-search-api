@@ -1,7 +1,7 @@
 import transformCollectionObject from '@/lib/sanity/transform/collectionObject';
 
 describe('transformCollectionObject', () => {
-  it('transforms the raw source correctly', () => {
+  it('transforms collectionObject raw source correctly', () => {
     const rawSource = {
       _createdAt: '2023-11-20T17:08:45Z',
       _id: 'collection_object_149224',
