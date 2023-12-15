@@ -19,9 +19,9 @@ describe('transformCollectionArtist', () => {
       _id: 'collection_artist_21279',
       title: 'Guadalupe Maravilla',
       description: 'American, born El Salvador, born 1976',
-      endYear: 9999,
       nationality: 'American, born El Salvador',
       startYear: 1976,
+      endYear: 9999,
       rawSource,
     };
     const result = transformCollectionArtist(rawSource);
