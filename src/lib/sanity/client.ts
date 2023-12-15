@@ -1,5 +1,5 @@
 import { createClient, type ClientConfig } from '@sanity/client';
-import { getEnvVar } from '../various';
+import { getEnvVar } from '../utils';
 
 // https://www.npmjs.com/package/@sanity/client#typescript
 const config: ClientConfig = {

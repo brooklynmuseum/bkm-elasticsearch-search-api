@@ -1,6 +1,6 @@
 import { importSanityDataMap } from './import';
 import { importFromFile } from './importFile';
-import { getEnvVar } from '../various';
+import { getEnvVar } from '../utils';
 import { bulkUpsert } from '../elasticsearch/es';
 import { createIndex } from '../elasticsearch/es';
 import { hydrateDocument } from './hydrate';

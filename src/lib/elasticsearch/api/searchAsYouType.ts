@@ -2,7 +2,7 @@ import * as T from '@elastic/elasticsearch/lib/api/types';
 
 import type { ApiSearchResponse, ElasticsearchDocument } from '@/types';
 import { client } from '../client';
-import { getEnvVar } from '@/lib/various';
+import { getEnvVar } from '@/lib/utils';
 
 const INDEX_NAME = getEnvVar('ELASTIC_INDEX_NAME');
 const MAX_SUGGESTIONS = 10; // Maximum number of suggestions to return

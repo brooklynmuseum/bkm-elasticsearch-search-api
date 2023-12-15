@@ -1,5 +1,5 @@
 import { JsonData } from '@/types';
-import { setIfHasValue } from '@/lib/various';
+import { setIfHasValue } from '@/lib/utils';
 
 export default function transformCollectionObject(collectionObject: JsonData): JsonData {
   const esDoc: JsonData = {

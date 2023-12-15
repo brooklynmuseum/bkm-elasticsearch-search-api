@@ -2,6 +2,12 @@ import type { JsonData } from '@/types';
 // import { toHTML } from '@portabletext/to-html';
 // import sanitizeHtml from 'sanitize-html';
 import { toPlainText } from '@portabletext/toolkit';
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export function getEnvVar(key: string, defaultValue?: string): string {
   const value = process.env[key];
