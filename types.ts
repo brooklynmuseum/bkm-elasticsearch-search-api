@@ -33,16 +33,6 @@ export interface ElasticsearchMuseumLocation {
   parentId?: string;
 }
 
-export interface ElasticsearchImage {
-  id?: string;
-  url?: string;
-  thumbnailUrl?: string;
-  alt?: string;
-  date?: string;
-  view?: string;
-  rank?: number;
-}
-
 export interface ElasticsearchDocument {
   _id?: string;
   _index?: string;
@@ -54,10 +44,47 @@ export interface ElasticsearchDocument {
   keywords?: string[];
   boostedKeywords?: string[];
   primaryConstituent?: ElasticsearchConstituent;
-  image?: ElasticsearchImage;
   startDate?: string;
   endDate?: string;
+  // Artwork fields:
+  accessionNumber?: string;
+  classification?: string;
   startYear?: number;
   endYear?: number;
-  original?: any;
+  // Artist fields:
+  nationality?: string;
+  // Original Sanity document:
+  rawSource?: any;
+}
+
+
+export interface SearchResponseMetadata {
+  count?: number;
+  pages?: number;
+}
+
+export interface SearchResponse {
+  query?: any;
+  data?: any;
+  terms?: any;
+  filters?: any;
+  options?: any;
+  metadata?: SearchResponseMetadata;
+  apiError?: string;
+  error?: any;
+}
+
+export interface AggOption {
+  key: string;
+  doc_count: number;
+}
+
+export interface Agg {
+  name: string;
+  displayName: string;
+  options?: Array<AggOption>;
+}
+
+export interface AggOptions {
+  [k: string]: AggOption[];
 }

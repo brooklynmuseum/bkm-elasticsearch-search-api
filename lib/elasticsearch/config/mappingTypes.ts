@@ -124,27 +124,3 @@ export const museumLocationObjectField: T.MappingProperty = {
     parentId: keywordField,
   },
 };
-
-export const imageObjectField: T.MappingProperty = {
-  properties: {
-    id: keywordField,
-    url: keywordField,
-    thumbnailUrl: keywordField,
-    alt: textField,
-    date: textField,
-    view: keywordField,
-    rank: integerField,
-  },
-};
-
-export const simpleImageObjectField: T.MappingProperty = {
-  properties: {
-    id: keywordField,
-    url: keywordField,
-    thumbnailUrl: keywordField,
-    alt: textField,
-    date: textField,
-    view: keywordField,
-    rank: integerField,
-  },
-};

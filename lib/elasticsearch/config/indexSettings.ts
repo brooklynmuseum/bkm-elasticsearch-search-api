@@ -1,5 +1,5 @@
 import * as T from '@elastic/elasticsearch/lib/api/types';
-import * as S from './settings';
+import * as S from './mappingTypes';
 
 export const indexSettings: T.IndicesIndexSettings = {
   settings: {
@@ -8,6 +8,7 @@ export const indexSettings: T.IndicesIndexSettings = {
   },
   mappings: {
     properties: {
+      // Universal search fields:
       type: S.keywordField,
       url: S.keywordField,
       title: S.suggestUnaggregatedStandardAnalyzerField,
@@ -16,12 +17,17 @@ export const indexSettings: T.IndicesIndexSettings = {
       keywords: S.unaggregatedStandardAnalyzerTextField,
       boostedKeywords: S.unaggregatedStandardAnalyzerTextField,
       primaryConstituent: S.constituentObjectField,
-      image: S.imageObjectField,
       startDate: S.dateField,
       endDate: S.dateField,
+      // Artwork-only fields:
+      accessionNumber: S.keywordField,
+      classification: S.keywordField,
       startYear: S.integerField,
       endYear: S.integerField,
-      original: S.disabledObjectField, // don't index original data
-    }
-  }
-}
+      // Artist-only fields:
+      nationality: S.keywordField,
+      // Original Sanity document:
+      rawSource: S.disabledObjectField, // don't index original data
+    },
+  },
+};
