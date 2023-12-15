@@ -14,6 +14,7 @@ export const indexSettings: T.IndicesIndexSettings = {
       title: S.suggestUnaggregatedStandardAnalyzerField,
       description: S.unaggregatedStandardAnalyzerTextField,
       searchText: S.unaggregatedStandardAnalyzerTextField,
+      categories: S.suggestUnaggregatedStandardAnalyzerField,
       keywords: S.unaggregatedStandardAnalyzerTextField,
       boostedKeywords: S.unaggregatedStandardAnalyzerTextField,
       primaryConstituent: S.constituentObjectField,

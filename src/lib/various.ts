@@ -21,6 +21,11 @@ export function setIfHasValue(obj: JsonData, key: string, value: any) {
   }
 }
 
+export function splitCommaSeparatedString(s: string): string[] {
+  if (!s) return [];
+  return s.split(',').map((s) => s.trim());
+}
+
 /**
  * TODO: This function doesn't seem to work with page content
  * @param portableTextBlocks

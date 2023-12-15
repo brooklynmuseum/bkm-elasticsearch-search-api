@@ -13,11 +13,11 @@ describe('search function', () => {
     expect(result.data[0]._id).toEqual('collection_artist_21585');
   });
 
-  it('searches "Spike Lee" and returns the expected result', async () => {
+  it('searches "Spike Lee Atlanta Georgia" and returns the expected result', async () => {
     const result = await search({
       pageNumber: 1,
       resultsPerPage: 10,
-      query: 'Spike Lee',
+      query: 'Spike Lee Atlanta Georgia',
     });
     expect(result.data).toHaveLength(1);
     expect(result.data[0]._id).toEqual('232b72a6-3b97-41fe-bfc4-33c5649dda83');

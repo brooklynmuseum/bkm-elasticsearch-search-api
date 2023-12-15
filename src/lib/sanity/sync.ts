@@ -46,7 +46,7 @@ export async function processChunkedData(
           transformers[document._type] = transformModule.default;
         } catch (error) {
           console.error(`Error loading transform function for type ${document._type}:`, error);
-          continue;
+          throw error;
         }
       }
 
