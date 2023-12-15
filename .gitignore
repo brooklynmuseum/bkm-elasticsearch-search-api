@@ -28,7 +28,7 @@ yarn-error.log*
 .turbo
 
 .contentlayer
-.env
+.env*
 !docker/.env
 
 es.secret.md
