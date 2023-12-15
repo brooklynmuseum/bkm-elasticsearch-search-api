@@ -7,13 +7,13 @@
 ### Run the sync
 
 ```
-ts-node sync.ts
+ts-node src/sync
 ```
 
 ### Run a query
 
 ```
-ts-node search.ts
+ts-node src/search
 ```
 
 ## TODO

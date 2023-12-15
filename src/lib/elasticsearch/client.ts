@@ -1,6 +1,6 @@
 import { Client } from '@elastic/elasticsearch';
 
-import { getEnvVar } from '../various';
+import { getEnvVar } from '@/lib/various';
 
 const useCloud = getEnvVar('ELASTIC_USE_CLOUD');
 const cloudId = getEnvVar('ELASTIC_CLOUD_ID');

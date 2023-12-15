@@ -1,4 +1,4 @@
-import type { JsonData } from '../types';
+import type { JsonData } from '@/types';
 
 export function getEnvVar(key: string, defaultValue?: string): string {
   const value = process.env[key];

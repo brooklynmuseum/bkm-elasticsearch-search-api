@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
-import { search } from './lib/elasticsearch/search';
+import { search } from '@/lib/elasticsearch/search';
 
 async function main() {
   const res = await search({

@@ -9,9 +9,9 @@
     "isolatedModules": true, 
     "noEmit": true, 
     "incremental": true, 
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@shared/*": ["../shared/*"]
+      "@/*": ["src/*"]
     }
   },
   "include": [
@@ -19,5 +19,12 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"],
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
+
 }

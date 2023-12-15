@@ -1,7 +1,7 @@
 import * as T from '@elastic/elasticsearch/lib/api/types';
 import { getEnvVar } from '../various';
 import { client } from './client';
-import type { SearchResponse, SearchResponseMetadata } from '../../types';
+import type { SearchResponse, SearchResponseMetadata, ElasticsearchDocument } from '@/types';
 
 const INDEX_NAME = getEnvVar('ELASTIC_INDEX_NAME');
 
@@ -55,7 +55,7 @@ export async function search(searchParams: SearchParams): Promise<SearchResponse
   const options = {};
   const metadata = getResponseMetadata(response, searchParams.resultsPerPage);
   const data = response.hits.hits.map((hit) => {
-    const doc = hit._source as any;
+    const doc = hit._source as ElasticsearchDocument;
     return doc?.rawSource;
   });
   const res: SearchResponse = { query: esQuery, data, options, metadata };
