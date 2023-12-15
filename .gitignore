@@ -35,3 +35,9 @@ es.secret.md
 **/.vscode/
 secrets/*
 elastic.md
+
+# next.js
+.next/
+out/
+build
+next-env.d.ts
