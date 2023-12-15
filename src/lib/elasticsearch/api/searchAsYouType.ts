@@ -15,13 +15,14 @@ const MAX_SUGGESTIONS = 10; // Maximum number of suggestions to return
  * @returns ApiSearchResponse object containing query and data
  */
 export async function searchAsYouType(q?: string | null): Promise<ApiSearchResponse> {
-  if (!q) return {};
+  const query = q?.trim();
+  if (!query) return {};
 
   const esQuery: T.SearchRequest = {
     index: INDEX_NAME,
     query: {
       multi_match: {
-        query: q,
+        query,
         type: 'bool_prefix',
         fields: ['title.suggest', 'title.suggest._2gram', 'title.suggest._3gram'],
       },

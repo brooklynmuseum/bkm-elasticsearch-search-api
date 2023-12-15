@@ -52,7 +52,7 @@ This project uses Jest for testing. Tests are located in the `__test__` folder a
 - Run only unit tests: `npm test:unit`
 - Run only integration tests: `npm test:integration`
 
-## Run
+## Sync
 
 ### Run the sync
 
@@ -66,6 +66,32 @@ To load data from the actual live Sanity dataset:
 
 ```
 npm run sync
+```
+
+## Run
+
+### Run the server
+
+```
+npm run dev
+```
+
+## API
+
+### Search
+
+Search for "spike" filtered by "exhibition" type:
+
+```
+http://localhost:3000/api/search?q=spike&type=exhibition
+```
+
+### Search-as-you-type
+
+Search-as-you-type for "spike":
+
+```
+http://localhost:3000/api/searchAsYouType?q=spike
 ```
 
 ## TODO
