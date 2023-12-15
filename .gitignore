@@ -35,5 +35,3 @@ es.secret.md
 **/.vscode/
 secrets/*
 elastic.md
-
-*.ndjson

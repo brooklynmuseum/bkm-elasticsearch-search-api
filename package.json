@@ -7,6 +7,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:ci": "jest --ci",
+    "sync:test": "ts-node src/testSync",
     "sync": "ts-node src/sync"
   },
   "keywords": [],
@@ -30,6 +31,7 @@
   "dependencies": {
     "@elastic/elasticsearch": "^8.11.0",
     "@portabletext/to-html": "^2.0.5",
+    "@portabletext/toolkit": "^2.0.10",
     "@sanity/client": "^6.10.0",
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",

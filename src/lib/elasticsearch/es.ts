@@ -1,6 +1,6 @@
 import { indexSettings } from './config/indexSettings';
 import { client } from './client';
-import type { JsonData } from '../../types';
+import type { JsonData } from '@/types';
 
 /**
  * Create an Elasticsearch index.
@@ -54,6 +54,8 @@ async function deleteIndex(indexName: string) {
  * @param documents Documents to be indexed.  Each document must define an `_id` property.
  */
 export async function bulkUpsert(indexName: string, documents: JsonData[]): Promise<void> {
+  if (!indexName || !documents || documents.length === 0) return;
+
   const body = documents.flatMap((doc) => {
     const docClone = { ...doc };
     delete docClone._id; // Delete the _id property

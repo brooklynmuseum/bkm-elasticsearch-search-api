@@ -1,4 +1,4 @@
-import { JsonData } from '../../../types';
+import { JsonData } from '@/types';
 import { setIfHasValue } from '../../various';
 
 export default function transformCollectionArtist(collectionArtist: JsonData): JsonData {

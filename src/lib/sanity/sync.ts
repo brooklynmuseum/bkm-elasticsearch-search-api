@@ -1,20 +1,24 @@
-// import { exportSanityDataMap } from './export';
-import { exportFromFile } from './exportFile';
+import { importSanityDataMap } from './import';
+import { importFromFile } from './importFile';
 import { getEnvVar } from '../various';
 import { bulkUpsert } from '../elasticsearch/es';
 import { createIndex } from '../elasticsearch/es';
 import { denormalizeDocument } from './denormalize';
-import type { JsonData, DataMap } from '../../types';
+import type { JsonData, DataMap } from '@/types';
 
-export async function sync() {
+export async function sync(datafile?: string) {
   const sanityProjectId = getEnvVar('SANITY_PROJECT_ID');
   const sanityDataset = getEnvVar('SANITY_DATASET');
   const sanityTypes = getEnvVar('SANITY_TYPES').split(',');
   const indexName = getEnvVar('ELASTIC_INDEX_NAME');
   const chunkSize = parseInt(getEnvVar('CHUNK_SIZE'), 10);
   try {
-    // const dataMap = await exportSanityDataMap(sanityProjectId, sanityDataset, []);
-    const dataMap = await exportFromFile('./output.ndjson');
+    let dataMap: DataMap;
+    if (datafile) {
+      dataMap = await importFromFile(datafile);
+    } else {
+      dataMap = await importSanityDataMap(sanityProjectId, sanityDataset, []);
+    }
     await createIndex(indexName, true);
     await processChunkedData(dataMap, sanityTypes, chunkSize, async (chunk) =>
       bulkUpsert(indexName, chunk),

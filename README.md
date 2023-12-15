@@ -54,6 +54,14 @@ npm test:watch
 
 ### Run the sync
 
+To load the test data from file (good for testing):
+
+```
+npm run sync:test
+```
+
+To load data from Sanity dataset:
+
 ```
 npm run sync
 ```
@@ -63,3 +71,5 @@ npm run sync
 Museum Location: only getting museumLocationId. Maybe museum location needs to be a document.
 
 Artist: is it a "collectionArtist" or an "Artist" augmented with collectionArtist data?
+
+Documents, esp. Page, might need a "Summary", "Description", or "CTA" field for short text. Can be used in search results. (will still index all page content)

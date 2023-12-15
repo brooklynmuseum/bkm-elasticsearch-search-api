@@ -1,5 +1,4 @@
-import { set } from 'date-fns';
-import { JsonData } from '../../../types';
+import { JsonData } from '@/types';
 import { setIfHasValue, portableTextToPlaintext } from '../../various';
 
 export default function transformExhibition(exhibition: JsonData): JsonData {
