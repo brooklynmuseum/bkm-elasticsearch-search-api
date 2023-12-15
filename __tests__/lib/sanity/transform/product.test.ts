@@ -42,6 +42,7 @@ describe('transformPage', () => {
 
     const expected = {
       _id: 'shopifyProduct-7480139612356',
+      type: 'product',
       title: 'Investigators: Ants In Pants',
       searchText: 'Henry Holt Books',
       language: 'es-US',

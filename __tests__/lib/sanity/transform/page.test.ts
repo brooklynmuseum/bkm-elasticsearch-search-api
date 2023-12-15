@@ -71,6 +71,7 @@ describe('transformPage', () => {
 
     const expected = {
       _id: '37d28e2e-fa8c-4e27-9c72-f3d236125613',
+      type: 'page',
       title: 'Boletos',
       url: '/admisiones/boletos',
       searchText: '', // TODO: Fix this

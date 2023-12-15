@@ -4,6 +4,7 @@ import { setIfHasValue } from '../../various';
 export default function transformCollectionObject(collectionObject: JsonData): JsonData {
   const esDoc: JsonData = {
     _id: collectionObject._id,
+    type: 'collectionObject',
     rawSource: collectionObject,
     language: 'en-US',
   };

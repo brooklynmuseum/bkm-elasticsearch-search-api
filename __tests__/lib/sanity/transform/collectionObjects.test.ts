@@ -189,6 +189,7 @@ describe('transformCollectionObject', () => {
 
     const expected = {
       _id: 'collection_object_149224',
+      type: 'collectionObject',
       title: 'Hook-shaped Toggle',
       startYear: 1868,
       endYear: 1933,

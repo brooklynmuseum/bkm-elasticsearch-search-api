@@ -4,6 +4,7 @@ import { setIfHasValue, splitCommaSeparatedString } from '../../various';
 export default function transformProduct(product: JsonData): JsonData {
   const esDoc: JsonData = {
     _id: product._id,
+    type: 'product',
     rawSource: product,
     language: 'es-US',
   };

@@ -4,6 +4,7 @@ import { setIfHasValue, portableTextToPlaintext } from '../../various';
 export default function transformExhibition(exhibition: JsonData): JsonData {
   const esDoc: JsonData = {
     _id: exhibition._id,
+    type: 'exhibition',
     rawSource: exhibition,
   };
   setIfHasValue(esDoc, 'title', exhibition.title);
