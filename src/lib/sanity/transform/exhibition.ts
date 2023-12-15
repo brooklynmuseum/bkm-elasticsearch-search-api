@@ -7,7 +7,7 @@ export default function transformExhibition(exhibition: JsonData): JsonData {
     type: 'exhibition',
     rawSource: exhibition,
   };
-  setIfHasValue(esDoc, 'title', exhibition.title);
+  setIfHasValue(esDoc, 'title', exhibition.title?.trim());
   setIfHasValue(esDoc, 'description', portableTextToPlaintext(exhibition.description));
   setIfHasValue(esDoc, 'startDate', exhibition.startsAt);
   setIfHasValue(esDoc, 'endDate', exhibition.endsAt);

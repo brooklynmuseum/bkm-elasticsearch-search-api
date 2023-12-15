@@ -11,7 +11,7 @@ export default function transformPage(page: JsonData): JsonData | undefined {
   const url = transformPageRoute(page.route, page.language, '', page.slug);
   if (!url) return; // don't index unrouted pages
   setIfHasValue(esDoc, 'url', url);
-  setIfHasValue(esDoc, 'title', page.title);
+  setIfHasValue(esDoc, 'title', page.title?.trim());
   setIfHasValue(esDoc, 'searchText', portableTextToPlaintext(page.content));
   setIfHasValue(esDoc, 'language', page.language);
   return esDoc;

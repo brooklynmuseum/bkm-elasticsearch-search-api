@@ -13,7 +13,7 @@
 
 Run Elasticsearch in a Docker container:
 
-The `/docker` folder contains a `docker-compose` file for running the Elasticsearch stack locally. (Only suitable for local development, as it's without security.)
+The `/docker` folder contains a `docker-compose` file for running the Elasticsearch stack locally. (No secruity, only suitable for local development.)
 
 1. `cd docker`
 2. `docker compose up`.
@@ -41,13 +41,16 @@ CHUNK_SIZE=1000 # number of documents to index in one batch
 HYDRATION_DEPTH=4 # 0 = no hydration, 1 = hydration of first level references, 2 = hydration of second level references, etc.
 ```
 
-## Test
+## Testing
+
+This project uses Jest for testing. Tests are located in the `__test__` folder and are split up into unit tests and integration tests.
 
 ### Run the tests
 
-```
-npm test:watch
-```
+- To run & watch unit tests: `npm test:watch`
+- To run & watch all tests: `npm test:watchall`
+- Run only unit tests: `npm test:unit`
+- Run only integration tests: `npm test:integration`
 
 ## Run
 
@@ -59,7 +62,7 @@ To load the test data from file (good for testing):
 npm run sync:test
 ```
 
-To load data from Sanity dataset:
+To load data from the actual live Sanity dataset:
 
 ```
 npm run sync
@@ -67,8 +70,7 @@ npm run sync
 
 ## TODO
 
-Museum Location: only getting museumLocationId. Maybe museum location needs to be a document.
-
-Artist: is it a "collectionArtist" or an "Artist" augmented with collectionArtist data?
-
-Documents, esp. Page, might need a "Summary", "Description", or "CTA" field for short text. Can be used in search results. (will still index all page content)
+- Museum Location: only getting museumLocationId. Maybe museum location needs to be a document.
+- Artist: is it a "collectionArtist" or an "Artist" augmented with collectionArtist data?
+- Documents, esp. Page, might need a "Summary", "Description", or "CTA" field for short text. Can be used in search results. (will still index all page content)
+- "language" or "locale"? (e.g. "en-US")

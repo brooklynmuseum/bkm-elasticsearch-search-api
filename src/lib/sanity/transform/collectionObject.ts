@@ -8,8 +8,8 @@ export default function transformCollectionObject(collectionObject: JsonData): J
     rawSource: collectionObject,
     language: 'en-US',
   };
-  setIfHasValue(esDoc, 'title', collectionObject.title);
-  setIfHasValue(esDoc, 'description', collectionObject.description);
+  setIfHasValue(esDoc, 'title', collectionObject.title?.trim());
+  setIfHasValue(esDoc, 'description', collectionObject.description?.trim());
   setIfHasValue(esDoc, 'startYear', collectionObject.objectDateBegin);
   setIfHasValue(esDoc, 'endYear', collectionObject.objectDateEnd);
   esDoc.searchText = collectionObject.accessionNumber;

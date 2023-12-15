@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watch --config=jest.unit.config.js",
+    "test:watchall": "jest --watch",
+    "test:unit": "jest --config=jest.unit.config.js",
+    "test:integration": "jest --config=jest.integration.config.js",
     "test:ci": "jest --ci",
     "sync:test": "ts-node src/testSync",
     "sync": "ts-node src/sync"

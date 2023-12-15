@@ -9,8 +9,8 @@ export default function transformProduct(product: JsonData): JsonData {
     language: 'es-US',
   };
   const store = product.store;
-  setIfHasValue(esDoc, 'title', store.title);
-  setIfHasValue(esDoc, 'searchText', store.vendor);
+  setIfHasValue(esDoc, 'title', store.title?.trim());
+  setIfHasValue(esDoc, 'searchText', store.vendor?.trim());
   setIfHasValue(esDoc, 'keywords', splitCommaSeparatedString(store.tags));
   return esDoc;
 }

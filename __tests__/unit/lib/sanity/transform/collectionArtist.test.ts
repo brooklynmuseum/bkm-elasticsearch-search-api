@@ -26,6 +26,7 @@ describe('transformCollectionArtist', () => {
       language: 'en-US',
       rawSource,
     };
+
     const result = transformCollectionArtist(rawSource);
     expect(result).toEqual(expected);
   });

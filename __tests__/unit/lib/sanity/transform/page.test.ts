@@ -79,7 +79,6 @@ describe('transformPage', () => {
       rawSource,
     };
     const result = transformPage(rawSource);
-    console.log('xxx', result);
     expect(result).toEqual(expected);
   });
 });

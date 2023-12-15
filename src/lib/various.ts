@@ -32,7 +32,7 @@ export function splitCommaSeparatedString(s: string): string[] {
  * @returns
  */
 export function portableTextToPlaintext(portableTextBlocks: any): string | undefined {
-  return toPlainText(portableTextBlocks);
+  return toPlainText(portableTextBlocks)?.trim();
 }
 
 /*
