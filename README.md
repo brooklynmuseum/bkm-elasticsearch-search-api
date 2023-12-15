@@ -9,20 +9,19 @@
 1. [Sign up for an Elasticsearch Cloud account](https://cloud.elastic.co/).
 2. Create a deployment. The free tier is sufficient for development.
 
-### Local Insecure Elasticsearch
+### Local Development Insecure Elasticsearch
 
 Run Elasticsearch in a Docker container:
 
-```bash
-docker run \
-       -p 9200:9200 \
-       -p 9300:9300 \
-       -e "discovery.type=single-node" \
-       -e "xpack.security.enabled=false" \
-       docker.elastic.co/elasticsearch/elasticsearch:8.10.0
-```
+The `/docker` folder contains a `docker-compose` file for running the Elasticsearch stack locally. (Only suitable for local development, as it's without security.)
 
-(Only suitable for local development, without SSL.)
+1. `cd docker`
+2. `docker compose up`.
+
+Once running, elasticsearch & kibana should be up and running at:
+
+1. Elasticsearch: http://0.0.0.0:9200/
+2. Kibana: http://0.0.0.0:5601/app/home#/
 
 ### Environment variables
 
@@ -31,15 +30,15 @@ You'll need a `.env` file and a `.env.test` (for testing) with the following var
 ```
 SANITY_PROJECT_ID=yourProjectId
 SANITY_DATASET=yourDataset
-#SANITY_TYPES=collectionObject,collectionArtist,exhibition,page,product
-SANITY_TYPES=collectionObject,collectionArtist
+SANITY_TYPES=collectionObject,collectionArtist,exhibition,page,product
 ELASTIC_USE_CLOUD=false
 ELASTIC_LOCAL_NODE=http://localhost:9200
-ELASTIC_CLOUD_ID=yourCloudId
+ELASTIC_CLOUD_ID=yourCloudId # only needed if ELASTIC_USE_CLOUD=true
 ELASTIC_CLOUD_USERNAME=yourCloudUsername
 ELASTIC_CLOUD_PASSWORD=yourCloudPassword
-ELASTIC_INDEX_NAME=content
-CHUNK_SIZE=1000
+ELASTIC_INDEX_NAME=content # name of the index to create
+CHUNK_SIZE=1000 # number of documents to index in one batch
+HYDRATION_DEPTH=4 # 0 = no hydration, 1 = hydration of first level references, 2 = hydration of second level references, etc.
 ```
 
 ## Test

@@ -7,7 +7,7 @@ export default function transformPage(page: JsonData): JsonData | undefined {
     _id: page._id,
     rawSource: page,
   };
-  const url = transformPageRoute(page.route, page.slug, page.language);
+  const url = transformPageRoute(page.route, page.language, '', page.slug);
   if (!url) return; // don't index unrouted pages
   setIfHasValue(esDoc, 'url', url);
   setIfHasValue(esDoc, 'title', page.title);
