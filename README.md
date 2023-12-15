@@ -2,6 +2,28 @@
 
 ## Installation
 
+## Elasticsearch Setup
+
+### Cloud Elasticsearch
+
+1. [Sign up for an Elasticsearch Cloud account](https://cloud.elastic.co/).
+2. Create a deployment. The free tier is sufficient for development.
+
+### Local Insecure Elasticsearch
+
+Run Elasticsearch in a Docker container:
+
+```bash
+docker run \
+       -p 9200:9200 \
+       -p 9300:9300 \
+       -e "discovery.type=single-node" \
+       -e "xpack.security.enabled=false" \
+       docker.elastic.co/elasticsearch/elasticsearch:8.10.0
+```
+
+(Only suitable for local development, without SSL.)
+
 ### Environment variables
 
 ```
