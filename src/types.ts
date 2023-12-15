@@ -1,4 +1,3 @@
-
 export type JsonData = { [key: string]: any };
 export type DataMap = Map<string, JsonData>;
 
@@ -46,17 +45,20 @@ export interface ElasticsearchDocument {
   primaryConstituent?: ElasticsearchConstituent;
   startDate?: string;
   endDate?: string;
+  language?: string;
+
   // Artwork fields:
   accessionNumber?: string;
   classification?: string;
   startYear?: number;
   endYear?: number;
+
   // Artist fields:
   nationality?: string;
+
   // Original Sanity document:
   rawSource?: any;
 }
-
 
 export interface SearchResponseMetadata {
   count?: number;

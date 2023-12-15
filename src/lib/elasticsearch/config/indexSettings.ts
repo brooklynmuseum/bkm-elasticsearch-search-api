@@ -19,13 +19,17 @@ export const indexSettings: T.IndicesIndexSettings = {
       primaryConstituent: S.constituentObjectField,
       startDate: S.dateField,
       endDate: S.dateField,
+      language: S.keywordField,
+
       // Artwork-only fields:
       accessionNumber: S.keywordField,
       classification: S.keywordField,
       startYear: S.integerField,
       endYear: S.integerField,
+
       // Artist-only fields:
       nationality: S.keywordField,
+
       // Original Sanity document:
       rawSource: S.disabledObjectField, // don't index original data
     },

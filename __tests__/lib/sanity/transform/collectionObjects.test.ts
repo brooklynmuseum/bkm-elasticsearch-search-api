@@ -199,6 +199,7 @@ describe('transformCollectionObject', () => {
         name: 'Alaska Native',
         role: 'Culture',
       },
+      language: 'en-US',
       rawSource,
     };
     const result = transformCollectionObject(rawSource);

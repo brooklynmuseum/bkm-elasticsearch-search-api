@@ -26,6 +26,8 @@ docker run \
 
 ### Environment variables
 
+You'll need a `.env` file and a `.env.test` (for testing) with the following variables:
+
 ```
 SANITY_PROJECT_ID=yourProjectId
 SANITY_DATASET=yourDataset
@@ -53,7 +55,7 @@ npm test:watch
 ### Run the sync
 
 ```
-ts-node src/sync
+npm run sync
 ```
 
 ## TODO

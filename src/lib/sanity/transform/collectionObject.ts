@@ -5,6 +5,7 @@ export default function transformCollectionObject(collectionObject: JsonData): J
   const esDoc: JsonData = {
     _id: collectionObject._id,
     rawSource: collectionObject,
+    language: 'en-US',
   };
   setIfHasValue(esDoc, 'title', collectionObject.title);
   setIfHasValue(esDoc, 'description', collectionObject.description);

@@ -5,6 +5,7 @@ export default function transformCollectionArtist(collectionArtist: JsonData): J
   const esDoc: JsonData = {
     _id: collectionArtist._id,
     rawSource: collectionArtist,
+    language: 'en-US',
   };
   setIfHasValue(esDoc, 'title', collectionArtist.name);
   setIfHasValue(esDoc, 'description', collectionArtist.dates);
