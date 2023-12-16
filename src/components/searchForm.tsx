@@ -150,7 +150,7 @@ export function SearchForm() {
         <div className="flex flex-col gap-4">
           <div className="grid w-full items-center gap-1.5">
             <Label htmlFor="url">URL</Label>
-            <Input id="url" className="" value={url} />
+            <Input id="url" className="" value={url} readOnly />
           </div>
           {metadata?.total ? (
             <div className="italic text-sm text-muted-foreground">
