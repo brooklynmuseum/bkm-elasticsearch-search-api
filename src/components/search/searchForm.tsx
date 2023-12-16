@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, FormEvent, ChangeEvent, KeyboardEvent } from 'react';
+import { useState, FormEvent, ChangeEvent, KeyboardEvent, Key } from 'react';
 import { SearchResult } from './searchResult';
 import { useDebounce } from '@/lib/debounce';
 import { Button } from '@/components/ui/button';
@@ -119,7 +119,7 @@ export function SearchForm() {
         </div>
       )}
       <div className="flex flex-col gap-4">
-        <div>
+        <div className="mb-4">
           <h2 className="text-lg font-bold mb-4">Search as you type</h2>
           <Input
             type="search"
@@ -130,7 +130,7 @@ export function SearchForm() {
             autoComplete="off"
           />
         </div>
-        <h2 className="text-lg font-bold">Regular Search</h2>
+        <h2 className="text-lg font-bold">Faceted Search</h2>
         <div className="grid w-full items-center gap-1.5">
           <Label htmlFor="searchQuery">Search Query</Label>
           <Input
@@ -178,8 +178,8 @@ export function SearchForm() {
           <TabsContent value="results">
             {searchResults && searchResults.data?.length > 0 && (
               <div className="grid grid-cols-1 gap-2">
-                {searchResults.data.map((result: ElasticsearchDocument) => (
-                  <SearchResult key={result._id} result={result} />
+                {searchResults.data.map((result: ElasticsearchDocument, i: Key) => (
+                  <SearchResult key={i} result={result} />
                 ))}
               </div>
             )}

@@ -30,7 +30,6 @@ You'll need a `.env` file and a `.env.test` (for testing) with the following var
 ```
 SANITY_PROJECT_ID=yourProjectId
 SANITY_DATASET=yourDataset
-SANITY_TYPES=collectionObject,collectionArtist,exhibition,page,product # only index documents of these types
 ELASTIC_USE_CLOUD=false
 ELASTIC_LOCAL_NODE=http://localhost:9200
 ELASTIC_CLOUD_ID=yourCloudId # only needed if ELASTIC_USE_CLOUD=true
