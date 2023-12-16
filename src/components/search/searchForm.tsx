@@ -15,7 +15,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { SearchIcon, Code2Icon, ListIcon } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { SearchIcon, Code2Icon, ListIcon, MessageCircleWarningIcon } from 'lucide-react';
 import type { ApiSearchResponse, ApiSearchResponseMetadata, ElasticsearchDocument } from '@/types';
 
 export function SearchForm() {
@@ -25,6 +26,7 @@ export function SearchForm() {
   const [url, setUrl] = useState('');
   const [searchResults, setSearchResults] = useState<ApiSearchResponse | null>(null);
   const [metadata, setMetadata] = useState<ApiSearchResponseMetadata>({});
+  const [error, setError] = useState('');
 
   const docTypes = ['collectionObject', 'collectionArtist', 'exhibition', 'page', 'product'];
 
@@ -38,11 +40,17 @@ export function SearchForm() {
     if (myQuery) {
       const currentUrl = `/api/searchAsYouType?query=${myQuery}`;
       setUrl(currentUrl);
+
       fetch(currentUrl)
         .then((res) => res.json())
         .then((data) => {
           setMetadata(data.metadata);
           setSearchResults(data);
+        })
+        .catch((error) => {
+          console.error('Error fetching search results:', error);
+          setError(error?.message);
+          setSearchResults(null);
         });
     }
   }, 50);
@@ -73,15 +81,17 @@ export function SearchForm() {
           'Content-Type': 'application/json',
         },
       });
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
       const data = await response.json();
-
       if (data?.metadata) {
         setMetadata(data.metadata);
       }
-
       setSearchResults(data); // Pretty print JSON
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching search results:', error);
+      setError(error?.message);
       setSearchResults(null);
     }
   };
@@ -99,6 +109,15 @@ export function SearchForm() {
 
   return (
     <div className="grid md:grid-cols-2 gap-6">
+      {error && (
+        <div className="flex flex-col gap-4 col-span-2">
+          <Alert variant="destructive">
+            <MessageCircleWarningIcon className="h-5 w-5" />
+            <AlertTitle>Error!</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        </div>
+      )}
       <div className="flex flex-col gap-4">
         <div>
           <h2 className="text-lg font-bold mb-4">Search as you type</h2>
