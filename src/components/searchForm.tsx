@@ -28,17 +28,21 @@ export function SearchForm() {
 
   const debouncedSuggest = useDebounce(() => {
     const myQuery = searchAsYouType?.trim();
+    setSearchResults('');
+    setSearchResults('');
     if (myQuery?.length < 3) {
-      setSearchResults('');
       return;
     }
-    if (myQuery)
-      fetch(`/api/searchAsYouType?query=${myQuery}`)
+    if (myQuery) {
+      const currentUrl = `/api/searchAsYouType?query=${myQuery}`;
+      setUrl(currentUrl);
+      fetch(currentUrl)
         .then((res) => res.json())
         .then((data) => {
           setMetadata(data.metadata);
           setSearchResults(JSON.stringify(data, null, 2));
         });
+    }
   }, 50);
 
   const onSearchAsYouTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -49,6 +53,8 @@ export function SearchForm() {
   // Function to fetch the API endpoint
   const fetchSearchResults = async () => {
     const queryParams = new URLSearchParams();
+    setUrl('');
+    setSearchResults('');
     if (searchQuery) {
       queryParams.append('query', searchQuery);
     }
