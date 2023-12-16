@@ -19,10 +19,8 @@ export function getClient(): Client {
           node: localNode,
         };
 
-  console.log('clientConfig', clientConfig);
   const client = new Client(clientConfig);
   if (client === undefined) throw new Error('Cannot connect to Elasticsearch.');
-  console.log('client', client);
   return client;
 }
 

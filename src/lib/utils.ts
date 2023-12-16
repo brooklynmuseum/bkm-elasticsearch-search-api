@@ -33,6 +33,16 @@ export function splitCommaSeparatedString(s: string): string[] {
 }
 
 /**
+ * Gets the legacy ID from a Sanity ID.
+ * collection_object_1234 -> 1234
+ * exhibition_1234 -> 1234
+ */
+export function getLegacyId(id: string): string {
+  const parts = id.split('_');
+  return parts[parts.length - 1];
+}
+
+/**
  * Gets the value of a boolean from a string or boolean, or return false.
  *
  * @param x the value to check

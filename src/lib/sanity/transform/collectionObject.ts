@@ -1,13 +1,22 @@
 import { JsonData } from '@/types';
 import { setIfHasValue } from '@/lib/utils';
+import { getLegacyId } from '@/lib/utils';
 
-export default function transformCollectionObject(collectionObject: JsonData): JsonData {
+export default function transformCollectionObject(
+  collectionObject: JsonData,
+  websiteUrl: string,
+): JsonData {
   const esDoc: JsonData = {
     _id: collectionObject._id,
     type: 'collectionObject',
     rawSource: collectionObject,
     language: 'en-US',
   };
+
+  const objectId = getLegacyId(collectionObject._id);
+  const collectionObjectUrl = `${websiteUrl}/opencollection/objects/${objectId}`;
+
+  setIfHasValue(esDoc, 'url', collectionObjectUrl);
   setIfHasValue(esDoc, 'title', collectionObject.title?.trim());
   setIfHasValue(esDoc, 'description', collectionObject.description?.trim());
   setIfHasValue(esDoc, 'startYear', collectionObject.objectDateBegin);
