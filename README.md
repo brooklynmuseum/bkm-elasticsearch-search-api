@@ -102,3 +102,4 @@ http://localhost:3000/api/searchAsYouType?query=spike
 - Documents, esp. Page, might need a "Summary", "Description", or "CTA" field for short text. Can be used in search results. (will still index all page content)
 - "language" or "locale"? (e.g. "en-US")
 - Derek: converting block text to plain text not working too well?
+- Doesn't collection object have an "image" property? (sometimes it's not rank 0)

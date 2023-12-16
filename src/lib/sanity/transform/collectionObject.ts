@@ -16,9 +16,12 @@ export default function transformCollectionObject(
   const objectId = getLegacyId(collectionObject._id);
   const collectionObjectUrl = `${websiteUrl}/opencollection/objects/${objectId}`;
 
+  const imageUrl = getImageUrl(collectionObject.images);
+
   setIfHasValue(esDoc, 'url', collectionObjectUrl);
   setIfHasValue(esDoc, 'title', collectionObject.title?.trim());
   setIfHasValue(esDoc, 'description', collectionObject.description?.trim());
+  setIfHasValue(esDoc, 'imageUrl', imageUrl);
   setIfHasValue(esDoc, 'startYear', collectionObject.objectDateBegin);
   setIfHasValue(esDoc, 'endYear', collectionObject.objectDateEnd);
   esDoc.searchText = collectionObject.accessionNumber;
@@ -30,7 +33,7 @@ export default function transformCollectionObject(
     const primaryConstituent = collectionObject.constituents.find(
       (constituent) => constituent.role && constituent.role.name === 'Artist' && constituent.artist,
     );
-    if (primaryConstituent && primaryConstituent.artist.name) {
+    if (primaryConstituent && primaryConstituent.artist?.name) {
       esDoc.primaryConstituent = {
         id: primaryConstituent.artist._id,
         name: primaryConstituent.artist.name,
@@ -41,7 +44,7 @@ export default function transformCollectionObject(
       const cultureConstituent = collectionObject.constituents.find(
         (constituent) => constituent.role && constituent.role.name === 'Culture',
       );
-      if (cultureConstituent && cultureConstituent.artist && cultureConstituent.artist.name) {
+      if (cultureConstituent && cultureConstituent.artist?.name) {
         esDoc.primaryConstituent = {
           id: cultureConstituent.artist._id,
           name: cultureConstituent.artist.name,
@@ -51,4 +54,18 @@ export default function transformCollectionObject(
     }
   }
   return esDoc;
+}
+
+function getImageUrl(images: any[]) {
+  if (images && Array.isArray(images) && images.length > 0) {
+    // sometimes there's a rank 0 image, sometimes not
+    let image = images.find((image) => image.rank === 0);
+    if (!image || !image.filename) {
+      image = images.find((image) => image.rank === 1);
+    }
+    if (image && image.filename) {
+      return `https://d1lfxha3ugu3d4.cloudfront.net/images/opencollection/objects/size0/${image.filename}`;
+    }
+  }
+  return '';
 }

@@ -54,6 +54,7 @@ export interface ElasticsearchDocument {
   title?: string;
   description?: string;
   searchText?: string;
+  imageUrl?: string;
   categories?: string[];
   keywords?: string[];
   boostedKeywords?: string[];
