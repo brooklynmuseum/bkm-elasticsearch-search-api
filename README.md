@@ -83,7 +83,7 @@ npm run dev
 Search for "spike" filtered by "exhibition" type:
 
 ```
-http://localhost:3000/api/search?q=spike&type=exhibition
+http://localhost:3000/api/search?query=spike&type=exhibition
 ```
 
 ### Search-as-you-type
@@ -91,7 +91,7 @@ http://localhost:3000/api/search?q=spike&type=exhibition
 Search-as-you-type for "spike":
 
 ```
-http://localhost:3000/api/searchAsYouType?q=spike
+http://localhost:3000/api/searchAsYouType?query=spike
 ```
 
 ## TODO

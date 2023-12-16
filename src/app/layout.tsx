@@ -1,7 +1,7 @@
 import './globals.css';
 import { Inter as FontSans } from 'next/font/google';
-
 import { cn } from '@/lib/utils';
+import { Header } from '@/components/layout/header';
 
 export const fontSans = FontSans({
   subsets: ['latin'],
@@ -13,7 +13,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <head />
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
-        {children}
+        <div className="relative flex min-h-screen flex-col">
+          <Header />
+          <main className="container">{children}</main>
+        </div>
       </body>
     </html>
   );

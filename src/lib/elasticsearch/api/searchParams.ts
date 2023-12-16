@@ -27,7 +27,7 @@ export function getSanitizedSearchParams(params: GenericSearchParams): SearchPar
   const sanitizedParams: Partial<SearchParams> = {};
 
   // page number between 1 and MAX_PAGES
-  const pageNumber = typeof params.p === 'string' ? parseInt(params.p, 10) : undefined;
+  const pageNumber = typeof params.page === 'string' ? parseInt(params.page, 10) : undefined;
   sanitizedParams.pageNumber =
     pageNumber && pageNumber > 0 && pageNumber <= MAX_PAGES ? pageNumber : 1;
 
@@ -36,8 +36,11 @@ export function getSanitizedSearchParams(params: GenericSearchParams): SearchPar
   sanitizedParams.resultsPerPage =
     size && size > 0 && size < MAX_SEARCH_PAGE_SIZE ? size : DEFAULT_SEARCH_PAGE_SIZE;
 
-  // q (search query)
-  sanitizedParams.query = typeof params.q === 'string' && params.q ? params.q : '';
+  // search query
+  sanitizedParams.query = typeof params.query === 'string' && params.query ? params.query : '';
+
+  // content type
+  sanitizedParams.type = typeof params.type === 'string' && params.type ? params.type : undefined;
 
   return sanitizedParams as SearchParams;
 }

@@ -11,18 +11,18 @@ const MAX_SUGGESTIONS = 10; // Maximum number of suggestions to return
  * Use Elasticsearch search-as-you-type to search terms:
  * https://www.elastic.co/guide/en/elasticsearch/reference/current/search-as-you-type.html
  *
- * @param params contains 'q' string representing query
+ * @param params contains 'query' string representing query
  * @returns ApiSearchResponse object containing query and data
  */
-export async function searchAsYouType(q?: string | null): Promise<ApiSearchResponse> {
-  const query = q?.trim();
-  if (!query) return {};
+export async function searchAsYouType(query?: string | null): Promise<ApiSearchResponse> {
+  const sanitizedQuery = query?.trim();
+  if (!sanitizedQuery) return {};
 
   const esQuery: T.SearchRequest = {
     index: INDEX_NAME,
     query: {
       multi_match: {
-        query,
+        query: sanitizedQuery,
         type: 'bool_prefix',
         fields: ['title.suggest', 'title.suggest._2gram', 'title.suggest._3gram'],
       },
@@ -33,6 +33,9 @@ export async function searchAsYouType(q?: string | null): Promise<ApiSearchRespo
 
   const response: T.SearchTemplateResponse = await client.search(esQuery);
   const data = response.hits.hits.map((h) => h._source as ElasticsearchDocument);
-  const res: ApiSearchResponse = { query: esQuery, data };
+  const metadata = {
+    count: response.hits?.total?.value,
+  };
+  const res: ApiSearchResponse = { query: esQuery, data, metadata };
   return res;
 }

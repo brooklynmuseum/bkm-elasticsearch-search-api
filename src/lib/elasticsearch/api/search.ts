@@ -8,6 +8,7 @@ import type {
   ElasticsearchDocument,
 } from '@/types';
 import { addQueryBoolFilterTerm } from './searchQueryBuilder';
+import { es } from 'date-fns/locale';
 
 const INDEX_NAME = getEnvVar('ELASTIC_INDEX_NAME');
 const SANITY_TYPES = getEnvVar('SANITY_TYPES');
