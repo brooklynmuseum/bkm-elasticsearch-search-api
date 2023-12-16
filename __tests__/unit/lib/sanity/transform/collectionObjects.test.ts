@@ -201,6 +201,8 @@ describe('transformCollectionObject', () => {
         name: 'Alaska Native',
         role: 'Culture',
       },
+      imageUrl:
+        'https://d1lfxha3ugu3d4.cloudfront.net/images/opencollection/objects/size0/74.212.4_bw.jpg',
       language: 'en-US',
       rawSource,
     };

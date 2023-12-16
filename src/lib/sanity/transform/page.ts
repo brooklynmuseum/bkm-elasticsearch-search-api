@@ -12,9 +12,11 @@ export default function transformPage(page: JsonData, websiteUrl: string): JsonD
   const path = transformPageRoute(page.route, page.language, '', page.slug);
   if (!path) return; // don't index unrouted pages
   const url = `${websiteUrl}${path}`;
+  const imageUrl = page.coverImage?.asset?.url;
 
   setIfHasValue(esDoc, 'url', url);
   setIfHasValue(esDoc, 'title', page.title?.trim());
+  setIfHasValue(esDoc, 'imageUrl', imageUrl);
   setIfHasValue(esDoc, 'searchText', portableTextToPlaintext(page.content));
   setIfHasValue(esDoc, 'language', page.language);
   return esDoc;

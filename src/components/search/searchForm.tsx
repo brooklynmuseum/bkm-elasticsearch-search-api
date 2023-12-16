@@ -5,7 +5,6 @@ import { SearchResult } from './searchResult';
 import { SearchPagination } from './searchPagination';
 import { useDebounce } from '@/lib/debounce';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import {
@@ -109,7 +108,7 @@ export function SearchForm() {
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {error && (
         <div className="flex flex-col gap-4 col-span-2">
           <Alert variant="destructive">
@@ -132,7 +131,7 @@ export function SearchForm() {
           />
         </div>
         <h2 className="text-lg font-bold">Faceted Search</h2>
-        <div className="grid w-full items-center gap-1.5">
+        <div className="grid items-center gap-1.5">
           <Label htmlFor="searchQuery">Search Query</Label>
           <Input
             id="searchQuery"
@@ -142,7 +141,7 @@ export function SearchForm() {
             onKeyPress={handleKeyPress}
           />
         </div>
-        <div className="grid w-full items-center gap-1.5">
+        <div className="grid items-center gap-1.5">
           <Label htmlFor="docType">Type</Label>
           <Select value={docType} onValueChange={(value) => setDocType(value)}>
             <SelectTrigger className="">
@@ -166,12 +165,12 @@ export function SearchForm() {
       </div>
       <div className="">
         <Tabs defaultValue="results">
-          <TabsList className="mb-4">
-            <TabsTrigger value="results">
+          <TabsList className="mb-4 flex items-center justify-center">
+            <TabsTrigger value="results" className="w-full">
               <ListIcon className="w-5 h-5 mr-2" />
               Results
             </TabsTrigger>
-            <TabsTrigger value="inspect">
+            <TabsTrigger value="inspect" className="w-full">
               <Code2Icon className="w-5 h-5 mr-2" />
               Inspect
             </TabsTrigger>
@@ -189,17 +188,14 @@ export function SearchForm() {
             )}
           </TabsContent>
           <TabsContent value="inspect">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 overflow-auto">
               <SearchPagination metadata={metadata} />
-              <div className="grid w-full items-center gap-1.5">
-                <Label htmlFor="url">URL</Label>
-                <Input id="url" className="bg-muted" value={url} readOnly />
-              </div>
-              <Textarea
-                className="h-[80vh] bg-muted"
-                value={searchResults ? JSON.stringify(searchResults, null, 2) : ''}
-                readOnly // Making this textarea read-only since it's for displaying results
-              />
+              <pre className="rounded-md bg-neutral-950 p-4 overflow-x-auto overflow-y-auto font-mono text-sm text-white">
+                <code>{url}</code>
+              </pre>
+              <pre className="h-[80vh] rounded-md bg-neutral-950 p-4 overflow-x-auto overflow-y-auto font-mono text-sm text-white">
+                <code>{JSON.stringify(searchResults, null, 2)}</code>
+              </pre>
             </div>
           </TabsContent>
         </Tabs>

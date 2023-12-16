@@ -22,6 +22,8 @@ describe('transformPage', () => {
             values: ['Default Title'],
           },
         ],
+        previewImageUrl:
+          'https://cdn.shopify.com/s/files/1/0780/5601/products/22_image_naturalcopy.png?v=1644363262',
         priceRange: { maxVariantPrice: 9.99, minVariantPrice: 9.99 },
         productType: 'Kids',
         slug: { _type: 'slug', current: 'investigators-ants-in-pants' },
@@ -45,6 +47,8 @@ describe('transformPage', () => {
       type: 'product',
       url: 'https://shop.brooklynmuseum.org/products/investigators-ants-in-pants',
       title: 'Investigators: Ants In Pants',
+      imageUrl:
+        'https://cdn.shopify.com/s/files/1/0780/5601/products/22_image_naturalcopy.png?v=1644363262',
       searchText: 'Henry Holt Books',
       language: 'es-US',
       keywords: ["Children's Bookfair", "Event_Children's Bookfair"],
