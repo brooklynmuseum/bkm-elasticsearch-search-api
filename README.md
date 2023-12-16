@@ -30,6 +30,7 @@ You'll need a `.env` file and a `.env.test` (for testing) with the following var
 ```
 SANITY_PROJECT_ID=yourProjectId
 SANITY_DATASET=yourDataset
+SANITY_TYPES=collectionObject,collectionArtist,exhibition,page,product # only index documents of these types
 ELASTIC_USE_CLOUD=false
 ELASTIC_LOCAL_NODE=http://localhost:9200
 ELASTIC_CLOUD_ID=yourCloudId # only needed if ELASTIC_USE_CLOUD=true
@@ -38,6 +39,7 @@ ELASTIC_CLOUD_PASSWORD=yourCloudPassword
 ELASTIC_INDEX_NAME=content # name of the index to create
 CHUNK_SIZE=1000 # number of documents to index in one batch
 HYDRATION_DEPTH=4 # 0 = no hydration, 1 = hydration of first level references, 2 = hydration of second level references, etc.
+WEBSITE_URL=https://www.brooklynmuseum.org # used for generating URLs for search results
 ```
 
 ## Testing

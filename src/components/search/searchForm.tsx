@@ -2,6 +2,7 @@
 
 import { useState, FormEvent, ChangeEvent, KeyboardEvent, Key } from 'react';
 import { SearchResult } from './searchResult';
+import { SearchPagination } from './searchPagination';
 import { useDebounce } from '@/lib/debounce';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -164,7 +165,7 @@ export function SearchForm() {
         </Button>
       </div>
       <div className="">
-        <Tabs defaultValue="inspect">
+        <Tabs defaultValue="results">
           <TabsList className="mb-4">
             <TabsTrigger value="results">
               <ListIcon className="w-5 h-5 mr-2" />
@@ -176,6 +177,9 @@ export function SearchForm() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="results">
+            <div className="mb-4">
+              <SearchPagination metadata={metadata} />
+            </div>
             {searchResults && searchResults.data?.length > 0 && (
               <div className="grid grid-cols-1 gap-2">
                 {searchResults.data.map((result: ElasticsearchDocument, i: Key) => (
@@ -186,18 +190,11 @@ export function SearchForm() {
           </TabsContent>
           <TabsContent value="inspect">
             <div className="flex flex-col gap-4">
+              <SearchPagination metadata={metadata} />
               <div className="grid w-full items-center gap-1.5">
                 <Label htmlFor="url">URL</Label>
                 <Input id="url" className="bg-muted" value={url} readOnly />
               </div>
-              {metadata?.total ? (
-                <div className="italic text-sm text-muted-foreground">
-                  {metadata.total} results
-                  {metadata.pages && ` in ${metadata.pages} pages`}
-                </div>
-              ) : (
-                <div className="italic text-sm text-muted-foreground">No results found.</div>
-              )}
               <Textarea
                 className="h-[80vh] bg-muted"
                 value={searchResults ? JSON.stringify(searchResults, null, 2) : ''}

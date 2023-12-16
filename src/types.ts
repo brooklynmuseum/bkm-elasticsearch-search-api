@@ -1,18 +1,6 @@
 export type JsonData = { [key: string]: any };
 export type DataMap = Map<string, JsonData>;
 
-export interface TypeConfig {
-  name: string;
-  basePath: string;
-}
-
-/**
- * Represents the site configuration.
- */
-export interface SiteConfig {
-  types: TypeConfig[];
-}
-
 export type SanityRoute = {
   path?: Array<{
     _key: string;

@@ -1,16 +1,11 @@
 import * as T from '@elastic/elasticsearch/lib/api/types';
 import { getEnvVar } from '@/lib/utils';
 import { client } from '../client';
-import { siteConfig } from '@/config/siteConfig';
-import type {
-  ApiSearchResponse,
-  ApiSearchResponseMetadata,
-  ApiSearchParams,
-  SiteConfig,
-} from '@/types';
+import type { ApiSearchResponse, ApiSearchResponseMetadata, ApiSearchParams } from '@/types';
 import { addQueryBoolFilterTerm } from './searchQueryBuilder';
 
 const INDEX_NAME = getEnvVar('ELASTIC_INDEX_NAME');
+const SANITY_TYPES = getEnvVar('SANITY_TYPES');
 
 /**
  * Search for documents in one or more indices
@@ -52,7 +47,7 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
     ];
   }
 
-  if (searchParams.type && siteConfig.types.find((type) => type.name === searchParams.type)) {
+  if (searchParams.type && SANITY_TYPES.includes(searchParams.type)) {
     addQueryBoolFilterTerm(esQuery, 'type', searchParams.type);
   }
 

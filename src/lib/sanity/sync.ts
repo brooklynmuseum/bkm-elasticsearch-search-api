@@ -4,12 +4,12 @@ import { getEnvVar } from '../utils';
 import { bulkUpsert } from '../elasticsearch/es';
 import { createIndex } from '../elasticsearch/es';
 import { hydrateDocument } from './hydrate';
-import type { JsonData, DataMap, SiteConfig, TypeConfig } from '@/types';
-import { siteConfig } from '@/config/siteConfig';
+import type { JsonData, DataMap } from '@/types';
 
 export async function sync(datafile?: string) {
   const sanityProjectId = getEnvVar('SANITY_PROJECT_ID');
   const sanityDataset = getEnvVar('SANITY_DATASET');
+  const sanityTypes = getEnvVar('SANITY_TYPES').split(',');
   const indexName = getEnvVar('ELASTIC_INDEX_NAME');
   const chunkSize = parseInt(getEnvVar('CHUNK_SIZE'), 10);
   const hydrationDepth = parseInt(getEnvVar('HYDRATION_DEPTH'), 10);
@@ -25,7 +25,7 @@ export async function sync(datafile?: string) {
     await createIndex(indexName, true);
     console.log(`Index ${indexName} created.`);
     console.log(`Indexing ${dataMap.size} documents...`);
-    await processChunkedData(dataMap, siteConfig.types, chunkSize, hydrationDepth, async (chunk) =>
+    await processChunkedData(dataMap, sanityTypes, chunkSize, hydrationDepth, async (chunk) =>
       bulkUpsert(indexName, chunk),
     );
   } catch (error) {
@@ -35,7 +35,7 @@ export async function sync(datafile?: string) {
 
 export async function processChunkedData(
   dataMap: DataMap,
-  typesToIndex: TypeConfig[],
+  typesToIndex: string[],
   chunkSize: number,
   hydrationDepth: number,
   asyncProcessChunk: (chunk: JsonData[]) => Promise<void>,
@@ -45,7 +45,7 @@ export async function processChunkedData(
   const transformers: Record<string, (doc: JsonData) => JsonData> = {}; // Cache for transform functions
 
   for (const [_, document] of dataMap) {
-    if (typesToIndex.find((type) => type.name === document._type)) {
+    if (typesToIndex.includes(document._type)) {
       if (!transformers[document._type]) {
         try {
           const transformModule = await import(`./transform/${document._type}.ts`);
