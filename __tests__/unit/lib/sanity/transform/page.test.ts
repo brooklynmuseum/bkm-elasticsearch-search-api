@@ -72,13 +72,13 @@ describe('transformPage', () => {
     const expected = {
       _id: '37d28e2e-fa8c-4e27-9c72-f3d236125613',
       type: 'page',
+      url: 'https://brooklynmuseum.org/admisiones/boletos',
       title: 'Boletos',
-      url: '/admisiones/boletos',
       searchText: '', // TODO: Fix this
       language: 'es-US',
       rawSource,
     };
-    const result = transformPage(rawSource);
+    const result = transformPage(rawSource, 'https://brooklynmuseum.org');
     expect(result).toEqual(expected);
   });
 });

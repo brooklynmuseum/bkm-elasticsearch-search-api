@@ -18,6 +18,7 @@ describe('transformCollectionArtist', () => {
     const expected = {
       _id: 'collection_artist_21279',
       type: 'collectionArtist',
+      url: 'https://brooklynmuseum.org/opencollection/artists/21279',
       title: 'Guadalupe Maravilla',
       description: 'American, born El Salvador, born 1976',
       nationality: 'American, born El Salvador',
@@ -27,7 +28,7 @@ describe('transformCollectionArtist', () => {
       rawSource,
     };
 
-    const result = transformCollectionArtist(rawSource);
+    const result = transformCollectionArtist(rawSource, 'https://brooklynmuseum.org');
     expect(result).toEqual(expected);
   });
 });

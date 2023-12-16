@@ -13,6 +13,8 @@ export async function sync(datafile?: string) {
   const indexName = getEnvVar('ELASTIC_INDEX_NAME');
   const chunkSize = parseInt(getEnvVar('CHUNK_SIZE'), 10);
   const hydrationDepth = parseInt(getEnvVar('HYDRATION_DEPTH'), 10);
+  const websiteUrl = getEnvVar('WEBSITE_URL');
+
   try {
     console.log('Starting sync...');
     let dataMap: DataMap;
@@ -25,8 +27,13 @@ export async function sync(datafile?: string) {
     await createIndex(indexName, true);
     console.log(`Index ${indexName} created.`);
     console.log(`Indexing ${dataMap.size} documents...`);
-    await processChunkedData(dataMap, sanityTypes, chunkSize, hydrationDepth, async (chunk) =>
-      bulkUpsert(indexName, chunk),
+    await processChunkedData(
+      dataMap,
+      sanityTypes,
+      chunkSize,
+      hydrationDepth,
+      websiteUrl,
+      async (chunk) => bulkUpsert(indexName, chunk),
     );
   } catch (error) {
     console.error(error);
@@ -38,11 +45,12 @@ export async function processChunkedData(
   typesToIndex: string[],
   chunkSize: number,
   hydrationDepth: number,
+  websiteUrl: string,
   asyncProcessChunk: (chunk: JsonData[]) => Promise<void>,
 ): Promise<void> {
   console.log(`Processing ${typesToIndex.length} types in chunks of ${chunkSize}...`);
   let currentChunk: JsonData[] = [];
-  const transformers: Record<string, (doc: JsonData) => JsonData> = {}; // Cache for transform functions
+  const transformers: Record<string, (doc: JsonData, websiteUrl: string) => JsonData> = {}; // Cache for transform functions
 
   for (const [_, document] of dataMap) {
     if (typesToIndex.includes(document._type)) {
@@ -57,7 +65,7 @@ export async function processChunkedData(
       }
 
       const denormalizedDocument = hydrateDocument(dataMap, document, hydrationDepth);
-      const transformedDocument = transformers[document._type](denormalizedDocument);
+      const transformedDocument = transformers[document._type](denormalizedDocument, websiteUrl);
       if (!transformedDocument) continue; // Some content, like unrouted pages, cannot be indexed
       currentChunk.push(transformedDocument);
 

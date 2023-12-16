@@ -190,6 +190,7 @@ describe('transformCollectionObject', () => {
     const expected = {
       _id: 'collection_object_149224',
       type: 'collectionObject',
+      url: 'https://brooklynmuseum.org/opencollection/objects/149224',
       title: 'Hook-shaped Toggle',
       startYear: 1868,
       endYear: 1933,
@@ -203,7 +204,7 @@ describe('transformCollectionObject', () => {
       language: 'en-US',
       rawSource,
     };
-    const result = transformCollectionObject(rawSource);
+    const result = transformCollectionObject(rawSource, 'https://brooklynmuseum.org');
     expect(result).toEqual(expected);
   });
 });

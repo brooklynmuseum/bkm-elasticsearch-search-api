@@ -1,14 +1,8 @@
 import * as T from '@elastic/elasticsearch/lib/api/types';
 import { getEnvVar } from '@/lib/utils';
 import { client } from '../client';
-import type {
-  ApiSearchResponse,
-  ApiSearchResponseMetadata,
-  ApiSearchParams,
-  ElasticsearchDocument,
-} from '@/types';
+import type { ApiSearchResponse, ApiSearchResponseMetadata, ApiSearchParams } from '@/types';
 import { addQueryBoolFilterTerm } from './searchQueryBuilder';
-import { es } from 'date-fns/locale';
 
 const INDEX_NAME = getEnvVar('ELASTIC_INDEX_NAME');
 const SANITY_TYPES = getEnvVar('SANITY_TYPES');

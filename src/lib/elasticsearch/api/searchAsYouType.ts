@@ -27,7 +27,7 @@ export async function searchAsYouType(query?: string | null): Promise<ApiSearchR
         fields: ['title.suggest', 'title.suggest._2gram', 'title.suggest._3gram'],
       },
     },
-    _source: ['type', 'title'], // Just return the title
+    _source: ['type', 'title', 'url'],
     size: MAX_SUGGESTIONS,
   };
 

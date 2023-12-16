@@ -43,13 +43,14 @@ describe('transformPage', () => {
     const expected = {
       _id: 'shopifyProduct-7480139612356',
       type: 'product',
+      url: 'https://shop.brooklynmuseum.org/products/investigators-ants-in-pants',
       title: 'Investigators: Ants In Pants',
       searchText: 'Henry Holt Books',
       language: 'es-US',
       keywords: ["Children's Bookfair", "Event_Children's Bookfair"],
       rawSource,
     };
-    const result = transformProduct(rawSource);
+    const result = transformProduct(rawSource, 'https://brooklynmuseum.org');
     expect(result).toEqual(expected);
   });
 });
