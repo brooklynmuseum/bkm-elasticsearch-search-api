@@ -24,6 +24,7 @@
   "devDependencies": {
     "@types/elasticsearch": "^5.0.43",
     "@types/jest": "^29.5.11",
+    "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^20.10.4",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.17",

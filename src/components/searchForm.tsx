@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, FormEvent, ChangeEvent } from 'react';
+import { useState, FormEvent, ChangeEvent, KeyboardEvent } from 'react';
 import { useDebounce } from '@/lib/debounce';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -15,14 +15,15 @@ import {
 } from '@/components/ui/select';
 import { SearchIcon } from 'lucide-react';
 
+import type { ApiSearchResponseMetadata } from '@/types';
+
 export function SearchForm() {
   const [searchAsYouType, setSearchAsYouType] = useState('');
-  const [searchAsYouTypeResults, setSearchAsYouTypeResults] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [docType, setDocType] = useState('');
   const [url, setUrl] = useState('');
   const [searchResults, setSearchResults] = useState('');
-  const [metadata, setMetadata] = useState({});
+  const [metadata, setMetadata] = useState<ApiSearchResponseMetadata>({});
 
   const docTypes = ['collectionObject', 'collectionArtist', 'exhibition', 'page', 'product'];
 
@@ -89,7 +90,7 @@ export function SearchForm() {
     fetchSearchResults();
   };
 
-  const handleKeyPress = (event: FormEvent) => {
+  const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       fetchSearchResults();
     }
@@ -126,12 +127,7 @@ export function SearchForm() {
           </div>
           <div className="grid w-full items-center gap-1.5">
             <Label htmlFor="docType">Type</Label>
-            <Select
-              id="docType"
-              className=""
-              value={docType}
-              onValueChange={(value) => setDocType(value)}
-            >
+            <Select value={docType} onValueChange={(value) => setDocType(value)}>
               <SelectTrigger className="">
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
@@ -156,9 +152,9 @@ export function SearchForm() {
             <Label htmlFor="url">URL</Label>
             <Input id="url" className="" value={url} />
           </div>
-          {metadata?.count ? (
+          {metadata?.total ? (
             <div className="italic text-sm text-muted-foreground">
-              {metadata.count} results
+              {metadata.total} results
               {metadata.pages && ` in ${metadata.pages} pages`}
             </div>
           ) : (

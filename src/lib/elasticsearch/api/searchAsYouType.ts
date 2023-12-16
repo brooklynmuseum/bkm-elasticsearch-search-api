@@ -27,14 +27,17 @@ export async function searchAsYouType(query?: string | null): Promise<ApiSearchR
         fields: ['title.suggest', 'title.suggest._2gram', 'title.suggest._3gram'],
       },
     },
-    _source: ['title'], // Just return the title
+    _source: ['type', 'title'], // Just return the title
     size: MAX_SUGGESTIONS,
   };
 
   const response: T.SearchTemplateResponse = await client.search(esQuery);
   const data = response.hits.hits.map((h) => h._source as ElasticsearchDocument);
+  const total =
+    typeof response.hits?.total === 'number' ? response.hits?.total : response.hits?.total?.value;
+
   const metadata = {
-    count: response.hits?.total?.value,
+    total: total,
   };
   const res: ApiSearchResponse = { query: esQuery, data, metadata };
   return res;

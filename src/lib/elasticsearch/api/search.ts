@@ -76,10 +76,10 @@ function getResponseMetadata(
   response: T.SearchTemplateResponse,
   size: number,
 ): ApiSearchResponseMetadata {
-  let count = response?.hits?.total || 0; // Returns either number or SearchTotalHits
-  if (typeof count !== 'number') count = count.value;
+  let total = response?.hits?.total || 0; // Returns either number or SearchTotalHits
+  if (typeof total !== 'number') total = total.value;
   return {
-    count,
-    pages: Math.ceil(count / size),
+    total,
+    pages: Math.ceil(total / size),
   };
 }

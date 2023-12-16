@@ -19,8 +19,9 @@ export function Header() {
   return (
     <header className="top-0 z-40 w-full">
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-        <div className="w-48">
-          <Logo />
+        <div className="flex flex-end">
+          <Logo className="w-48 inline mr-3" />
+          <span className="text-lg font-bold text-muted-foreground">Search</span>
         </div>
         <NavigationMenu>
           <NavigationMenuItem>
