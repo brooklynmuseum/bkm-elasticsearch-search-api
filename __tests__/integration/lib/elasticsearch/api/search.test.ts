@@ -30,7 +30,7 @@ describe('search function', () => {
       query: 'Spike Lee',
     });
     expect(result.data).toHaveLength(10);
-    expect(result.metadata?.count).toEqual(65);
+    expect(result.metadata?.total).toEqual(65);
   });
 
   it('searches "Spike Lee" with type "exhibition" and returns the expected result', async () => {

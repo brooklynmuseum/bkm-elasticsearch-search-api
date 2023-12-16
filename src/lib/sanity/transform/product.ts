@@ -1,5 +1,5 @@
 import { JsonData } from '@/types';
-import { setIfHasValue, splitCommaSeparatedString } from '@/lib/various';
+import { setIfHasValue, splitCommaSeparatedString } from '@/lib/utils';
 
 export default function transformProduct(product: JsonData): JsonData {
   const esDoc: JsonData = {

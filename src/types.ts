@@ -75,16 +75,16 @@ export interface ElasticsearchDocument {
   rawSource?: any;
 }
 
-export interface ApiSearchResponseMetadata {
-  count?: number;
-  pages?: number;
-}
-
 export interface ApiSearchParams {
   pageNumber: number; // page number
   resultsPerPage: number; // number of results per page
   query?: string; // search query
   type?: string; // document type
+}
+
+export interface ApiSearchResponseMetadata {
+  total?: number;
+  pages?: number;
 }
 
 export interface ApiSearchResponse {

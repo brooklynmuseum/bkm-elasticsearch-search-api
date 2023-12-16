@@ -1,5 +1,5 @@
 import * as T from '@elastic/elasticsearch/lib/api/types';
-import { getEnvVar } from '@/lib/various';
+import { getEnvVar } from '@/lib/utils';
 import { client } from '../client';
 import type {
   ApiSearchResponse,
@@ -8,6 +8,7 @@ import type {
   ElasticsearchDocument,
 } from '@/types';
 import { addQueryBoolFilterTerm } from './searchQueryBuilder';
+import { es } from 'date-fns/locale';
 
 const INDEX_NAME = getEnvVar('ELASTIC_INDEX_NAME');
 const SANITY_TYPES = getEnvVar('SANITY_TYPES');
@@ -75,10 +76,10 @@ function getResponseMetadata(
   response: T.SearchTemplateResponse,
   size: number,
 ): ApiSearchResponseMetadata {
-  let count = response?.hits?.total || 0; // Returns either number or SearchTotalHits
-  if (typeof count !== 'number') count = count.value;
+  let total = response?.hits?.total || 0; // Returns either number or SearchTotalHits
+  if (typeof total !== 'number') total = total.value;
   return {
-    count,
-    pages: Math.ceil(count / size),
+    total,
+    pages: Math.ceil(total / size),
   };
 }

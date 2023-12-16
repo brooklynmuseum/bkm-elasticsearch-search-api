@@ -1,6 +1,6 @@
 import { importSanityDataMap } from './import';
 import { importFromFile } from './importFile';
-import { getEnvVar } from '../various';
+import { getEnvVar } from '../utils';
 import { bulkUpsert } from '../elasticsearch/es';
 import { createIndex } from '../elasticsearch/es';
 import { hydrateDocument } from './hydrate';
@@ -14,13 +14,17 @@ export async function sync(datafile?: string) {
   const chunkSize = parseInt(getEnvVar('CHUNK_SIZE'), 10);
   const hydrationDepth = parseInt(getEnvVar('HYDRATION_DEPTH'), 10);
   try {
+    console.log('Starting sync...');
     let dataMap: DataMap;
     if (datafile) {
       dataMap = await importFromFile(datafile);
     } else {
       dataMap = await importSanityDataMap(sanityProjectId, sanityDataset, []);
     }
+    console.log(`Creating index ${indexName}...`);
     await createIndex(indexName, true);
+    console.log(`Index ${indexName} created.`);
+    console.log(`Indexing ${dataMap.size} documents...`);
     await processChunkedData(dataMap, sanityTypes, chunkSize, hydrationDepth, async (chunk) =>
       bulkUpsert(indexName, chunk),
     );

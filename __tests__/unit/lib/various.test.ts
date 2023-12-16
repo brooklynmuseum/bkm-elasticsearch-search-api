@@ -1,4 +1,4 @@
-import { portableTextToPlaintext } from '@/lib/various';
+import { portableTextToPlaintext } from '@/lib/utils';
 
 describe('portableTextToPlaintext', () => {
   it('converts portable text to plain text', () => {

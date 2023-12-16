@@ -2,6 +2,12 @@ import type { JsonData } from '@/types';
 // import { toHTML } from '@portabletext/to-html';
 // import sanitizeHtml from 'sanitize-html';
 import { toPlainText } from '@portabletext/toolkit';
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export function getEnvVar(key: string, defaultValue?: string): string {
   const value = process.env[key];
@@ -24,6 +30,21 @@ export function setIfHasValue(obj: JsonData, key: string, value: any) {
 export function splitCommaSeparatedString(s: string): string[] {
   if (!s) return [];
   return s.split(',').map((s) => s.trim());
+}
+
+/**
+ * Gets the value of a boolean from a string or boolean, or return false.
+ *
+ * @param x the value to check
+ * @returns  true if x is a boolean or a string that is 'true', false otherwise
+ */
+export function getBooleanValue(x?: boolean | string | string[] | number | null) {
+  if (typeof x === 'boolean') return x;
+  if (typeof x === 'string') {
+    return x.toLowerCase() === 'true' || x === '1';
+  }
+  if (typeof x === 'number') return x === 1;
+  return false; // undefined, null, string[]
 }
 
 /**
