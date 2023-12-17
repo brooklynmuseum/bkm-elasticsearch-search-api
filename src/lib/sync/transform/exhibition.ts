@@ -1,23 +1,28 @@
-import { JsonData } from '@/types';
 import { setIfHasValue, portableTextToPlaintext } from '@/lib/utils';
+import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 
-export default function transformExhibition(exhibition: JsonData, websiteUrl: string): JsonData {
-  const esDoc: JsonData = {
-    _id: exhibition._id,
+const transform: ElasticsearchTransformFunction = (
+  sanityDoc: JsonData,
+  websiteUrl: string,
+): ElasticsearchDocument => {
+  const esDoc: ElasticsearchDocument = {
+    _id: sanityDoc._id,
     type: 'exhibition',
-    rawSource: exhibition,
+    rawSource: sanityDoc,
   };
 
-  const slug = exhibition.slug?.current?.trim();
-  const exhibitionUrl = `${websiteUrl}/exhibitions/${slug}`;
-  const imageUrl = exhibition.coverImage?.asset?.url;
+  const slug = sanityDoc.slug?.current?.trim();
+  const url = `${websiteUrl}/exhibitions/${slug}`;
+  const imageUrl = sanityDoc.coverImage?.asset?.url;
 
-  setIfHasValue(esDoc, 'url', exhibitionUrl);
-  setIfHasValue(esDoc, 'title', exhibition.title?.trim());
-  setIfHasValue(esDoc, 'description', portableTextToPlaintext(exhibition.description));
+  setIfHasValue(esDoc, 'url', url);
+  setIfHasValue(esDoc, 'title', sanityDoc.title?.trim());
+  setIfHasValue(esDoc, 'description', portableTextToPlaintext(sanityDoc.description));
   setIfHasValue(esDoc, 'imageUrl', imageUrl);
-  setIfHasValue(esDoc, 'startDate', exhibition.startsAt);
-  setIfHasValue(esDoc, 'endDate', exhibition.endsAt);
-  setIfHasValue(esDoc, 'language', exhibition.language);
+  setIfHasValue(esDoc, 'startDate', sanityDoc.startsAt);
+  setIfHasValue(esDoc, 'endDate', sanityDoc.endsAt);
+  setIfHasValue(esDoc, 'language', sanityDoc.language);
   return esDoc;
-}
+};
+
+export default transform;

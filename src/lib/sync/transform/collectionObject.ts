@@ -1,38 +1,38 @@
-import { JsonData } from '@/types';
 import { setIfHasValue } from '@/lib/utils';
 import { getLegacyId } from '@/lib/utils';
+import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 
-export default function transformCollectionObject(
-  collectionObject: JsonData,
+const transform: ElasticsearchTransformFunction = (
+  sanityDoc: JsonData,
   websiteUrl: string,
-): JsonData {
-  const esDoc: JsonData = {
-    _id: collectionObject._id,
+): ElasticsearchDocument => {
+  const esDoc: ElasticsearchDocument = {
+    _id: sanityDoc._id,
     type: 'collectionObject',
-    rawSource: collectionObject,
+    rawSource: sanityDoc,
     language: 'en-US',
   };
 
-  const objectId = getLegacyId(collectionObject._id);
-  const collectionObjectUrl = `${websiteUrl}/opencollection/objects/${objectId}`;
+  const id = getLegacyId(sanityDoc._id);
+  const url = `${websiteUrl}/opencollection/objects/${id}`;
 
-  const imageUrl = getImageUrl(collectionObject.images);
+  const imageUrl = getImageUrl(sanityDoc.images);
 
-  setIfHasValue(esDoc, 'url', collectionObjectUrl);
-  setIfHasValue(esDoc, 'title', collectionObject.title?.trim());
-  setIfHasValue(esDoc, 'description', collectionObject.description?.trim());
+  setIfHasValue(esDoc, 'url', url);
+  setIfHasValue(esDoc, 'title', sanityDoc.title?.trim());
+  setIfHasValue(esDoc, 'description', sanityDoc.description?.trim());
   setIfHasValue(esDoc, 'imageUrl', imageUrl);
-  setIfHasValue(esDoc, 'startYear', collectionObject.objectDateBegin);
-  setIfHasValue(esDoc, 'endYear', collectionObject.objectDateEnd);
+  setIfHasValue(esDoc, 'startYear', sanityDoc.objectDateBegin);
+  setIfHasValue(esDoc, 'endYear', sanityDoc.objectDateEnd);
 
-  esDoc.searchText = collectionObject.accessionNumber;
+  esDoc.searchText = sanityDoc.accessionNumber;
 
-  if (collectionObject.classification && collectionObject.classification !== '(not assigned)') {
-    esDoc.classification = collectionObject.classification;
+  if (sanityDoc.classification && sanityDoc.classification !== '(not assigned)') {
+    esDoc.classification = sanityDoc.classification;
   }
-  if (collectionObject.constituents && Array.isArray(collectionObject.constituents)) {
+  if (sanityDoc.constituents && Array.isArray(sanityDoc.constituents)) {
     // find 'Artist' constituent
-    const primaryConstituent = collectionObject.constituents.find(
+    const primaryConstituent = sanityDoc.constituents.find(
       (constituent) => constituent.role && constituent.role.name === 'Artist' && constituent.artist,
     );
     if (primaryConstituent && primaryConstituent.artist?.name) {
@@ -43,7 +43,7 @@ export default function transformCollectionObject(
       };
     } else {
       // find 'Culture' constituent
-      const cultureConstituent = collectionObject.constituents.find(
+      const cultureConstituent = sanityDoc.constituents.find(
         (constituent) => constituent.role && constituent.role.name === 'Culture',
       );
       if (cultureConstituent && cultureConstituent.artist?.name) {
@@ -56,7 +56,7 @@ export default function transformCollectionObject(
     }
   }
   return esDoc;
-}
+};
 
 function getImageUrl(images: any[]) {
   if (images && Array.isArray(images) && images.length > 0) {
@@ -71,3 +71,5 @@ function getImageUrl(images: any[]) {
   }
   return '';
 }
+
+export default transform;

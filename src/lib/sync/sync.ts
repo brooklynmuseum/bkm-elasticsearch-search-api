@@ -5,7 +5,12 @@ import { bulkUpsert } from '@/lib/elasticsearch/es';
 import { createIndex } from '@/lib/elasticsearch/es';
 import { indexSettings } from '@/lib/elasticsearch/config/indexSettings';
 import { hydrateDocument } from '@/lib/sanity/hydrate';
-import type { JsonData, DataMap } from '@/types';
+import type {
+  JsonData,
+  DataMap,
+  ElasticsearchDocument,
+  ElasticsearchTransformFunction,
+} from '@/types';
 
 export async function sync(deleteIndexIfExists = false, datafile?: string) {
   const sanityProjectId = getEnvVar('SANITY_PROJECT_ID');
@@ -50,8 +55,8 @@ export async function processChunkedData(
   asyncProcessChunk: (chunk: JsonData[]) => Promise<void>,
 ): Promise<void> {
   console.log(`Processing ${typesToIndex.length} types in chunks of ${chunkSize}...`);
-  let currentChunk: JsonData[] = [];
-  const transformers: Record<string, (doc: JsonData, websiteUrl: string) => JsonData> = {}; // Cache for transform functions
+  let currentChunk: ElasticsearchDocument[] = [];
+  const transformers: Record<string, ElasticsearchTransformFunction> = {}; // Cache for transform functions
 
   for (const [_, document] of dataMap) {
     if (typesToIndex.includes(document._type)) {
