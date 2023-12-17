@@ -1,6 +1,5 @@
 import { JsonData } from '@/types';
 import { setIfHasValue, portableTextToPlaintext } from '@/lib/utils';
-import { getLegacyId } from '@/lib/utils';
 
 export default function transformExhibition(exhibition: JsonData, websiteUrl: string): JsonData {
   const esDoc: JsonData = {

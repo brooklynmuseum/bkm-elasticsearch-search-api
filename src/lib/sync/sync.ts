@@ -1,12 +1,13 @@
-import { importSanityDataMap } from './import';
-import { importFromFile } from './importFile';
-import { getEnvVar } from '../utils';
-import { bulkUpsert } from '../elasticsearch/es';
-import { createIndex } from '../elasticsearch/es';
-import { hydrateDocument } from './hydrate';
+import { importSanityDataMap } from '@/lib/sanity/import';
+import { importFromFile } from '@/lib/sanity/importFile';
+import { getEnvVar } from '@/lib/utils';
+import { bulkUpsert } from '@/lib/elasticsearch/es';
+import { createIndex } from '@/lib/elasticsearch/es';
+import { indexSettings } from '@/lib/elasticsearch/config/indexSettings';
+import { hydrateDocument } from '@/lib/sanity/hydrate';
 import type { JsonData, DataMap } from '@/types';
 
-export async function sync(datafile?: string) {
+export async function sync(deleteIndexIfExists = false, datafile?: string) {
   const sanityProjectId = getEnvVar('SANITY_PROJECT_ID');
   const sanityDataset = getEnvVar('SANITY_DATASET');
   const sanityTypes = getEnvVar('SANITY_TYPES').split(',');
@@ -24,7 +25,7 @@ export async function sync(datafile?: string) {
       dataMap = await importSanityDataMap(sanityProjectId, sanityDataset, []);
     }
     console.log(`Creating index ${indexName}...`);
-    await createIndex(indexName, true);
+    await createIndex(indexName, indexSettings, deleteIndexIfExists);
     console.log(`Index ${indexName} created.`);
     console.log(`Indexing ${dataMap.size} documents...`);
     await processChunkedData(

@@ -12,7 +12,7 @@ export type SanityRoute = {
 
 export type SanitySlug = {
   _type: string;
-  current?: string; // Make current optional
+  current?: string;
 };
 
 export interface ElasticsearchConstituent {
@@ -76,15 +76,15 @@ export interface ElasticsearchDocument {
 }
 
 export interface ApiSearchParams {
-  pageNumber: number; // page number
-  resultsPerPage: number; // number of results per page
-  query?: string; // search query
-  type?: string; // document type
-  classification?: string; // cclassification/department
-  'primaryConstituent.name': string; // artist name
-  tags?: string; // tags
-  categories?: string; // categories
-  [key: string]: any; // typescript hack
+  pageNumber: number;
+  resultsPerPage: number;
+  query?: string;
+  type?: string;
+  classification?: string;
+  'primaryConstituent.name': string;
+  tags?: string;
+  categories?: string;
+  [key: string]: any;
 }
 
 export interface ApiSearchResponseMetadata {
