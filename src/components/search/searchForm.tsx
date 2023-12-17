@@ -90,7 +90,7 @@ export function SearchForm() {
   };
 
   const fetchBasicSearchResults = async (querystring?: string) => {
-    const currentUrl = `/api/search?${querystring}`;
+    const currentUrl = querystring ? `/api/search?${querystring}` : '/api/search';
     setUrl(currentUrl);
     setSearchResults(null);
     try {

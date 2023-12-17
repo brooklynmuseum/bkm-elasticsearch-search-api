@@ -1,4 +1,4 @@
-import transformExhibition from '@/lib/sanity/transform/exhibition';
+import transformExhibition from '@/lib/sync/transform/exhibition';
 
 describe('transformExhibition', () => {
   it('transforms exhibition raw source correctly', () => {

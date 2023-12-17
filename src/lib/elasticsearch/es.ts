@@ -1,6 +1,6 @@
-import { indexSettings } from './config/indexSettings';
 import { client } from './client';
 import type { JsonData } from '@/types';
+import * as T from '@elastic/elasticsearch/lib/api/types';
 
 /**
  * Create an Elasticsearch index.
@@ -9,7 +9,11 @@ import type { JsonData } from '@/types';
  * @param deleteIndexIfExists Delete the index if it already exists.
  * @param deleteAliasIfExists Delete the alias if it already exists.
  */
-export async function createIndex(indexName: string, deleteIndexIfExists = false) {
+export async function createIndex(
+  indexName: string,
+  indexSettings: T.IndicesIndexSettings,
+  deleteIndexIfExists = false,
+) {
   if (deleteIndexIfExists) {
     await deleteIndex(indexName);
   }

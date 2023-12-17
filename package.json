@@ -15,8 +15,8 @@
     "test:unit": "jest --config=jest.unit.config.js",
     "test:integration": "jest --config=jest.integration.config.js",
     "test:ci": "jest --ci",
-    "sync:test": "ts-node src/testSync",
-    "sync": "ts-node src/sync"
+    "sync": "ts-node src/lib/commands/sync",
+    "sync:test": "ts-node src/lib/commands/syncTestData"
   },
   "keywords": [],
   "author": "",

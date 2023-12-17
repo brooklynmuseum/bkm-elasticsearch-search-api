@@ -53,21 +53,17 @@ This project uses Jest for testing. Tests are located in the `__test__` folder a
 - Run only unit tests: `npm test:unit`
 - Run only integration tests: `npm test:integration`
 
-## Sync
+## Upsert Sync
+
+Before running a sync, ensure that you are using the correct Elasticsearch server in your `.env` file.
 
 ### Run the sync
 
-To load the test data from file (good for testing):
+Sync test data from local test file: `npm run sync:test`
+(WARNING: this will delete all data in the index. Can only be used with a non-cloud Elasticsearch instance.)
 
-```
-npm run sync:test
-```
-
-To load data from the actual live Sanity dataset:
-
-```
-npm run sync
-```
+Sync the live Sanity dataset: `npm run sync`
+(Creates a new index if one doesn't exist. Otherwise, updates the existing index.)
 
 ## Run
 
