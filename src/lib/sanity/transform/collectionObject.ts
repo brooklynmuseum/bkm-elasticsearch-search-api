@@ -24,7 +24,9 @@ export default function transformCollectionObject(
   setIfHasValue(esDoc, 'imageUrl', imageUrl);
   setIfHasValue(esDoc, 'startYear', collectionObject.objectDateBegin);
   setIfHasValue(esDoc, 'endYear', collectionObject.objectDateEnd);
+
   esDoc.searchText = collectionObject.accessionNumber;
+
   if (collectionObject.classification && collectionObject.classification !== '(not assigned)') {
     esDoc.classification = collectionObject.classification;
   }

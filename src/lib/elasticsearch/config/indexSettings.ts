@@ -1,6 +1,14 @@
 import * as T from '@elastic/elasticsearch/lib/api/types';
 import * as S from './mappingTypes';
 
+export const aggFields = [
+  'type',
+  'classification',
+  'primaryConstituent.name',
+  'tags',
+  'categories',
+];
+
 export const indexSettings: T.IndicesIndexSettings = {
   settings: {
     index: S.index,
@@ -9,14 +17,14 @@ export const indexSettings: T.IndicesIndexSettings = {
   mappings: {
     properties: {
       // Universal search fields:
-      type: S.keywordField,
+      type: S.searchableAggregatedKeywordAnalyzerField, // Agg
       url: S.keywordField,
       title: S.suggestUnaggregatedStandardAnalyzerField,
       description: S.unaggregatedStandardAnalyzerTextField,
       searchText: S.unaggregatedStandardAnalyzerTextField,
       imageUrl: S.keywordField,
-      categories: S.suggestUnaggregatedStandardAnalyzerField,
-      keywords: S.unaggregatedStandardAnalyzerTextField,
+      categories: S.searchableAggregatedKeywordAnalyzerField, // Agg
+      tags: S.searchableAggregatedKeywordAnalyzerField, // Agg
       boostedKeywords: S.unaggregatedStandardAnalyzerTextField,
       primaryConstituent: S.constituentObjectField,
       startDate: S.dateField,
@@ -25,7 +33,7 @@ export const indexSettings: T.IndicesIndexSettings = {
 
       // Artwork-only fields:
       accessionNumber: S.keywordField,
-      classification: S.keywordField,
+      classification: S.searchableAggregatedKeywordAnalyzerField, // Agg
       startYear: S.integerField,
       endYear: S.integerField,
 

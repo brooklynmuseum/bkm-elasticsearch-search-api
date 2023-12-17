@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, FormEvent, ChangeEvent, KeyboardEvent, Key } from 'react';
+import { useState, useEffect, ChangeEvent, KeyboardEvent, Key } from 'react';
 import { SearchResult } from './searchResult';
 import { SearchPagination } from './searchPagination';
 import { useDebounce } from '@/lib/debounce';
@@ -17,12 +17,19 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { SearchIcon, Code2Icon, ListIcon, MessageCircleWarningIcon } from 'lucide-react';
-import type { ApiSearchResponse, ApiSearchResponseMetadata, ElasticsearchDocument } from '@/types';
+import type {
+  ApiSearchResponse,
+  ApiSearchResponseMetadata,
+  ElasticsearchDocument,
+  AggOption,
+} from '@/types';
+import { aggFields } from '@/lib/elasticsearch/config/indexSettings';
 
 export function SearchForm() {
   const [searchAsYouType, setSearchAsYouType] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [docType, setDocType] = useState('');
+  const [aggFieldValues, setAggFieldValues] = useState<Record<string, string>>({});
   const [url, setUrl] = useState('');
   const [searchResults, setSearchResults] = useState<ApiSearchResponse | null>(null);
   const [metadata, setMetadata] = useState<ApiSearchResponseMetadata>({});
@@ -71,6 +78,13 @@ export function SearchForm() {
     if (docType && docType !== '-1') {
       queryParams.append('type', docType);
     }
+
+    for (const field of aggFields) {
+      if (aggFieldValues[field] && aggFieldValues[field] !== '-1') {
+        queryParams.append(field, aggFieldValues[field]);
+      }
+    }
+
     const currentUrl = `/api/search?${queryParams}`;
     setUrl(currentUrl);
 
@@ -107,6 +121,10 @@ export function SearchForm() {
     }
   };
 
+  const setAggFieldValue = (field: string, value: string) => {
+    setAggFieldValues({ ...aggFieldValues, [field]: value });
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {error && (
@@ -141,22 +159,33 @@ export function SearchForm() {
             onKeyPress={handleKeyPress}
           />
         </div>
-        <div className="grid items-center gap-1.5">
-          <Label htmlFor="docType">Type</Label>
-          <Select value={docType} onValueChange={(value) => setDocType(value)}>
-            <SelectTrigger className="">
-              <SelectValue placeholder="Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="-1">All Types</SelectItem>
-              {docTypes.map((docType) => (
-                <SelectItem key={docType} value={docType}>
-                  {docType}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+
+        {searchResults &&
+          aggFields?.map(
+            (field) =>
+              searchResults.options?.[field]?.length > 0 && (
+                <div key={field} className="grid items-center gap-1.5">
+                  <Label htmlFor="docType">{field}</Label>
+                  <Select
+                    value={aggFieldValues[field]}
+                    onValueChange={(value) => setAggFieldValue(field, value)}
+                  >
+                    <SelectTrigger className="">
+                      <SelectValue placeholder="All" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="-1">All</SelectItem>
+                      {searchResults.options[field].map((agg: AggOption) => (
+                        <SelectItem key={agg.key} value={agg.key}>
+                          {agg.key}
+                          <span className="text-muted-foreground ml-2">{agg.doc_count}</span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ),
+          )}
 
         <Button onClick={handleSearchClick}>
           <SearchIcon className="w-5 h-5 mr-2" />

@@ -1,5 +1,8 @@
 // import * as T from '@elastic/elasticsearch/lib/api/types';
 // import { format } from 'date-fns';
+import { aggFields } from '../config/indexSettings';
+
+const SEARCH_AGG_SIZE = 100;
 
 /**
  * Add a term to a bool filter query
@@ -25,8 +28,20 @@ export function addQueryBoolFilterTerm(
   });
 }
 
+export function addQueryAggs(esQuery: any) {
+  const aggs: any = {};
+  for (const aggName of aggFields) {
+    aggs[aggName] = {
+      terms: {
+        field: aggName,
+        size: SEARCH_AGG_SIZE,
+      },
+    };
+  }
+  esQuery.aggs = aggs;
+}
+
 /*
-const SEARCH_AGG_SIZE = 20; // 20 results per aggregation
 
 export function addQueryBoolDateRange(
   esQuery: any,
@@ -226,19 +241,5 @@ export function addQueryBoolMustNotFilter(
   });
 }
 
-export function addQueryAggs(esQuery: any, indexName: string | string[] | undefined) {
-  if (indexName === undefined || Array.isArray(indexName)) return;
-  if (indicesMeta[indexName]?.aggs?.length > 0) {
-    const aggs = {};
-    for (const aggName of indicesMeta[indexName].aggs) {
-      aggs[aggName] = {
-        terms: {
-          field: aggName,
-          size: SEARCH_AGG_SIZE,
-        },
-      };
-    }
-    esQuery.aggs = aggs;
-  }
-}
+
 */
