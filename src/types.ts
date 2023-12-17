@@ -95,6 +95,7 @@ export interface ApiSearchParams {
 export interface ApiSearchResponseMetadata {
   total?: number;
   pages?: number;
+  pageNumber?: number;
 }
 
 export interface ApiSearchResponse {
