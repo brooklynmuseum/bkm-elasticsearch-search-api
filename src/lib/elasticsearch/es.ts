@@ -32,7 +32,7 @@ export async function createIndex(
  * @param indexName Name of the index.
  * @returns True if the index exists, false otherwise.
  */
-async function existsIndex(indexName: string): Promise<boolean> {
+export async function existsIndex(indexName: string): Promise<boolean> {
   return (await client.indices.exists({ index: indexName })) ? true : false;
 }
 
@@ -41,7 +41,7 @@ async function existsIndex(indexName: string): Promise<boolean> {
  *
  * @param indexName Name of the index.
  */
-async function deleteIndex(indexName: string) {
+export async function deleteIndex(indexName: string) {
   if (await existsIndex(indexName)) {
     try {
       await client.indices.delete({ index: indexName });
