@@ -70,8 +70,6 @@ export function SearchForm() {
   // Function to fetch the API endpoint
   const fetchSearchResults = async () => {
     const queryParams = new URLSearchParams();
-    setUrl('');
-    setSearchResults(null);
     if (searchQuery) {
       queryParams.append('query', searchQuery);
     }
@@ -88,6 +86,13 @@ export function SearchForm() {
     const currentUrl = `/api/search?${queryParams}`;
     setUrl(currentUrl);
 
+    fetchBasicSearchResults(`${queryParams}`);
+  };
+
+  const fetchBasicSearchResults = async (querystring?: string) => {
+    const currentUrl = `/api/search?${querystring}`;
+    setUrl(currentUrl);
+    setSearchResults(null);
     try {
       const response = await fetch(currentUrl, {
         method: 'GET',
@@ -102,13 +107,17 @@ export function SearchForm() {
       if (data?.metadata) {
         setMetadata(data.metadata);
       }
-      setSearchResults(data); // Pretty print JSON
+      setSearchResults(data);
     } catch (error: any) {
       console.error('Error fetching search results:', error);
       setError(error?.message);
       setSearchResults(null);
     }
   };
+
+  useEffect(() => {
+    fetchBasicSearchResults();
+  }, []); // Passing an empty dependency array to ensure this runs once on mount
 
   // Event handler for the search button
   const handleSearchClick = () => {
