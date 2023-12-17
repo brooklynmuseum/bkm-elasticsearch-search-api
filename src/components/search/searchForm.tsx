@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { SearchIcon, Code2Icon, ListIcon, MessageCircleWarningIcon } from 'lucide-react';
+import { SearchIcon, Code2Icon, ListIcon, MessageCircleWarningIcon, XIcon } from 'lucide-react';
 import type {
   ApiSearchResponse,
   ApiSearchResponseMetadata,
@@ -28,7 +28,6 @@ import { aggFields } from '@/lib/elasticsearch/config/indexSettings';
 export function SearchForm() {
   const [searchAsYouType, setSearchAsYouType] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [docType, setDocType] = useState('');
   const [aggFieldValues, setAggFieldValues] = useState<Record<string, string>>({});
   const [url, setUrl] = useState('');
   const [searchResults, setSearchResults] = useState<ApiSearchResponse | null>(null);
@@ -72,9 +71,6 @@ export function SearchForm() {
     const queryParams = new URLSearchParams();
     if (searchQuery) {
       queryParams.append('query', searchQuery);
-    }
-    if (docType && docType !== '-1') {
-      queryParams.append('type', docType);
     }
 
     for (const field of aggFields) {
@@ -175,23 +171,30 @@ export function SearchForm() {
               searchResults.options?.[field]?.length > 0 && (
                 <div key={field} className="grid items-center gap-1.5">
                   <Label htmlFor="docType">{field}</Label>
-                  <Select
-                    value={aggFieldValues[field]}
-                    onValueChange={(value) => setAggFieldValue(field, value)}
-                  >
-                    <SelectTrigger className="">
-                      <SelectValue placeholder="All" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="-1">All</SelectItem>
-                      {searchResults.options[field].map((agg: AggOption) => (
-                        <SelectItem key={agg.key} value={agg.key}>
-                          {agg.key}
-                          <span className="text-muted-foreground ml-2">{agg.doc_count}</span>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="flex items-center gap-x-2">
+                    <Select
+                      value={aggFieldValues[field]}
+                      onValueChange={(value) => setAggFieldValue(field, value)}
+                    >
+                      <SelectTrigger className="">
+                        <SelectValue placeholder="All" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="-1">All</SelectItem>
+                        {searchResults.options[field].map((agg: AggOption) => (
+                          <SelectItem key={agg.key} value={agg.key}>
+                            {agg.key}
+                            <span className="text-muted-foreground ml-2">{agg.doc_count}</span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {aggFieldValues[field] && aggFieldValues[field] !== '-1' && (
+                      <Button variant="secondary" onClick={() => setAggFieldValue(field, '-1')}>
+                        <XIcon className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
               ),
           )}
