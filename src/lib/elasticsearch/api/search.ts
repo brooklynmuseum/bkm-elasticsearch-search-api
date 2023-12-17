@@ -82,10 +82,9 @@ function getResponseMetadata(
 ): ApiSearchResponseMetadata {
   let total = response?.hits?.total || 0; // Returns either number or SearchTotalHits
   if (typeof total !== 'number') total = total.value;
-  return {
-    total,
-    pages: Math.ceil(total / size),
-  };
+  const pages = Math.ceil(total / size);
+  const pageNumber = Math.ceil(response?.hits?.hits?.length / size);
+  return { total, pages, pageNumber };
 }
 
 /**

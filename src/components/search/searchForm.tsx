@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, ChangeEvent, KeyboardEvent, Key } from 'react';
+import { useState, useEffect, ChangeEvent, Key } from 'react';
 import { SearchResult } from './searchResult';
 import { SearchPagination } from './searchPagination';
 import { useDebounce } from '@/lib/debounce';
@@ -16,7 +16,15 @@ import {
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { SearchIcon, Code2Icon, ListIcon, MessageCircleWarningIcon, XIcon } from 'lucide-react';
+import {
+  SearchIcon,
+  Code2Icon,
+  ListIcon,
+  MessageCircleWarningIcon,
+  XIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from 'lucide-react';
 import type {
   ApiSearchResponse,
   ApiSearchResponseMetadata,
@@ -27,18 +35,19 @@ import { aggFields } from '@/lib/elasticsearch/config/indexSettings';
 
 export function SearchForm() {
   const [searchAsYouType, setSearchAsYouType] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [aggFieldValues, setAggFieldValues] = useState<Record<string, string>>({});
+  const [formState, setFormState] = useState({
+    searchAsYouType: '',
+    searchQuery: '',
+    pageNumber: 1,
+    aggFieldValues: {} as Record<string, string>,
+  });
   const [url, setUrl] = useState('');
   const [searchResults, setSearchResults] = useState<ApiSearchResponse | null>(null);
   const [metadata, setMetadata] = useState<ApiSearchResponseMetadata>({});
   const [error, setError] = useState('');
 
-  const docTypes = ['collectionObject', 'collectionArtist', 'exhibition', 'page', 'product'];
-
   const debouncedSuggest = useDebounce(() => {
     const myQuery = searchAsYouType?.trim();
-    setSearchResults(null);
     setSearchResults(null);
     if (myQuery?.length < 3) {
       return;
@@ -66,26 +75,7 @@ export function SearchForm() {
     debouncedSuggest();
   };
 
-  // Function to fetch the API endpoint
-  const fetchSearchResults = async () => {
-    const queryParams = new URLSearchParams();
-    if (searchQuery) {
-      queryParams.append('query', searchQuery);
-    }
-
-    for (const field of aggFields) {
-      if (aggFieldValues[field] && aggFieldValues[field] !== '-1') {
-        queryParams.append(field, aggFieldValues[field]);
-      }
-    }
-
-    const currentUrl = `/api/search?${queryParams}`;
-    setUrl(currentUrl);
-
-    fetchBasicSearchResults(`${queryParams}`);
-  };
-
-  const fetchBasicSearchResults = async (querystring?: string) => {
+  const fetchSearchResults = async (querystring?: string) => {
     const currentUrl = querystring ? `/api/search?${querystring}` : '/api/search';
     setUrl(currentUrl);
     setSearchResults(null);
@@ -111,23 +101,45 @@ export function SearchForm() {
     }
   };
 
-  useEffect(() => {
-    fetchBasicSearchResults();
-  }, []); // Passing an empty dependency array to ensure this runs once on mount
+  const debouncedSearch = useDebounce(() => {
+    executeSearch();
+  }, 300);
 
-  // Event handler for the search button
-  const handleSearchClick = () => {
-    fetchSearchResults();
-  };
-
-  const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      fetchSearchResults();
+  const executeSearch = async () => {
+    const queryParams = new URLSearchParams();
+    if (formState.searchQuery) {
+      queryParams.append('query', formState.searchQuery);
     }
+    queryParams.append('page', formState.pageNumber.toString());
+    for (const field of aggFields) {
+      const value = formState.aggFieldValues[field];
+      if (value && value !== '-1') {
+        queryParams.append(field, value);
+      }
+    }
+    await fetchSearchResults(queryParams.toString());
   };
 
-  const setAggFieldValue = (field: string, value: string) => {
-    setAggFieldValues({ ...aggFieldValues, [field]: value });
+  useEffect(() => {
+    debouncedSearch();
+  }, [debouncedSearch, formState]);
+
+  const handleSearchQueryInputChange = (value: string) => {
+    const newSearch = {
+      searchAsYouType: '',
+      searchQuery: value,
+      pageNumber: 1,
+      aggFieldValues: {} as Record<string, string>,
+    };
+    setFormState(newSearch);
+  };
+
+  const handleSelectChange = (field: string, value: string) => {
+    setFormState({ ...formState, aggFieldValues: { ...formState.aggFieldValues, [field]: value } });
+  };
+
+  const handlePageChange = (newPageNumber: number) => {
+    setFormState({ ...formState, pageNumber: newPageNumber });
   };
 
   return (
@@ -159,9 +171,8 @@ export function SearchForm() {
           <Input
             id="searchQuery"
             className=""
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={handleKeyPress}
+            value={formState.searchQuery}
+            onChange={(e) => handleSearchQueryInputChange(e.target.value)}
           />
         </div>
 
@@ -173,8 +184,8 @@ export function SearchForm() {
                   <Label htmlFor="docType">{field}</Label>
                   <div className="flex items-center gap-x-2">
                     <Select
-                      value={aggFieldValues[field]}
-                      onValueChange={(value) => setAggFieldValue(field, value)}
+                      value={formState.aggFieldValues[field]}
+                      onValueChange={(value) => handleSelectChange(field, value)}
                     >
                       <SelectTrigger className="">
                         <SelectValue placeholder="All" />
@@ -189,20 +200,31 @@ export function SearchForm() {
                         ))}
                       </SelectContent>
                     </Select>
-                    {aggFieldValues[field] && aggFieldValues[field] !== '-1' && (
-                      <Button variant="secondary" onClick={() => setAggFieldValue(field, '-1')}>
-                        <XIcon className="w-4 h-4" />
-                      </Button>
-                    )}
                   </div>
                 </div>
               ),
           )}
 
-        <Button onClick={handleSearchClick}>
-          <SearchIcon className="w-5 h-5 mr-2" />
-          Search
-        </Button>
+        <div className="flex items-center gap-x-2">
+          <Button
+            disabled={formState.pageNumber <= 1}
+            className="w-full"
+            variant="secondary"
+            onClick={() => handlePageChange(formState.pageNumber - 1)}
+          >
+            <ChevronLeftIcon className="w-5 h-5 mr-2" />
+            <span className="hidden sm:inline-block">Previous</span>
+          </Button>
+          <Button
+            disabled={metadata.pages !== undefined && formState.pageNumber >= metadata.pages}
+            className="w-full"
+            variant="secondary"
+            onClick={() => handlePageChange(formState.pageNumber + 1)}
+          >
+            <span className="hidden sm:inline-block">Next</span>
+            <ChevronRightIcon className="w-5 h-5 ml-2" />
+          </Button>
+        </div>
       </div>
       <div className="">
         <Tabs defaultValue="results">
@@ -218,7 +240,11 @@ export function SearchForm() {
           </TabsList>
           <TabsContent value="results">
             <div className="mb-4">
-              <SearchPagination metadata={metadata} />
+              <SearchPagination
+                total={metadata.total}
+                pages={metadata.pages}
+                pageNumber={formState.pageNumber}
+              />
             </div>
             {searchResults && searchResults.data?.length > 0 && (
               <div className="grid grid-cols-1 gap-2">
@@ -230,7 +256,11 @@ export function SearchForm() {
           </TabsContent>
           <TabsContent value="inspect">
             <div className="flex flex-col gap-4 overflow-auto">
-              <SearchPagination metadata={metadata} />
+              <SearchPagination
+                total={metadata.total}
+                pages={metadata.pages}
+                pageNumber={formState.pageNumber}
+              />
               <pre className="rounded-md bg-neutral-950 p-4 overflow-x-auto overflow-y-auto font-mono text-sm text-white">
                 <code>{url}</code>
               </pre>
