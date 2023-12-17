@@ -81,7 +81,7 @@ export interface ApiSearchParams {
   query?: string;
   type?: string;
   classification?: string;
-  'primaryConstituent.name': string;
+  'primaryConstituent.name'?: string;
   tags?: string;
   categories?: string;
   [key: string]: any;
