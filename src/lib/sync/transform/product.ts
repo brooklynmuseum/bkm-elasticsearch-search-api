@@ -1,14 +1,20 @@
-import { JsonData } from '@/types';
 import { setIfHasValue, splitCommaSeparatedString } from '@/lib/utils';
+import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 
-export default function transformProduct(product: JsonData, websiteUrl: string): JsonData {
-  const esDoc: JsonData = {
-    _id: product._id,
+const transform: ElasticsearchTransformFunction = (
+  sanityDoc: JsonData,
+  websiteUrl: string,
+): ElasticsearchDocument | undefined => {
+  const esDoc: ElasticsearchDocument = {
+    _id: sanityDoc._id,
     type: 'product',
-    rawSource: product,
+    rawSource: sanityDoc,
     language: 'es-US',
   };
-  const store = product.store;
+
+  const store = sanityDoc.store;
+  if (!store) return; // can't index a product without a store
+
   const slug = store.slug?.current?.trim();
   const url = `https://shop.brooklynmuseum.org/products/${slug}`;
   const imageUrl = store.previewImageUrl;
@@ -20,4 +26,6 @@ export default function transformProduct(product: JsonData, websiteUrl: string):
   setIfHasValue(esDoc, 'tags', splitCommaSeparatedString(store.tags));
   setIfHasValue(esDoc, 'imageUrl', store.previewImageUrl);
   return esDoc;
-}
+};
+
+export default transform;

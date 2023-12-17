@@ -1,26 +1,28 @@
-import { JsonData } from '@/types';
 import { setIfHasValue, getEnvVar } from '@/lib/utils';
 import { getLegacyId } from '@/lib/utils';
+import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 
-export default function transformCollectionArtist(
-  collectionArtist: JsonData,
+const transform: ElasticsearchTransformFunction = (
+  sanityDoc: JsonData,
   websiteUrl: string,
-): JsonData {
-  const esDoc: JsonData = {
-    _id: collectionArtist._id,
+): ElasticsearchDocument => {
+  const esDoc: ElasticsearchDocument = {
+    _id: sanityDoc._id,
     type: 'collectionArtist',
-    rawSource: collectionArtist,
+    rawSource: sanityDoc,
     language: 'en-US',
   };
 
-  const artistId = getLegacyId(collectionArtist._id);
-  const collectionArtistUrl = `${websiteUrl}/opencollection/artists/${artistId}`;
+  const id = getLegacyId(sanityDoc._id);
+  const url = `${websiteUrl}/opencollection/artists/${id}`;
 
-  setIfHasValue(esDoc, 'url', collectionArtistUrl);
-  setIfHasValue(esDoc, 'title', collectionArtist.name?.trim());
-  setIfHasValue(esDoc, 'description', collectionArtist.dates?.trim());
-  setIfHasValue(esDoc, 'startYear', collectionArtist.startYear);
-  setIfHasValue(esDoc, 'endYear', collectionArtist.endYear);
-  setIfHasValue(esDoc, 'nationality', collectionArtist.nationality?.trim());
+  setIfHasValue(esDoc, 'url', url);
+  setIfHasValue(esDoc, 'title', sanityDoc.name?.trim());
+  setIfHasValue(esDoc, 'description', sanityDoc.dates?.trim());
+  setIfHasValue(esDoc, 'startYear', sanityDoc.startYear);
+  setIfHasValue(esDoc, 'endYear', sanityDoc.endYear);
+  setIfHasValue(esDoc, 'nationality', sanityDoc.nationality?.trim());
   return esDoc;
-}
+};
+
+export default transform;

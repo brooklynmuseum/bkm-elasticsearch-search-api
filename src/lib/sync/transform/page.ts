@@ -1,23 +1,28 @@
-import { JsonData } from '@/types';
 import { setIfHasValue, portableTextToPlaintext } from '@/lib/utils';
 import { transformPageRoute } from './pageRoute';
+import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 
-export default function transformPage(page: JsonData, websiteUrl: string): JsonData | undefined {
-  const esDoc: JsonData = {
-    _id: page._id,
+const transform: ElasticsearchTransformFunction = (
+  sanityDoc: JsonData,
+  websiteUrl: string,
+): ElasticsearchDocument | undefined => {
+  const esDoc: ElasticsearchDocument = {
+    _id: sanityDoc._id,
     type: 'page',
-    rawSource: page,
+    rawSource: sanityDoc,
   };
 
-  const path = transformPageRoute(page.route, page.language, '', page.slug);
+  const path = transformPageRoute(sanityDoc.route, sanityDoc.language, '', sanityDoc.slug);
   if (!path) return; // don't index unrouted pages
   const url = `${websiteUrl}${path}`;
-  const imageUrl = page.coverImage?.asset?.url;
+  const imageUrl = sanityDoc.coverImage?.asset?.url;
 
   setIfHasValue(esDoc, 'url', url);
-  setIfHasValue(esDoc, 'title', page.title?.trim());
+  setIfHasValue(esDoc, 'title', sanityDoc.title?.trim());
   setIfHasValue(esDoc, 'imageUrl', imageUrl);
-  setIfHasValue(esDoc, 'searchText', portableTextToPlaintext(page.content));
-  setIfHasValue(esDoc, 'language', page.language);
+  setIfHasValue(esDoc, 'searchText', portableTextToPlaintext(sanityDoc.content));
+  setIfHasValue(esDoc, 'language', sanityDoc.language);
   return esDoc;
-}
+};
+
+export default transform;

@@ -1,6 +1,11 @@
 export type JsonData = { [key: string]: any };
 export type DataMap = Map<string, JsonData>;
 
+export type ElasticsearchTransformFunction = (
+  doc: JsonData,
+  websiteUrl: string,
+) => ElasticsearchDocument | undefined;
+
 export type SanityRoute = {
   path?: Array<{
     _key: string;
