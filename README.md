@@ -1,15 +1,25 @@
-# sanity-elasticsearch-connector
+# bkm-elasticsearch-search-api
+
+## Architecture
+
+![Search Architecture](./docs/img/architecture.png)
 
 ## Installation
 
-## Elasticsearch Setup
+### Install dependencies
 
-### Cloud Elasticsearch
+```
+npm install
+```
+
+### Install Elasticsearch
+
+#### Cloud Elasticsearch
 
 1. [Sign up for an Elasticsearch Cloud account](https://cloud.elastic.co/).
 2. Create a deployment. The free tier is sufficient for development.
 
-### Local Development Insecure Elasticsearch
+#### Local Development Insecure Elasticsearch
 
 Run Elasticsearch in a Docker container:
 
@@ -67,7 +77,7 @@ Sync the live Sanity dataset: `npm run sync`
 
 ## Run
 
-### Run the server
+### Local Development
 
 ```
 npm run dev

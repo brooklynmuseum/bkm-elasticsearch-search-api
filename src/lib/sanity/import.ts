@@ -1,3 +1,7 @@
+/**
+ * Import data from Sanity using the Sanity export API
+ * https://www.sanity.io/docs/export
+ */
 import * as https from 'https';
 import { promisify } from 'util';
 import * as stream from 'stream';
