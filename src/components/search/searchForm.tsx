@@ -256,7 +256,11 @@ export function SearchForm() {
           </TabsContent>
           <TabsContent value="inspect">
             <div className="flex flex-col gap-4 overflow-auto">
-              <SearchPagination metadata={metadata} />
+              <SearchPagination
+                total={metadata.total}
+                pages={metadata.pages}
+                pageNumber={formState.pageNumber}
+              />
               <pre className="rounded-md bg-neutral-950 p-4 overflow-x-auto overflow-y-auto font-mono text-sm text-white">
                 <code>{url}</code>
               </pre>
