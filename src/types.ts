@@ -18,7 +18,6 @@ export type SanitySlug = {
 export interface ElasticsearchConstituent {
   id?: string;
   name: string;
-  canonicalName: string;
   prefix?: string;
   suffix?: string;
   dates?: string;
@@ -56,7 +55,7 @@ export interface ElasticsearchDocument {
   searchText?: string;
   imageUrl?: string;
   categories?: string[];
-  keywords?: string[];
+  tags?: string[];
   boostedKeywords?: string[];
   primaryConstituent?: ElasticsearchConstituent;
   startDate?: string;
@@ -81,6 +80,11 @@ export interface ApiSearchParams {
   resultsPerPage: number; // number of results per page
   query?: string; // search query
   type?: string; // document type
+  classification?: string; // cclassification/department
+  'primaryConstituent.name': string; // artist name
+  tags?: string; // tags
+  categories?: string; // categories
+  [key: string]: any; // typescript hack
 }
 
 export interface ApiSearchResponseMetadata {
