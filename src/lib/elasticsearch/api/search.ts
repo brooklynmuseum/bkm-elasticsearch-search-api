@@ -11,7 +11,6 @@ import { addQueryBoolFilterTerm, addQueryAggs } from './searchQueryBuilder';
 import { aggFields } from '../config/indexSettings';
 
 const INDEX_NAME = getEnvVar('ELASTIC_INDEX_NAME');
-const SANITY_TYPES = getEnvVar('SANITY_TYPES');
 
 /**
  * Search for documents in one or more indices
