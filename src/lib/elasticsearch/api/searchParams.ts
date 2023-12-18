@@ -30,7 +30,7 @@ export function getSanitizedSearchParams(params: GenericSearchParams): ApiSearch
 
   // size (number of results shown per page)
   const size = typeof params.size === 'string' ? parseInt(params.size, 10) : undefined;
-  sanitizedParams.resultsPerPage =
+  sanitizedParams.size =
     size && size > 0 && size < MAX_SEARCH_PAGE_SIZE ? size : DEFAULT_SEARCH_PAGE_SIZE;
 
   // search query

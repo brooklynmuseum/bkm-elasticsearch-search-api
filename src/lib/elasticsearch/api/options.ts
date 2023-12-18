@@ -23,6 +23,10 @@ export async function options(
 ): Promise<ApiSearchResponse> {
   const { field, query } = params;
 
+  if (!field) {
+    throw new Error('Field parameter is required');
+  }
+
   const request: T.SearchRequest = {
     index: INDEX_NAME,
     size: 0,
@@ -36,12 +40,13 @@ export async function options(
     },
   };
 
+  // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-fuzzy-query.html
   if (query) {
     request.query = {
       match: {
         [`${field}.search`]: {
           query,
-          fuzziness: 'AUTO:3,7',
+          fuzziness: 'AUTO',
         },
       },
     };
@@ -66,7 +71,7 @@ export async function options(
       }
     }
   } catch (e) {
-    console.error(e);
+    console.error('Error in Elasticsearch aggregation options:', e);
   }
   return {};
 }

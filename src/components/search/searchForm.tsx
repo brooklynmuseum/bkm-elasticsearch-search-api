@@ -41,6 +41,7 @@ export function SearchForm() {
     searchQuery: '',
     pageNumber: 1,
     aggFieldValues: {} as Record<string, string>,
+    size: '24',
   });
   const [url, setUrl] = useState('');
   const [searchResults, setSearchResults] = useState<ApiSearchResponse | null>(null);
@@ -141,6 +142,7 @@ export function SearchForm() {
       queryParams.append('query', formState.searchQuery);
     }
     queryParams.append('page', formState.pageNumber.toString());
+    queryParams.append('size', formState.size);
     for (const field of aggFields) {
       const value = formState.aggFieldValues[field];
       if (value && value !== '-1') {
@@ -159,6 +161,7 @@ export function SearchForm() {
       searchAsYouType: '',
       searchQuery: value,
       pageNumber: 1,
+      size: '24',
       aggFieldValues: {} as Record<string, string>,
     };
     setFormState(newSearch);
@@ -170,6 +173,10 @@ export function SearchForm() {
 
   const handlePageChange = (newPageNumber: number) => {
     setFormState({ ...formState, pageNumber: newPageNumber });
+  };
+
+  const handleSizeChange = (value: string) => {
+    setFormState({ ...formState, size: value });
   };
 
   return (
@@ -214,10 +221,11 @@ export function SearchForm() {
                   <SelectValue placeholder="" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="type">type</SelectItem>
-                  <SelectItem value="classification">classification</SelectItem>
-                  <SelectItem value="primaryConstituent.name">primaryConstituent.name</SelectItem>
-                  <SelectItem value="tags">tags</SelectItem>
+                  {aggFields.map((field: string) => (
+                    <SelectItem key={field} value={field}>
+                      {field}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -264,6 +272,16 @@ export function SearchForm() {
           )}
 
         <div className="flex items-center gap-x-2">
+          <Select value={formState.size} onValueChange={(value) => handleSizeChange(value)}>
+            <SelectTrigger className="">
+              <SelectValue placeholder="" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="12">12</SelectItem>
+              <SelectItem value="24">24</SelectItem>
+              <SelectItem value="48">48</SelectItem>
+            </SelectContent>
+          </Select>
           <Button
             disabled={formState.pageNumber <= 1}
             className="w-full"

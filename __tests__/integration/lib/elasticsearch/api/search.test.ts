@@ -6,7 +6,7 @@ describe('search function', () => {
   it('searches "Yamashita" and returns the expected result', async () => {
     const result = await search({
       pageNumber: 1,
-      resultsPerPage: 10,
+      size: 10,
       query: 'Yamashita',
     });
 
@@ -18,7 +18,7 @@ describe('search function', () => {
   it('searches "Spike Lee Atlanta Georgia" and returns the expected result', async () => {
     const result = await search({
       pageNumber: 1,
-      resultsPerPage: 10,
+      size: 10,
       query: 'Spike Lee Atlanta Georgia',
     });
     expect(result.data).toHaveLength(1);
@@ -28,7 +28,7 @@ describe('search function', () => {
   it('searches "Spike Lee" and returns the expected result', async () => {
     const result = await search({
       pageNumber: 1,
-      resultsPerPage: 10,
+      size: 10,
       query: 'Spike Lee',
     });
     expect(result.data).toHaveLength(10);
@@ -38,7 +38,7 @@ describe('search function', () => {
   it('searches "Spike Lee" with type "exhibition" and returns the expected result', async () => {
     const result = await search({
       pageNumber: 1,
-      resultsPerPage: 10,
+      size: 10,
       query: 'Spike Lee',
       type: 'exhibition',
     });
