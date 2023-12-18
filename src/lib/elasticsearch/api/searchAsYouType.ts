@@ -21,10 +21,27 @@ export async function searchAsYouType(query?: string | null): Promise<ApiSearchR
   const esQuery: T.SearchRequest = {
     index: INDEX_NAME,
     query: {
-      multi_match: {
-        query: sanitizedQuery,
-        type: 'bool_prefix',
-        fields: ['title.suggest', 'title.suggest._2gram', 'title.suggest._3gram'],
+      function_score: {
+        query: {
+          multi_match: {
+            query: sanitizedQuery,
+            type: 'bool_prefix',
+            fields: ['title.suggest', 'title.suggest._2gram', 'title.suggest._3gram'],
+          },
+        },
+        functions: [
+          {
+            // Rank artists higher than other types:
+            filter: { term: { type: 'collectionArtist' } },
+            weight: 2,
+          },
+          {
+            // Rank pages, exhibitions higher:
+            filter: { terms: { type: ['exhibition', 'page'] } },
+            weight: 1.5,
+          },
+        ],
+        boost_mode: 'multiply',
       },
     },
     _source: ['type', 'title', 'url'],

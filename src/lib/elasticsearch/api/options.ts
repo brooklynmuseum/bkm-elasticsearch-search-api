@@ -36,12 +36,13 @@ export async function options(
     },
   };
 
+  // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-fuzzy-query.html
   if (query) {
     request.query = {
       match: {
         [`${field}.search`]: {
           query,
-          fuzziness: 'AUTO:3,7',
+          fuzziness: 'AUTO',
         },
       },
     };
