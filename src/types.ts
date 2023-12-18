@@ -82,7 +82,7 @@ export interface ElasticsearchDocument {
 
 export interface ApiSearchParams {
   pageNumber: number;
-  resultsPerPage: number;
+  size: number;
   query?: string;
   type?: string;
   classification?: string;

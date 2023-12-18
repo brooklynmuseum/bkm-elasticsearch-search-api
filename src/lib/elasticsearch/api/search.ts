@@ -22,8 +22,8 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
   const esQuery: T.SearchRequest = {
     index: INDEX_NAME,
     query: { bool: { must: {} } },
-    from: (searchParams.pageNumber - 1) * searchParams.resultsPerPage || 0,
-    size: searchParams.resultsPerPage,
+    from: (searchParams.pageNumber - 1) * searchParams.size || 0,
+    size: searchParams.size,
     track_total_hits: true,
   };
   if (searchParams.query && esQuery?.query?.bool) {
@@ -61,7 +61,7 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
   addQueryAggs(esQuery);
 
   const response: T.SearchTemplateResponse = await client.search(esQuery);
-  const metadata = getResponseMetadata(response, searchParams.resultsPerPage);
+  const metadata = getResponseMetadata(response, searchParams.size);
   const options = getResponseAggOptions(response);
   const data = response.hits.hits.map((hit) => hit._source);
   const res: ApiSearchResponse = { query: esQuery, data, options, metadata };

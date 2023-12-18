@@ -23,6 +23,10 @@ export async function options(
 ): Promise<ApiSearchResponse> {
   const { field, query } = params;
 
+  if (!field) {
+    throw new Error('Field parameter is required');
+  }
+
   const request: T.SearchRequest = {
     index: INDEX_NAME,
     size: 0,
@@ -67,7 +71,7 @@ export async function options(
       }
     }
   } catch (e) {
-    console.error(e);
+    console.error('Error in Elasticsearch aggregation options:', e);
   }
   return {};
 }
