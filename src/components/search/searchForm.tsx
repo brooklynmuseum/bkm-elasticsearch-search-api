@@ -161,6 +161,7 @@ export function SearchForm() {
       searchAsYouType: '',
       searchQuery: value,
       pageNumber: 1,
+      size: '24',
       aggFieldValues: {} as Record<string, string>,
     };
     setFormState(newSearch);
