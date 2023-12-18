@@ -2,6 +2,7 @@
 
 import { useState, useEffect, ChangeEvent, Key } from 'react';
 import { SearchResult } from './searchResult';
+import { AggOptionResult } from './aggOptionResult';
 import { SearchPagination } from './searchPagination';
 import { useDebounce } from '@/lib/debounce';
 import { Button } from '@/components/ui/button';
@@ -17,11 +18,9 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
-  SearchIcon,
   Code2Icon,
   ListIcon,
   MessageCircleWarningIcon,
-  XIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
 } from 'lucide-react';
@@ -35,6 +34,8 @@ import { aggFields } from '@/lib/elasticsearch/config/indexSettings';
 
 export function SearchForm() {
   const [searchAsYouType, setSearchAsYouType] = useState('');
+  const [optionsQuery, setOptionsQuery] = useState('');
+  const [optionsField, setOptionsField] = useState('primaryConstituent.name');
   const [formState, setFormState] = useState({
     searchAsYouType: '',
     searchQuery: '',
@@ -49,7 +50,7 @@ export function SearchForm() {
   const debouncedSuggest = useDebounce(() => {
     const myQuery = searchAsYouType?.trim();
     setSearchResults(null);
-    if (myQuery?.length < 3) {
+    if (myQuery?.length < 2) {
       return;
     }
     if (myQuery) {
@@ -63,7 +64,7 @@ export function SearchForm() {
           setSearchResults(data);
         })
         .catch((error) => {
-          console.error('Error fetching search results:', error);
+          console.error('Error fetching search-as-you-type results:', error);
           setError(error?.message);
           setSearchResults(null);
         });
@@ -73,6 +74,35 @@ export function SearchForm() {
   const onSearchAsYouTypeChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchAsYouType(e.target.value);
     debouncedSuggest();
+  };
+
+  const debouncedOptions = useDebounce(() => {
+    const myQuery = optionsQuery?.trim();
+    setSearchResults(null);
+    if (myQuery?.length < 2) {
+      return;
+    }
+    if (myQuery) {
+      const currentUrl = `/api/options?field=${optionsField}&query=${myQuery}`;
+      setUrl(currentUrl);
+
+      fetch(currentUrl)
+        .then((res) => res.json())
+        .then((data) => {
+          setMetadata(data.metadata);
+          setSearchResults(data);
+        })
+        .catch((error) => {
+          console.error('Error fetching options:', error);
+          setError(error?.message);
+          setSearchResults(null);
+        });
+    }
+  }, 50);
+
+  const onOptionsQueryChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setOptionsQuery(e.target.value);
+    debouncedOptions();
   };
 
   const fetchSearchResults = async (querystring?: string) => {
@@ -165,6 +195,34 @@ export function SearchForm() {
             autoComplete="off"
           />
         </div>
+        <div className="mb-4">
+          <h2 className="text-lg font-bold mb-4">Aggregations Options</h2>
+          <div className="grid grid-cols-2 items-center gap-x-2">
+            <div>
+              <Input
+                type="search"
+                id="options"
+                placeholder="Type here..."
+                onChange={onOptionsQueryChange}
+                value={optionsQuery}
+                autoComplete="off"
+              />
+            </div>
+            <div>
+              <Select value={optionsField} onValueChange={(value) => setOptionsField(value)}>
+                <SelectTrigger className="">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="type">type</SelectItem>
+                  <SelectItem value="classification">classification</SelectItem>
+                  <SelectItem value="primaryConstituent.name">primaryConstituent.name</SelectItem>
+                  <SelectItem value="tags">tags</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
         <h2 className="text-lg font-bold">Faceted Search</h2>
         <div className="grid items-center gap-1.5">
           <Label htmlFor="searchQuery">Search Query</Label>
@@ -248,9 +306,13 @@ export function SearchForm() {
             </div>
             {searchResults && searchResults.data?.length > 0 && (
               <div className="grid grid-cols-1 gap-2">
-                {searchResults.data.map((result: ElasticsearchDocument, i: Key) => (
-                  <SearchResult key={i} result={result} />
-                ))}
+                {searchResults.data.map((result: ElasticsearchDocument | AggOption, i: Key) =>
+                  'key' in result ? (
+                    <AggOptionResult key={i} result={result as AggOption} />
+                  ) : (
+                    <SearchResult key={i} result={result as ElasticsearchDocument} />
+                  ),
+                )}
               </div>
             )}
           </TabsContent>
