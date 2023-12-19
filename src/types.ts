@@ -1,3 +1,5 @@
+import type { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+
 export type JsonData = { [key: string]: any };
 export type DataMap = Map<string, JsonData>;
 
@@ -80,6 +82,21 @@ export interface ElasticsearchDocument {
   rawSource?: any;
 }
 
+export interface AggOption {
+  key: string;
+  doc_count: number;
+}
+
+export interface Agg {
+  name: string;
+  displayName: string;
+  options?: Array<AggOption>;
+}
+
+export interface AggOptions {
+  [k: string]: AggOption[];
+}
+
 export type SortOrder = 'asc' | 'desc';
 
 export interface ApiSearchParams {
@@ -103,27 +120,11 @@ export interface ApiSearchResponseMetadata {
 }
 
 export interface ApiSearchResponse {
-  query?: any;
-  data?: any;
-  terms?: any;
-  filters?: any;
-  options?: any;
+  query?: SearchRequest;
+  data: ElasticsearchDocument[] | AggOption[];
+  // filters?: any; TODO
+  options?: AggOptions;
   metadata?: ApiSearchResponseMetadata;
   apiError?: string;
   error?: any;
-}
-
-export interface AggOption {
-  key: string;
-  doc_count: number;
-}
-
-export interface Agg {
-  name: string;
-  displayName: string;
-  options?: Array<AggOption>;
-}
-
-export interface AggOptions {
-  [k: string]: AggOption[];
 }

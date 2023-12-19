@@ -16,7 +16,7 @@ const MAX_SUGGESTIONS = 10; // Maximum number of suggestions to return
  */
 export async function searchAsYouType(query?: string | null): Promise<ApiSearchResponse> {
   const sanitizedQuery = query?.trim();
-  if (!sanitizedQuery) return {};
+  if (!sanitizedQuery) return { data: [] };
 
   const esQuery: T.SearchRequest = {
     index: INDEX_NAME,

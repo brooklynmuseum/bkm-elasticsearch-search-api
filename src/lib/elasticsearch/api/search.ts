@@ -5,6 +5,7 @@ import type {
   ApiSearchResponse,
   ApiSearchResponseMetadata,
   ApiSearchParams,
+  ElasticsearchDocument,
   AggOptions,
 } from '@/types';
 import { addQueryBoolFilterTerm, addQueryAggs } from './searchQueryBuilder';
@@ -71,7 +72,7 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
   const response: T.SearchTemplateResponse = await client.search(esQuery);
   const metadata = getResponseMetadata(response, searchParams.size, searchParams.pageNumber);
   const options = getResponseAggOptions(response);
-  const data = response.hits.hits.map((hit) => hit._source);
+  const data = response.hits.hits.map((hit) => hit._source) as ElasticsearchDocument[];
   const res: ApiSearchResponse = { query: esQuery, data, options, metadata };
   return res;
 }
