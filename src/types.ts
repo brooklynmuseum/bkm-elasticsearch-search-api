@@ -80,9 +80,13 @@ export interface ElasticsearchDocument {
   rawSource?: any;
 }
 
+export type SortOrder = 'asc' | 'desc';
+
 export interface ApiSearchParams {
   pageNumber: number;
   size: number;
+  sortField?: string;
+  sortOrder?: SortOrder;
   query?: string;
   type?: string;
   classification?: string;

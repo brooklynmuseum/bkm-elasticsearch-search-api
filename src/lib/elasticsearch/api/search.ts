@@ -58,6 +58,14 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
     }
   }
 
+  if (searchParams.sortField && searchParams.sortOrder) {
+    esQuery.sort = [{ [searchParams.sortField]: searchParams.sortOrder }];
+  } else {
+    // Collection objects don't have a startDate (to account for BCE), so sort by startYear
+    // first, then startDate (so that both objects and events/exhibitions are sorted)
+    esQuery.sort = [{ startYear: 'desc' }, { startDate: 'desc' }];
+  }
+
   addQueryAggs(esQuery);
 
   const response: T.SearchTemplateResponse = await client.search(esQuery);
