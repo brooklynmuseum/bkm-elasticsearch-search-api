@@ -58,10 +58,18 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
     }
   }
 
+  if (searchParams.sortField && searchParams.sortOrder) {
+    esQuery.sort = [{ [searchParams.sortField]: searchParams.sortOrder }];
+  } else {
+    // Collection objects don't have a startDate (to account for BCE), so sort by startYear
+    // first, then startDate (so that both objects and events/exhibitions are sorted)
+    esQuery.sort = [{ startYear: 'desc' }, { startDate: 'desc' }];
+  }
+
   addQueryAggs(esQuery);
 
   const response: T.SearchTemplateResponse = await client.search(esQuery);
-  const metadata = getResponseMetadata(response, searchParams.size);
+  const metadata = getResponseMetadata(response, searchParams.size, searchParams.pageNumber);
   const options = getResponseAggOptions(response);
   const data = response.hits.hits.map((hit) => hit._source);
   const res: ApiSearchResponse = { query: esQuery, data, options, metadata };
@@ -78,11 +86,11 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
 function getResponseMetadata(
   response: T.SearchTemplateResponse,
   size: number,
+  pageNumber: number = 1,
 ): ApiSearchResponseMetadata {
   let total = response?.hits?.total || 0; // Returns either number or SearchTotalHits
   if (typeof total !== 'number') total = total.value;
   const pages = Math.ceil(total / size);
-  const pageNumber = Math.ceil(response?.hits?.hits?.length / size);
   return { total, pages, pageNumber };
 }
 
