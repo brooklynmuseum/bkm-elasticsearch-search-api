@@ -135,6 +135,7 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
       {searchResults &&
         aggFields.map(
           (field) =>
+            searchResults.options &&
             searchResults.options?.[field]?.length > 0 && (
               <div key={field} className="grid items-center gap-1.5">
                 <Label htmlFor={field}>{field}</Label>

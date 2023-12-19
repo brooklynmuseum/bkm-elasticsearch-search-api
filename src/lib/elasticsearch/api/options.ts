@@ -73,5 +73,5 @@ export async function options(
   } catch (e) {
     console.error('Error in Elasticsearch aggregation options:', e);
   }
-  return {};
+  return { data: [] };
 }
