@@ -1,24 +1,18 @@
 'use client';
 
-import type { ApiSearchResponseMetadata } from '@/types';
+import type { ApiSearchResponse } from '@/types';
 
-export function SearchPagination({
-  total,
-  pages,
-  pageNumber,
-}: {
-  total?: number;
-  pages?: number;
-  pageNumber?: number;
-}) {
-  if (!total) {
+export function SearchPagination({ searchResults }: { searchResults: ApiSearchResponse | null }) {
+  if (!searchResults?.metadata?.total) {
     return <div className="italic text-sm text-muted-foreground">No results found.</div>;
   }
 
   return (
     <div className="italic text-sm text-muted-foreground">
-      {total} results.
-      {pages && pageNumber && ` Page ${pageNumber} of ${pages}.`}
+      {searchResults?.metadata?.total} results.
+      {searchResults?.metadata?.pages &&
+        searchResults?.metadata?.pageNumber &&
+        ` Page ${searchResults?.metadata?.pageNumber} of ${searchResults?.metadata?.pages}.`}
     </div>
   );
 }

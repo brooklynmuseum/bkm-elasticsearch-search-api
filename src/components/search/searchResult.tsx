@@ -2,14 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
 import type { ElasticsearchDocument } from '@/types';
 
 export function SearchResult({ result }: { result: ElasticsearchDocument }) {
