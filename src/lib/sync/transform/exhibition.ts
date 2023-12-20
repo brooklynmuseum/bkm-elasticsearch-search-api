@@ -1,4 +1,4 @@
-import { setIfHasValue, portableTextToPlaintext } from '@/lib/utils';
+import { setIfHasValue, portableTextToPlaintext, setDateAndYear } from './utils';
 import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 
 const transform: ElasticsearchTransformFunction = (
@@ -19,8 +19,8 @@ const transform: ElasticsearchTransformFunction = (
   setIfHasValue(esDoc, 'title', sanityDoc.title?.trim());
   setIfHasValue(esDoc, 'description', portableTextToPlaintext(sanityDoc.description));
   setIfHasValue(esDoc, 'imageUrl', imageUrl);
-  setIfHasValue(esDoc, 'startDate', sanityDoc.startsAt);
-  setIfHasValue(esDoc, 'endDate', sanityDoc.endsAt);
+  setDateAndYear(esDoc, sanityDoc.startsAt, 'start');
+  setDateAndYear(esDoc, sanityDoc.endsAt, 'end');
   setIfHasValue(esDoc, 'language', sanityDoc.language);
   return esDoc;
 };

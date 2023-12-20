@@ -1,4 +1,4 @@
-import { setIfHasValue, portableTextToPlaintext } from '@/lib/utils';
+import { setIfHasValue, portableTextToPlaintext } from './utils';
 import { transformPageRoute } from './pageRoute';
 import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 

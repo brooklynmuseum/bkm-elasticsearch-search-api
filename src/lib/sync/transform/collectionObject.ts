@@ -1,5 +1,4 @@
-import { setIfHasValue } from '@/lib/utils';
-import { getLegacyId } from '@/lib/utils';
+import { setIfHasValue, getLegacyId } from './utils';
 import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 
 const transform: ElasticsearchTransformFunction = (
@@ -22,6 +21,8 @@ const transform: ElasticsearchTransformFunction = (
   setIfHasValue(esDoc, 'title', sanityDoc.title?.trim());
   setIfHasValue(esDoc, 'description', sanityDoc.description?.trim());
   setIfHasValue(esDoc, 'imageUrl', imageUrl);
+  // for collectionObjects we don't set startDate & endDate due to
+  // possible range beyond unix epoch, e.g. -500 (500 BCE)
   setIfHasValue(esDoc, 'startYear', sanityDoc.objectDateBegin);
   setIfHasValue(esDoc, 'endYear', sanityDoc.objectDateEnd);
 
