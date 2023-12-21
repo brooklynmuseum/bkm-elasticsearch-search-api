@@ -4,6 +4,29 @@
 
 ![Search Architecture](./docs/img/architecture.png)
 
+## Unified Search Fields
+
+- **_Identifier (\_id)_**: A unique identifier for the item within the system. Typically, the ID of the ingested document.
+- **_Type (type)_**: The general type of the item (e.g., exhibition, event, collectionObject, etc.).
+- **_URL (url)_**: A web address where more information about the item can be found.
+- **_Title (title)_**: Represents the primary name or title of the item.
+- **_Description (description)_**: A brief summary or description of the item.
+- **_Search Text (searchText)_**: Full text of the item, used for full-text search.
+- **_Tags (tags)_**: A list of keywords or tags associated with the item. TODO: Rename to "keywords"?
+- **_Boosted Keywords (boostedKeywords)_**: A list of keywords or tags associated with the item that should be boosted in search results.
+- **_Primary Constituent (primaryConstituent)_**: The name of the individual or organization responsible for creating the item.
+- **_Start Date (startDate)_**: The relevant start date for the item, such as publication, creation, event, or release date.
+- **_Start Year (startYear)_**: The relevant start year for the item, such as publication, creation, event, or release date.
+- **_End Date (endDate)_**: The relevant end date for the item, such as publication, creation, event, or release date.
+- **_End Year (endYear)_**: The relevant end year for the item, such as publication, creation, event, or release date.
+- **_Language (language)_**: The language in which the item is written or presented, e.g. "en-US".
+- **_Image URL (imageUrl)_**: A web address of an image associated with the item.
+- **_Price (price)_** (TODO): Relevant for retail products and event tickets, representing the cost.
+- **_Collection (collection)_**: The name of the collection to which the item belongs.
+- **_Museum Location (museumLocation)_**: The physical or virtual location associated with the item.
+- **_Visible_**: Whether the item is currently on view. (TODO?)
+- **_Public Access (publicAccess)_**: Whether the item is licensed public/open access.
+
 ## Installation
 
 ### Install dependencies

@@ -1,4 +1,4 @@
-import { portableTextToPlaintext } from '@/lib/utils';
+import { portableTextToPlaintext } from '@/lib/sync/transform/utils';
 
 describe('portableTextToPlaintext', () => {
   it('converts portable text to plain text', () => {

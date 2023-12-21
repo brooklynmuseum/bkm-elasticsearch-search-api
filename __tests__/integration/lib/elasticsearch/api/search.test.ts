@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config({ path: '.env.test' });
 import { search } from '@/lib/elasticsearch/api/search';
+import type { ElasticsearchDocument } from '@/types';
 
 describe('search function', () => {
   it('searches "Yamashita" and returns the expected result', async () => {
@@ -9,10 +10,8 @@ describe('search function', () => {
       size: 10,
       query: 'Yamashita',
     });
-
-    // TODO: Issue with block text in raw source?
-    //expect(result.data).toHaveLength(1);
-    expect(result.data[0].rawSource._id).toEqual('collection_object_225440');
+    const esDoc = result.data[0] as ElasticsearchDocument;
+    expect(esDoc.rawSource._id).toEqual('collection_object_225440');
   });
 
   it('searches "Spike Lee Atlanta Georgia" and returns the expected result', async () => {
@@ -22,7 +21,8 @@ describe('search function', () => {
       query: 'Spike Lee Atlanta Georgia',
     });
     expect(result.data).toHaveLength(1);
-    expect(result.data[0].rawSource._id).toEqual('232b72a6-3b97-41fe-bfc4-33c5649dda83');
+    const esDoc = result.data[0] as ElasticsearchDocument;
+    expect(esDoc.rawSource._id).toEqual('232b72a6-3b97-41fe-bfc4-33c5649dda83');
   });
 
   it('searches "Spike Lee" and returns the expected result', async () => {
@@ -43,6 +43,7 @@ describe('search function', () => {
       type: 'exhibition',
     });
     expect(result.data).toHaveLength(1);
-    expect(result.data[0].rawSource._id).toEqual('232b72a6-3b97-41fe-bfc4-33c5649dda83');
+    const esDoc = result.data[0] as ElasticsearchDocument;
+    expect(esDoc.rawSource._id).toEqual('232b72a6-3b97-41fe-bfc4-33c5649dda83');
   });
 });

@@ -3,8 +3,10 @@ import * as S from './mappingTypes';
 
 export const aggFields = [
   'type',
+  'collection',
   'classification',
   'primaryConstituent.name',
+  'museumLocation',
   'tags',
   'categories',
 ];
@@ -27,15 +29,23 @@ export const indexSettings: T.IndicesIndexSettings = {
       tags: S.searchableAggregatedKeywordAnalyzerField, // Agg
       boostedKeywords: S.unaggregatedStandardAnalyzerTextField,
       primaryConstituent: S.constituentObjectField,
+
+      // Two date fields for date range queries, accomodates artworks which
+      // have start/end years stretching back far beyond unix epoch, e.g. -500 (500 BCE)
       startDate: S.dateField,
+      startYear: S.integerField,
       endDate: S.dateField,
+      endYear: S.integerField,
+
       language: S.keywordField,
 
       // Artwork-only fields:
       accessionNumber: S.keywordField,
       classification: S.searchableAggregatedKeywordAnalyzerField, // Agg
-      startYear: S.integerField,
-      endYear: S.integerField,
+      collection: S.searchableAggregatedKeywordAnalyzerField, // Agg
+      museumLocation: S.searchableAggregatedKeywordAnalyzerField, // Agg
+      visible: S.booleanField,
+      publicAccess: S.booleanField,
 
       // Artist-only fields:
       nationality: S.keywordField,

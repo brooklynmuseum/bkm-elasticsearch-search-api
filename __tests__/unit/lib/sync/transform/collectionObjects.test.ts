@@ -194,6 +194,10 @@ describe('transformCollectionObject', () => {
       title: 'Hook-shaped Toggle',
       startYear: 1868,
       endYear: 1933,
+      collection: 'Arts of the Americas',
+      museumLocation: 'Luce Visible Storage and Study Center, 5th Floor, Paper Alcove, Drawer Unit',
+      visible: true,
+      publicAccess: true,
       searchText: '74.212.4',
       classification: 'Tool',
       primaryConstituent: {

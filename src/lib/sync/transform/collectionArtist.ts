@@ -1,5 +1,4 @@
-import { setIfHasValue, getEnvVar } from '@/lib/utils';
-import { getLegacyId } from '@/lib/utils';
+import { setIfHasValue, getLegacyId } from './utils';
 import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 
 const transform: ElasticsearchTransformFunction = (

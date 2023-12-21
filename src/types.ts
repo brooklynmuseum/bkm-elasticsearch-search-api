@@ -44,14 +44,6 @@ export interface ElasticsearchGeographicalLocation {
   type?: string;
 }
 
-export interface ElasticsearchMuseumLocation {
-  id?: string;
-  name?: string;
-  isPublic?: boolean;
-  isFloor?: boolean;
-  parentId?: string;
-}
-
 export interface ElasticsearchDocument {
   _id?: string;
   _index?: string;
@@ -74,6 +66,10 @@ export interface ElasticsearchDocument {
   classification?: string;
   startYear?: number;
   endYear?: number;
+  collection?: string; // could apply to other types
+  museumLocation?: string; // could apply to other types
+  visible?: boolean;
+  publicAccess?: boolean;
 
   // Artist fields:
   nationality?: string;
