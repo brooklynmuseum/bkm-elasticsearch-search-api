@@ -51,5 +51,12 @@ export function getSanitizedSearchParams(params: GenericSearchParams): ApiSearch
     }
   }
 
+  if (params.visible === 'true') {
+    sanitizedParams.visible = true;
+  }
+  if (params.publicAccess === 'true') {
+    sanitizedParams.publicAccess = true;
+  }
+
   return sanitizedParams as ApiSearchParams;
 }
