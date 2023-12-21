@@ -1,5 +1,7 @@
-import { setIfHasValue, getLegacyId } from './utils';
+import { setIfHasValue, getLegacyId, getBooleanValue } from './utils';
 import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
+import { museumLocations } from './dictionaries/museumLocations';
+import { collections } from './dictionaries/collections';
 
 const transform: ElasticsearchTransformFunction = (
   sanityDoc: JsonData,
@@ -25,12 +27,17 @@ const transform: ElasticsearchTransformFunction = (
   // possible range beyond unix epoch, e.g. -500 (500 BCE)
   setIfHasValue(esDoc, 'startYear', sanityDoc.objectDateBegin);
   setIfHasValue(esDoc, 'endYear', sanityDoc.objectDateEnd);
+  setIfHasValue(esDoc, 'collection', getCollectionName(sanityDoc.collectionId));
+  setIfHasValue(esDoc, 'museumLocation', getMuseumLocationDescription(sanityDoc.museumLocationId));
+  esDoc.visible = getBooleanValue(sanityDoc.visible);
+  esDoc.publicAccess = getBooleanValue(sanityDoc.publicAccess);
 
   esDoc.searchText = sanityDoc.accessionNumber;
 
   if (sanityDoc.classification && sanityDoc.classification !== '(not assigned)') {
     esDoc.classification = sanityDoc.classification;
   }
+
   if (sanityDoc.constituents && Array.isArray(sanityDoc.constituents)) {
     // find 'Artist' constituent
     const primaryConstituent = sanityDoc.constituents.find(
@@ -71,6 +78,16 @@ function getImageUrl(images: any[]) {
     }
   }
   return '';
+}
+
+function getMuseumLocationDescription(locationId: number) {
+  const museumLocation = museumLocations.find((museumLocation) => museumLocation.id === locationId);
+  return museumLocation ? museumLocation.description : null;
+}
+
+function getCollectionName(collectionId: number) {
+  const collection = collections.find((collection) => collection.id === collectionId);
+  return collection ? collection.name : null;
 }
 
 export default transform;

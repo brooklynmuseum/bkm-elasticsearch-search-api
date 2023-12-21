@@ -3,8 +3,10 @@ import * as S from './mappingTypes';
 
 export const aggFields = [
   'type',
+  'collection',
   'classification',
   'primaryConstituent.name',
+  'museumLocation',
   'tags',
   'categories',
 ];
@@ -40,6 +42,10 @@ export const indexSettings: T.IndicesIndexSettings = {
       // Artwork-only fields:
       accessionNumber: S.keywordField,
       classification: S.searchableAggregatedKeywordAnalyzerField, // Agg
+      collection: S.searchableAggregatedKeywordAnalyzerField, // Agg
+      museumLocation: S.searchableAggregatedKeywordAnalyzerField, // Agg
+      visible: S.booleanField,
+      publicAccess: S.booleanField,
 
       // Artist-only fields:
       nationality: S.keywordField,
