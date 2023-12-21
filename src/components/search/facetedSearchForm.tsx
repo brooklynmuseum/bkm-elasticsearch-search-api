@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { useDebounce } from '@/lib/debounce';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import type { ApiSearchResponse, AggOption } from '@/types';
@@ -33,6 +34,8 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     pageNumber: 1,
     aggFieldValues: {} as Record<string, string>,
     size: '24',
+    visible: false,
+    publicAccess: false,
   });
 
   const debouncedSearch = useDebounce(() => {
@@ -53,6 +56,12 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
         queryParams.append(field, value);
       }
     });
+    if (formState.visible === true) {
+      queryParams.append('visible', 'true');
+    }
+    if (formState.publicAccess === true) {
+      queryParams.append('publicAccess', 'true');
+    }
 
     const currentUrl = `/api/search?${queryParams.toString()}`;
     setUrl(currentUrl);
@@ -63,7 +72,6 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
         throw new Error(response.statusText);
       }
       const data = await response.json();
-      console.log('yyy', data);
       setSearchResultsLocal(data);
       setSearchResults(data);
     } catch (error: any) {
@@ -84,7 +92,6 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
           throw new Error(response.statusText);
         }
         const data = await response.json();
-        console.log('yyy', data);
         setSearchResultsLocal(data);
         setSearchResults(data);
       } catch (error: any) {
@@ -107,6 +114,11 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
       aggFieldValues: { ...formState.aggFieldValues, [field]: value },
       pageNumber: 1,
     });
+    debouncedSearch();
+  };
+
+  const handleSwitchChange = (field: string, checked: boolean) => {
+    setFormState({ ...formState, [field]: checked, pageNumber: 1 });
     debouncedSearch();
   };
 
@@ -159,6 +171,39 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
               </div>
             ),
         )}
+
+      <div className="flex items-center gap-x-4">
+        <div className="flex items-center gap-x-2">
+          <Switch
+            id="visible"
+            onCheckedChange={(checked) => handleSwitchChange('visible', checked)}
+            checked={formState.visible}
+            aria-labelledby={'label-visible'}
+          />
+          <Label
+            htmlFor="visible"
+            id={'label-visible'}
+            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            On View
+          </Label>
+        </div>
+        <div className="flex items-center gap-x-2">
+          <Switch
+            id="publicAccess"
+            onCheckedChange={(checked) => handleSwitchChange('publicAccess', checked)}
+            checked={formState.publicAccess}
+            aria-labelledby={'label-publicAccess'}
+          />
+          <Label
+            htmlFor="publicAccess"
+            id={'label-publicAccess'}
+            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Public Access
+          </Label>
+        </div>
+      </div>
 
       <div className="flex items-center gap-x-2">
         <Select value={formState.size} onValueChange={(value) => handleSizeChange(value)}>
