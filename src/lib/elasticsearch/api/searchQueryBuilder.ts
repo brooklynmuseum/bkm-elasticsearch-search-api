@@ -1,6 +1,6 @@
-// import * as T from '@elastic/elasticsearch/lib/api/types';
-// import { format } from 'date-fns';
+import * as T from '@elastic/elasticsearch/lib/api/types';
 import { aggFields } from '../config/indexSettings';
+import { format } from 'date-fns';
 
 const SEARCH_AGG_SIZE = 100;
 
@@ -41,29 +41,63 @@ export function addQueryAggs(esQuery: any) {
   esQuery.aggs = aggs;
 }
 
-/*
+/**
+ * For the default date range query, we only want documents (events) that
+ * have already started OR have no start date.
+ * @param esQuery
+ * @param searchParams
+ */
+export function addDefaultQueryBoolDateRange(esQuery: any) {
+  const boolQuery: T.QueryDslQueryContainer = {
+    bool: {
+      should: [
+        {
+          range: {
+            startDate: {
+              lte: format(new Date(), 'yyyy-MM-dd'),
+            },
+          },
+        },
+        {
+          bool: {
+            must_not: {
+              exists: {
+                field: 'startDate',
+              },
+            },
+          },
+        },
+      ],
+      minimum_should_match: 1,
+    },
+  };
+  esQuery.query ??= {};
+  esQuery.query.bool ??= {};
+  esQuery.query.bool.filter ??= [];
+  esQuery.query.bool.filter.push(boolQuery);
+}
 
 export function addQueryBoolDateRange(
   esQuery: any,
-  fromDate: Date | undefined,
-  toDate: Date | undefined,
+  startDate: Date | undefined,
+  endDate: Date | undefined,
 ) {
-  if (!fromDate && !toDate) return;
+  if (!startDate && !endDate) return;
   const ranges: T.QueryDslQueryContainer[] = [];
-  if (fromDate) {
+  if (startDate) {
     ranges.push({
       range: {
-        date: {
-          lte: format(fromDate, 'yyyy-MM-dd'),
+        startDate: {
+          lte: format(startDate, 'yyyy-MM-dd'),
         },
       },
     });
   }
-  if (toDate) {
+  if (endDate) {
     ranges.push({
       range: {
         endDate: {
-          gte: format(toDate, 'yyyy-MM-dd'),
+          gte: format(endDate, 'yyyy-MM-dd'),
         },
       },
     });
@@ -81,39 +115,43 @@ export function addQueryBoolDateRange(
  *
  * @param esQuery The ES query to modify in place
  * @param searchParams The search params
- */ /*
-export function addQueryBoolYearRange(esQuery: any, searchParams: ApiSearchParams) {
+ */
+export function addQueryBoolYearRange(
+  esQuery: any,
+  startYear: number | undefined,
+  endYear: number | undefined,
+) {
   const ranges: T.QueryDslQueryContainer[] = [];
-  if (searchParams.startYear !== undefined && searchParams.endYear !== undefined) {
+  if (startYear !== undefined && endYear !== undefined && startYear <= endYear) {
     ranges.push({
       range: {
         startYear: {
-          gte: searchParams.startYear,
-          lte: searchParams.endYear,
+          gte: startYear,
+          lte: endYear,
         },
       },
     });
     ranges.push({
       range: {
         endYear: {
-          gte: searchParams.startYear,
-          lte: searchParams.endYear,
+          gte: startYear,
+          lte: endYear,
         },
       },
     });
-  } else if (searchParams.startYear !== undefined) {
+  } else if (startYear !== undefined) {
     ranges.push({
       range: {
         startYear: {
-          gte: searchParams.startYear,
+          gte: startYear,
         },
       },
     });
-  } else if (searchParams.endYear !== undefined) {
+  } else if (endYear !== undefined) {
     ranges.push({
       range: {
         endYear: {
-          lte: searchParams.endYear,
+          lte: endYear,
         },
       },
     });
@@ -126,41 +164,8 @@ export function addQueryBoolYearRange(esQuery: any, searchParams: ApiSearchParam
   }
 }
 
-/**
- * For the default date range query, we only want documents (events) that
- * have already started OR have no start date.
- * @param esQuery
- * @param searchParams
- */ /*
-export function addDefaultQueryBoolDateRange(esQuery: any, searchParams: ApiSearchParams) {
-  const boolQuery: T.QueryDslQueryContainer = {
-    bool: {
-      should: [
-        {
-          range: {
-            date: {
-              lte: format(new Date(), 'yyyy-MM-dd'),
-            },
-          },
-        },
-        {
-          bool: {
-            must_not: {
-              exists: {
-                field: 'date',
-              },
-            },
-          },
-        },
-      ],
-      minimum_should_match: 1,
-    },
-  };
-  esQuery.query ??= {};
-  esQuery.query.bool ??= {};
-  esQuery.query.bool.filter ??= [];
-  esQuery.query.bool.filter.push(boolQuery);
-}
+/*
+
 
 export function addQueryBoolFilterTerms(esQuery: any, searchParams: ApiSearchParams) {
   if (indicesMeta[searchParams.index]?.filters?.length > 0) {

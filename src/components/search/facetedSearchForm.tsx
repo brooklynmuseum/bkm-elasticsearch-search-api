@@ -34,6 +34,8 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     pageNumber: 1,
     aggFieldValues: {} as Record<string, string>,
     size: '24',
+    startYear: '',
+    endYear: '',
     visible: false,
     publicAccess: false,
   });
@@ -61,6 +63,12 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     }
     if (formState.publicAccess === true) {
       queryParams.append('publicAccess', 'true');
+    }
+    if (formState.startYear) {
+      queryParams.append('startYear', formState.startYear);
+    }
+    if (formState.endYear) {
+      queryParams.append('endYear', formState.endYear);
     }
 
     const currentUrl = `/api/search?${queryParams.toString()}`;
@@ -117,8 +125,8 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     debouncedSearch();
   };
 
-  const handleSwitchChange = (field: string, checked: boolean) => {
-    setFormState({ ...formState, [field]: checked, pageNumber: 1 });
+  const handleFormValueChange = (field: string, value: string | boolean) => {
+    setFormState({ ...formState, [field]: value, pageNumber: 1 });
     debouncedSearch();
   };
 
@@ -173,10 +181,29 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
         )}
 
       <div className="flex items-center gap-x-4">
+        <div className="grid items-center gap-1.5">
+          <Label htmlFor="startYear">Start Year</Label>
+          <Input
+            id="startYear"
+            value={formState.startYear}
+            onChange={(e) => handleFormValueChange('startYear', e.target.value)}
+          />
+        </div>
+        <div className="grid items-center gap-1.5">
+          <Label htmlFor="endYear">End Year</Label>
+          <Input
+            id="endYear"
+            value={formState.endYear}
+            onChange={(e) => handleFormValueChange('endYear', e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="flex items-center gap-x-4">
         <div className="flex items-center gap-x-2">
           <Switch
             id="visible"
-            onCheckedChange={(checked) => handleSwitchChange('visible', checked)}
+            onCheckedChange={(checked) => handleFormValueChange('visible', checked)}
             checked={formState.visible}
             aria-labelledby={'label-visible'}
           />
@@ -191,7 +218,7 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
         <div className="flex items-center gap-x-2">
           <Switch
             id="publicAccess"
-            onCheckedChange={(checked) => handleSwitchChange('publicAccess', checked)}
+            onCheckedChange={(checked) => handleFormValueChange('publicAccess', checked)}
             checked={formState.publicAccess}
             aria-labelledby={'label-publicAccess'}
           />
