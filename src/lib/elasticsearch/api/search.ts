@@ -8,7 +8,13 @@ import type {
   ElasticsearchDocument,
   AggOptions,
 } from '@/types';
-import { addQueryBoolFilterTerm, addQueryAggs } from './searchQueryBuilder';
+import {
+  addQueryBoolFilterTerm,
+  addQueryAggs,
+  addDefaultQueryBoolDateRange,
+  addQueryBoolDateRange,
+  addQueryBoolYearRange,
+} from './searchQueryBuilder';
 import { aggFields } from '../config/indexSettings';
 
 const INDEX_NAME = getEnvVar('ELASTIC_INDEX_NAME');
@@ -53,12 +59,12 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
     ];
   }
 
+  // Add search filters:
   for (const aggField of aggFields) {
     if (searchParams[aggField]) {
       addQueryBoolFilterTerm(esQuery, aggField, searchParams[aggField]);
     }
   }
-
   if (searchParams.visible === true) {
     addQueryBoolFilterTerm(esQuery, 'visible', true);
   }
@@ -66,6 +72,22 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
     addQueryBoolFilterTerm(esQuery, 'publicAccess', true);
   }
 
+  // Date ranges
+  if (!searchParams.type) {
+    // Default search has special date range filter
+    // addDefaultQueryBoolDateRange(esQuery, searchParams);  TODO
+  }
+
+  if ((searchParams.type === 'event' || searchParams.type === 'exhibition') && searchParams.isNow) {
+    // Events & Exhibitions search has special date range filter
+    addQueryBoolDateRange(esQuery, new Date(), new Date());
+  }
+
+  if (searchParams.startYear || searchParams.endYear) {
+    addQueryBoolYearRange(esQuery, searchParams.startYear, searchParams.endYear);
+  }
+
+  // Add sort
   if (searchParams.sortField && searchParams.sortOrder) {
     esQuery.sort = [{ [searchParams.sortField]: searchParams.sortOrder }];
   } else {
@@ -74,6 +96,7 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
     esQuery.sort = [{ startYear: 'desc' }, { startDate: 'desc' }];
   }
 
+  // Include aggregations
   addQueryAggs(esQuery);
 
   const response: T.SearchTemplateResponse = await client.search(esQuery);

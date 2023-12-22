@@ -106,6 +106,8 @@ export interface ApiSearchParams {
   'primaryConstituent.name'?: string;
   tags?: string;
   categories?: string;
+  startYear?: number;
+  endYear?: number;
   [key: string]: any;
 }
 

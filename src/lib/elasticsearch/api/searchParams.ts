@@ -45,17 +45,25 @@ export function getSanitizedSearchParams(params: GenericSearchParams): ApiSearch
   // search query
   sanitizedParams.query = typeof params.query === 'string' && params.query ? params.query : '';
 
+  // search filters
   for (const aggField of aggFields) {
     if (typeof params[aggField] === 'string' && params[aggField]) {
       sanitizedParams[aggField] = params[aggField] as string;
     }
   }
-
   if (params.visible === 'true') {
     sanitizedParams.visible = true;
   }
   if (params.publicAccess === 'true') {
     sanitizedParams.publicAccess = true;
+  }
+
+  // date/year ranges
+  if (typeof params.startYear === 'string') {
+    sanitizedParams.startYear = parseInt(params.startYear);
+  }
+  if (typeof params.endYear === 'string') {
+    sanitizedParams.endYear = parseInt(params.endYear);
   }
 
   return sanitizedParams as ApiSearchParams;
