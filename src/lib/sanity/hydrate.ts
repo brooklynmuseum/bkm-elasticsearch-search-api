@@ -6,51 +6,47 @@ import { DataMap, JsonData } from '@/types';
  * @param dataMap Map of all documents in the dataset.
  * @param obj The object to resolve references within.
  * @param documentId The ID of the original document to avoid self-referencing.
- * @param maxDepth The maximum depth to resolve references.
- * @param currentDepth The current depth in the resolution process.
+ * @param processedRefs Set of already processed references to avoid loops.
  * @returns The object with resolved references.
  */
 function resolveReferences(
   dataMap: DataMap,
   obj: JsonData,
   documentId: string,
-  maxDepth: number,
-  currentDepth: number = 0,
+  processedRefs: Set<string> = new Set(),
 ): JsonData {
-  if (currentDepth > maxDepth) {
-    return obj; // Return the object as is if the maximum depth is exceeded
-  }
+  // Remember current document
+  processedRefs.add(documentId);
 
   Object.keys(obj).forEach((key) => {
-    if (typeof obj[key] === 'object' && obj[key] !== null) {
-      if (obj[key]._ref && obj[key]._ref !== documentId) {
-        const refData = dataMap.get(obj[key]._ref);
+    const value = obj[key];
+    if (typeof value === 'object' && value !== null) {
+      if (value._ref && !processedRefs.has(value._ref)) {
+        const refData = dataMap.get(value._ref);
         if (refData) {
-          obj[key] = { ...refData };
-          // Resolve references within the referenced object, increasing depth
-          resolveReferences(dataMap, obj[key], documentId, maxDepth, currentDepth + 1);
+          // Remember processed references to avoid loops
+          processedRefs.add(value._ref);
+          obj[key] = resolveReferences(dataMap, { ...refData }, value._ref, processedRefs);
         }
       } else {
-        // Continue to resolve references in nested objects without increasing depth
-        resolveReferences(dataMap, obj[key], documentId, maxDepth, currentDepth);
+        resolveReferences(dataMap, value, documentId, processedRefs);
       }
     }
   });
+
   return obj;
 }
 
 /**
  * Recursively resolve references within a document, hydrating it with referenced data.
  *
+ * WARNING: This function mutates the original document!
+ *
  * @param dataMap Map of all documents in the dataset.
  * @param document The document to resolve references within.
- * @param maxDepth The maximum depth to resolve references.
  * @returns The document with resolved references.
  */
-export function hydrateDocument(
-  dataMap: DataMap,
-  document: JsonData,
-  maxDepth: number = 1,
-): JsonData {
-  return resolveReferences(dataMap, document, document._id, maxDepth);
+export function hydrateDocument(dataMap: DataMap, document: JsonData): JsonData {
+  const processedRefs = new Set<string>();
+  return resolveReferences(dataMap, document, document._id, processedRefs);
 }
