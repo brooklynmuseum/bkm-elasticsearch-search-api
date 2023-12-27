@@ -1,5 +1,6 @@
 import type { JsonData, ElasticsearchDocument } from '@/types';
 import { toPlainText } from '@portabletext/toolkit';
+import { convertDateToUTC } from '@/lib/time';
 
 /**
  * Assigns a value to a key in a JSON object if the value is neither undefined nor null.
@@ -27,10 +28,10 @@ export function setDateAndYear(
   value: string,
   type: 'start' | 'end',
 ): void {
-  const date = new Date(value);
-  if (!isNaN(date.getTime())) {
-    obj[`${type}Date`] = date.toISOString();
-    obj[`${type}Year`] = date.getFullYear();
+  const dateInUTC = convertDateToUTC(value);
+  if (dateInUTC) {
+    obj[`${type}Date`] = dateInUTC.toISOString();
+    obj[`${type}Year`] = dateInUTC.getFullYear();
   }
 }
 

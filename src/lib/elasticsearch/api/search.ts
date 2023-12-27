@@ -83,6 +83,10 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
     addQueryBoolDateRange(esQuery, new Date(), new Date());
   }
 
+  if (searchParams.startDate || searchParams.endDate) {
+    addQueryBoolDateRange(esQuery, searchParams.startDate, searchParams.endDate);
+  }
+
   if (searchParams.startYear || searchParams.endYear) {
     addQueryBoolYearRange(esQuery, searchParams.startYear, searchParams.endYear);
   }

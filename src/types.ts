@@ -106,6 +106,8 @@ export interface ApiSearchParams {
   'primaryConstituent.name'?: string;
   tags?: string;
   categories?: string;
+  startDate?: Date;
+  endDate?: Date;
   startYear?: number;
   endYear?: number;
   visible?: boolean;

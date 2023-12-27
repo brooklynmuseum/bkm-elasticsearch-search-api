@@ -1,6 +1,6 @@
 import * as T from '@elastic/elasticsearch/lib/api/types';
 import { aggFields } from '../config/indexSettings';
-import { format } from 'date-fns';
+import { format, formatISO } from 'date-fns';
 
 const SEARCH_AGG_SIZE = 100;
 
@@ -83,12 +83,13 @@ export function addQueryBoolDateRange(
   endDate: Date | undefined,
 ) {
   if (!startDate && !endDate) return;
+  console.log('startdate', startDate, endDate);
   const ranges: T.QueryDslQueryContainer[] = [];
   if (startDate) {
     ranges.push({
       range: {
         startDate: {
-          lte: format(startDate, 'yyyy-MM-dd'),
+          lte: formatISO(startDate, { representation: 'date' }),
         },
       },
     });
@@ -97,7 +98,7 @@ export function addQueryBoolDateRange(
     ranges.push({
       range: {
         endDate: {
-          gte: format(endDate, 'yyyy-MM-dd'),
+          gte: formatISO(endDate, { representation: 'date' }),
         },
       },
     });
