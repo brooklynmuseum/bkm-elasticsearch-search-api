@@ -38,6 +38,7 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     endYear: '',
     visible: false,
     publicAccess: false,
+    rawSource: false,
   });
 
   const debouncedSearch = useDebounce(() => {
@@ -63,6 +64,9 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     }
     if (formState.publicAccess === true) {
       queryParams.append('publicAccess', 'true');
+    }
+    if (formState.rawSource === true) {
+      queryParams.append('rawSource', 'true');
     }
     if (formState.startYear) {
       queryParams.append('startYear', formState.startYear);
@@ -199,7 +203,7 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
         </div>
       </div>
 
-      <div className="flex items-center gap-x-4">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         <div className="flex items-center gap-x-2">
           <Switch
             id="visible"
@@ -228,6 +232,21 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
             className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             Public Access
+          </Label>
+        </div>
+        <div className="flex items-center gap-x-2">
+          <Switch
+            id="rawSource"
+            onCheckedChange={(checked) => handleFormValueChange('rawSource', checked)}
+            checked={formState.rawSource}
+            aria-labelledby={'label-rawSource'}
+          />
+          <Label
+            htmlFor="rawSource"
+            id={'label-rawSource'}
+            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Include Raw Source
           </Label>
         </div>
       </div>

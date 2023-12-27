@@ -108,6 +108,9 @@ export interface ApiSearchParams {
   categories?: string;
   startYear?: number;
   endYear?: number;
+  visible?: boolean;
+  publicAccess?: boolean;
+  rawSource?: boolean;
   [key: string]: any;
 }
 

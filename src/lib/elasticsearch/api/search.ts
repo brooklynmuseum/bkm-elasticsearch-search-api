@@ -99,6 +99,17 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
   // Include aggregations
   addQueryAggs(esQuery);
 
+  // Remove rawSource and searchText from response
+  if (!searchParams.rawSource) {
+    esQuery._source = {
+      excludes: ['rawSource', 'searchText'],
+    };
+  } else {
+    esQuery._source = {
+      excludes: ['searchText'],
+    };
+  }
+
   const response: T.SearchTemplateResponse = await client.search(esQuery);
   const metadata = getResponseMetadata(response, searchParams.size, searchParams.pageNumber);
   const options = getResponseAggOptions(response);
