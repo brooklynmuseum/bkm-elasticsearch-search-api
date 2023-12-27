@@ -153,7 +153,6 @@ describe('transformPage', () => {
       title: 'Boletos',
       imageUrl:
         'https://cdn.sanity.io/images/kzj21sz4/production/363216d78dd354df97b276fc60bc346100b91fdd-2560x1920.jpg',
-      searchText: '', // TODO: Fix this
       language: 'es-US',
       rawSource,
     };

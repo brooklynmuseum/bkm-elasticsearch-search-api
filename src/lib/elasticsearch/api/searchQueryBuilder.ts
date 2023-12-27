@@ -77,6 +77,24 @@ export function addQueryBoolLanguage(esQuery: any, language: string | undefined)
 }
 
 /**
+ * Add an exists clause to a bool filter query
+ *
+ * @param esQuery   The ES query
+ * @param name    The name of the field to filter on
+ * @returns  Void.  The ES Query is modified in place
+ */
+export function addQueryBoolFilterExists(esQuery: any, name: string): void {
+  esQuery.query ??= {};
+  esQuery.query.bool ??= {};
+  esQuery.query.bool.filter ??= [];
+  esQuery.query.bool.filter.push({
+    exists: {
+      field: name,
+    },
+  });
+}
+
+/**
  * For the default date range query, we only want documents (events) that
  * have already started OR have no start date.
  * @param esQuery
@@ -239,24 +257,6 @@ export function addQueryBoolFilter(esQuery: any, filter: any): void {
   esQuery.query.bool ??= {};
   esQuery.query.bool.filter ??= [];
   esQuery.query.bool.filter.push(filter);
-}
-
-/**
- * Add an exists clause to a bool filter query
- *
- * @param esQuery   The ES query
- * @param name    The name of the field to filter on
- * @returns  Void.  The ES Query is modified in place
- */ /*
-export function addQueryBoolFilterExists(esQuery: any, name: string): void {
-  esQuery.query ??= {};
-  esQuery.query.bool ??= {};
-  esQuery.query.bool.filter ??= [];
-  esQuery.query.bool.filter.push({
-    exists: {
-      field: name,
-    },
-  });
 }
 
 /**

@@ -112,6 +112,7 @@ export interface ApiSearchParams {
   endYear?: number;
   visible?: boolean;
   publicAccess?: boolean;
+  hasPhoto?: boolean;
   language?: string;
   rawSource?: boolean;
   [key: string]: any;

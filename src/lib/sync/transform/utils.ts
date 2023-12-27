@@ -10,7 +10,7 @@ import { convertDateToUTC } from '@/lib/time';
  * @param {any} value - The value to set for the key.
  */
 export function setIfHasValue(obj: JsonData, key: string, value: any) {
-  if (value !== undefined && value !== null) {
+  if (value !== undefined && value !== null && value !== '') {
     obj[key] = value;
   }
 }

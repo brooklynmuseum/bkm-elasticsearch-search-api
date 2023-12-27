@@ -44,6 +44,7 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     language: '',
     visible: false,
     publicAccess: false,
+    hasPhoto: false,
     rawSource: false,
   });
 
@@ -70,6 +71,9 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     }
     if (formState.publicAccess === true) {
       queryParams.append('publicAccess', 'true');
+    }
+    if (formState.hasPhoto === true) {
+      queryParams.append('hasPhoto', 'true');
     }
     if (formState.startDate && formState.endDate) {
       queryParams.append('startDate', formState.startDate);
@@ -267,6 +271,21 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
             className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             Public Access
+          </Label>
+        </div>
+        <div className="flex items-center gap-x-2">
+          <Switch
+            id="hasPhoto"
+            onCheckedChange={(checked) => handleFormValueChange('hasPhoto', checked)}
+            checked={formState.hasPhoto}
+            aria-labelledby={'label-hasPhoto'}
+          />
+          <Label
+            htmlFor="hasPhoto"
+            id={'label-hasPhoto'}
+            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Has Photo
           </Label>
         </div>
         <div className="flex items-center gap-x-2">

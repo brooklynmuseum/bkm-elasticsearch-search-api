@@ -64,6 +64,7 @@ export function getSanitizedSearchParams(params: GenericSearchParams): ApiSearch
       sanitizedParams[aggField] = parseString(params[aggField]);
     }
   }
+
   if (params.visible === 'true') {
     sanitizedParams.visible = true;
   }
@@ -72,6 +73,9 @@ export function getSanitizedSearchParams(params: GenericSearchParams): ApiSearch
   }
   if (params.rawSource === 'true') {
     sanitizedParams.rawSource = true;
+  }
+  if (params.hasPhoto === 'true') {
+    sanitizedParams.hasPhoto = true;
   }
 
   // date/year ranges
