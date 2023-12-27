@@ -1,7 +1,7 @@
 import { DataMap, JsonData } from '@/types';
 
 /**
- * Recursively resolve references within an object up to a specified depth.
+ * Recursively resolve references within an object, avoiding loops.
  *
  * @param dataMap Map of all documents in the dataset.
  * @param obj The object to resolve references within.
@@ -15,8 +15,7 @@ function resolveReferences(
   documentId: string,
   processedRefs: Set<string> = new Set(),
 ): JsonData {
-  // Remember current document
-  processedRefs.add(documentId);
+  processedRefs.add(documentId); // Remember current document
 
   Object.keys(obj).forEach((key) => {
     const value = obj[key];
@@ -24,8 +23,6 @@ function resolveReferences(
       if (value._ref && !processedRefs.has(value._ref)) {
         const refData = dataMap.get(value._ref);
         if (refData) {
-          // Remember processed references to avoid loops
-          processedRefs.add(value._ref);
           obj[key] = resolveReferences(dataMap, { ...refData }, value._ref, processedRefs);
         }
       } else {
