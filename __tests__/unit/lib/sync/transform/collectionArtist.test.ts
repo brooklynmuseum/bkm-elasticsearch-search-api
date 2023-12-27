@@ -24,7 +24,6 @@ describe('transformCollectionArtist', () => {
       nationality: 'American, born El Salvador',
       startYear: 1976,
       endYear: 9999,
-      language: 'en-US',
       rawSource,
     };
 

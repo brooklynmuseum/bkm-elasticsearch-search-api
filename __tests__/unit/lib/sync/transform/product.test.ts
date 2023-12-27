@@ -50,7 +50,6 @@ describe('transformPage', () => {
       imageUrl:
         'https://cdn.shopify.com/s/files/1/0780/5601/products/22_image_naturalcopy.png?v=1644363262',
       searchText: 'Henry Holt Books',
-      language: 'es-US',
       tags: ["Children's Bookfair", "Event_Children's Bookfair"],
       rawSource,
     };

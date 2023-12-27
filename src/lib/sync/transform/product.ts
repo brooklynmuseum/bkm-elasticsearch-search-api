@@ -9,7 +9,6 @@ const transform: ElasticsearchTransformFunction = (
     _id: sanityDoc._id,
     type: 'product',
     rawSource: sanityDoc,
-    language: 'es-US',
   };
 
   const store = sanityDoc.store;

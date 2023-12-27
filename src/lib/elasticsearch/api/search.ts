@@ -14,6 +14,7 @@ import {
   addDefaultQueryBoolDateRange,
   addQueryBoolDateRange,
   addQueryBoolYearRange,
+  addQueryBoolLanguage,
 } from './searchQueryBuilder';
 import { aggFields } from '../config/indexSettings';
 
@@ -70,6 +71,10 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
   }
   if (searchParams.publicAccess === true) {
     addQueryBoolFilterTerm(esQuery, 'publicAccess', true);
+  }
+
+  if (searchParams.language) {
+    addQueryBoolLanguage(esQuery, searchParams.language);
   }
 
   // Date ranges

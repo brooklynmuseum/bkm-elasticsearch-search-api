@@ -11,7 +11,6 @@ const transform: ElasticsearchTransformFunction = (
     _id: sanityDoc._id,
     type: 'collectionObject',
     rawSource: sanityDoc,
-    language: 'en-US',
   };
 
   const id = getLegacyId(sanityDoc._id);
