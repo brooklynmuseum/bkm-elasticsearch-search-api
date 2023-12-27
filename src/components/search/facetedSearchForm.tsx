@@ -12,10 +12,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { DatePickerWithRange } from './datePickerWithRange';
 import { useDebounce } from '@/lib/debounce';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import type { ApiSearchResponse, AggOption } from '@/types';
 import { aggFields } from '@/lib/elasticsearch/config/indexSettings';
+import { DateRange } from 'react-day-picker';
+import { format } from 'date-fns';
 
 type FacetedSearchFormProps = {
   setSearchResults: (results: ApiSearchResponse | null) => void;
@@ -34,6 +37,8 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     pageNumber: 1,
     aggFieldValues: {} as Record<string, string>,
     size: '24',
+    startDate: '',
+    endDate: '',
     startYear: '',
     endYear: '',
     visible: false,
@@ -64,6 +69,10 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     }
     if (formState.publicAccess === true) {
       queryParams.append('publicAccess', 'true');
+    }
+    if (formState.startDate && formState.endDate) {
+      queryParams.append('startDate', formState.startDate);
+      queryParams.append('endDate', formState.endDate);
     }
     if (formState.rawSource === true) {
       queryParams.append('rawSource', 'true');
@@ -129,6 +138,23 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     debouncedSearch();
   };
 
+  const handleDateRangeChange = (newDateRange: DateRange | undefined) => {
+    if (newDateRange?.from && newDateRange?.to) {
+      console.log(
+        'newDateRange',
+        format(newDateRange.from, 'yyyy-MM-dd'),
+        format(newDateRange.to, 'yyyy-MM-dd'),
+      );
+      setFormState({
+        ...formState,
+        startDate: format(newDateRange.from, 'yyyy-MM-dd'),
+        endDate: format(newDateRange.to, 'yyyy-MM-dd'),
+        pageNumber: 1,
+      });
+    }
+    debouncedSearch();
+  };
+
   const handleFormValueChange = (field: string, value: string | boolean) => {
     setFormState({ ...formState, [field]: value, pageNumber: 1 });
     debouncedSearch();
@@ -183,6 +209,11 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
               </div>
             ),
         )}
+
+      <div className="grid items-center gap-1.5">
+        <Label htmlFor="dateRange">Date Range</Label>
+        <DatePickerWithRange id="dateRange" onDateChange={handleDateRangeChange} />
+      </div>
 
       <div className="flex items-center gap-x-4">
         <div className="grid items-center gap-1.5">

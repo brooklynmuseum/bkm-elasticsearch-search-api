@@ -1,5 +1,6 @@
 import { aggFields } from '../config/indexSettings';
 import type { ApiSearchParams, SortOrder } from '@/types';
+import { convertDateToUTC } from '@/lib/time';
 
 /**
  * Encapsulates & validates search parameters.
@@ -62,6 +63,18 @@ export function getSanitizedSearchParams(params: GenericSearchParams): ApiSearch
   }
 
   // date/year ranges
+  if (typeof params.startDate === 'string' && params.startDate) {
+    const utcStartDate = convertDateToUTC(params.startDate);
+    if (utcStartDate) {
+      sanitizedParams.startDate = convertDateToUTC(params.startDate);
+    }
+  }
+  if (typeof params.endDate === 'string' && params.endDate) {
+    const utcEndDate = convertDateToUTC(params.endDate);
+    if (utcEndDate) {
+      sanitizedParams.endDate = convertDateToUTC(params.endDate);
+    }
+  }
   if (typeof params.startYear === 'string') {
     sanitizedParams.startYear = parseInt(params.startYear);
   }

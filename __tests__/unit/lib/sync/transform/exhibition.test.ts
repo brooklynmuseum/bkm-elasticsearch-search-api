@@ -160,9 +160,9 @@ describe('transformExhibition', () => {
         'Take a rare glimpse into the world of Spike Lee (born Atlanta, Georgia, 1957; raised in Brooklyn, New York), one of the most influential and prolific American filmmakers and directors. Through an immersive installation of objects drawn from Lee’s personal collection, visitors will discover the sources of inspiration that have fueled his creative output.',
       imageUrl:
         'https://cdn.sanity.io/images/kzj21sz4/production/e35c538870b3a61e48fc359fbc167f6832c61d57-600x600.png',
-      startDate: '2023-10-07T00:00:00.000Z',
+      startDate: '2023-10-07T04:00:00.000Z',
       startYear: 2023,
-      endDate: '2024-02-04T00:00:00.000Z',
+      endDate: '2024-02-04T05:00:00.000Z',
       endYear: 2024,
       language: 'en-US',
       rawSource,
