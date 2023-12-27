@@ -63,8 +63,8 @@ export async function processChunkedData(
         }
       }
 
-      const denormalizedDocument = hydrateDocument(dataMap, document);
-      const transformedDocument = transformers[document._type](denormalizedDocument, websiteUrl);
+      const hydratedDocument = hydrateDocument(dataMap, document);
+      const transformedDocument = transformers[document._type](hydratedDocument, websiteUrl);
       if (!transformedDocument) continue; // Some content, like unrouted pages, cannot be indexed
       currentChunk.push(transformedDocument);
 
