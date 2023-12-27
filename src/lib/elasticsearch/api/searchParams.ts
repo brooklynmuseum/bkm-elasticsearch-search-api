@@ -57,6 +57,9 @@ export function getSanitizedSearchParams(params: GenericSearchParams): ApiSearch
   if (params.publicAccess === 'true') {
     sanitizedParams.publicAccess = true;
   }
+  if (params.rawSource === 'true') {
+    sanitizedParams.rawSource = true;
+  }
 
   // date/year ranges
   if (typeof params.startYear === 'string') {

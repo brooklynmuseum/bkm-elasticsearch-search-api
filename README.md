@@ -71,7 +71,6 @@ ELASTIC_CLOUD_USERNAME=yourCloudUsername
 ELASTIC_CLOUD_PASSWORD=yourCloudPassword
 ELASTIC_INDEX_NAME=content # name of the index to create
 CHUNK_SIZE=1000 # number of documents to index in one batch
-HYDRATION_DEPTH=4 # 0 = no hydration, 1 = hydration of first level references, 2 = hydration of second level references, etc.
 WEBSITE_URL=https://brooklynmuseum.org # used for generating URLs for search results
 ```
 

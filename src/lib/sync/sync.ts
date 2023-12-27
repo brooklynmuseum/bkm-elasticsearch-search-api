@@ -18,7 +18,6 @@ export async function sync(deleteIndexIfExists = false, datafile?: string) {
   const sanityTypes = getEnvVar('SANITY_TYPES').split(',');
   const indexName = getEnvVar('ELASTIC_INDEX_NAME');
   const chunkSize = parseInt(getEnvVar('CHUNK_SIZE'), 10);
-  const hydrationDepth = parseInt(getEnvVar('HYDRATION_DEPTH'), 10);
   const websiteUrl = getEnvVar('WEBSITE_URL');
 
   try {
@@ -33,13 +32,8 @@ export async function sync(deleteIndexIfExists = false, datafile?: string) {
     await createIndex(indexName, indexSettings, deleteIndexIfExists);
     console.log(`Index ${indexName} created.`);
     console.log(`Indexing ${dataMap.size} documents...`);
-    await processChunkedData(
-      dataMap,
-      sanityTypes,
-      chunkSize,
-      hydrationDepth,
-      websiteUrl,
-      async (chunk) => bulkUpsert(indexName, chunk),
+    await processChunkedData(dataMap, sanityTypes, chunkSize, websiteUrl, async (chunk) =>
+      bulkUpsert(indexName, chunk),
     );
   } catch (error) {
     console.error(error);
@@ -50,7 +44,6 @@ export async function processChunkedData(
   dataMap: DataMap,
   typesToIndex: string[],
   chunkSize: number,
-  hydrationDepth: number,
   websiteUrl: string,
   asyncProcessChunk: (chunk: JsonData[]) => Promise<void>,
 ): Promise<void> {
@@ -70,7 +63,7 @@ export async function processChunkedData(
         }
       }
 
-      const denormalizedDocument = hydrateDocument(dataMap, document, hydrationDepth);
+      const denormalizedDocument = hydrateDocument(dataMap, document);
       const transformedDocument = transformers[document._type](denormalizedDocument, websiteUrl);
       if (!transformedDocument) continue; // Some content, like unrouted pages, cannot be indexed
       currentChunk.push(transformedDocument);
