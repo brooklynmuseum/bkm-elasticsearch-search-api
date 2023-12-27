@@ -207,7 +207,6 @@ describe('transformCollectionObject', () => {
       },
       imageUrl:
         'https://d1lfxha3ugu3d4.cloudfront.net/images/opencollection/objects/size0/74.212.4_bw.jpg',
-      language: 'en-US',
       rawSource,
     };
     const result = transformCollectionObject(rawSource, 'https://brooklynmuseum.org');

@@ -9,7 +9,6 @@ const transform: ElasticsearchTransformFunction = (
     _id: sanityDoc._id,
     type: 'collectionArtist',
     rawSource: sanityDoc,
-    language: 'en-US',
   };
 
   const id = getLegacyId(sanityDoc._id);

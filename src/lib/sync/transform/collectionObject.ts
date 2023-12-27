@@ -11,7 +11,6 @@ const transform: ElasticsearchTransformFunction = (
     _id: sanityDoc._id,
     type: 'collectionObject',
     rawSource: sanityDoc,
-    language: 'en-US',
   };
 
   const id = getLegacyId(sanityDoc._id);
@@ -27,6 +26,13 @@ const transform: ElasticsearchTransformFunction = (
   // possible range beyond unix epoch, e.g. -500 (500 BCE)
   setIfHasValue(esDoc, 'startYear', sanityDoc.objectDateBegin);
   setIfHasValue(esDoc, 'endYear', sanityDoc.objectDateEnd);
+  if (esDoc.startYear && esDoc.startYear > 0 && esDoc.endYear === 0) {
+    // TODO: Bug in TMS/Sanity data: objectDateEnd is sometimes 0
+    // even though objectDateBegin is set.  In this case, set endYear
+    // to startYear.
+    esDoc.endYear = esDoc.startYear;
+  }
+
   setIfHasValue(esDoc, 'collection', getCollectionName(sanityDoc.collectionId));
   setIfHasValue(esDoc, 'museumLocation', getMuseumLocationDescription(sanityDoc.museumLocationId));
   esDoc.visible = getBooleanValue(sanityDoc.visible);

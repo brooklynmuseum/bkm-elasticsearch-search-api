@@ -41,6 +41,7 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     endDate: '',
     startYear: '',
     endYear: '',
+    language: '',
     visible: false,
     publicAccess: false,
     rawSource: false,
@@ -82,6 +83,9 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     }
     if (formState.endYear) {
       queryParams.append('endYear', formState.endYear);
+    }
+    if (formState.language) {
+      queryParams.append('language', formState.language);
     }
 
     const currentUrl = `/api/search?${queryParams.toString()}`;
@@ -283,9 +287,21 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
       </div>
 
       <div className="flex items-center gap-x-2">
+        <Select
+          value={formState.language}
+          onValueChange={(value) => handleFormValueChange('language', value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Language" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="en-US">English</SelectItem>
+            <SelectItem value="es-US">Spanish</SelectItem>
+          </SelectContent>
+        </Select>
         <Select value={formState.size} onValueChange={(value) => handleSizeChange(value)}>
           <SelectTrigger>
-            <SelectValue placeholder="" />
+            <SelectValue placeholder="Results per page" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="12">12</SelectItem>

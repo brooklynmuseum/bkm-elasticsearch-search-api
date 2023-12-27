@@ -47,6 +47,41 @@ export function addQueryAggs(esQuery: any) {
  * @param esQuery
  * @param searchParams
  */
+export function addQueryBoolLanguage(esQuery: any, language: string | undefined) {
+  if (!language) return;
+  const boolQuery: T.QueryDslQueryContainer = {
+    bool: {
+      should: [
+        {
+          term: {
+            language,
+          },
+        },
+        {
+          bool: {
+            must_not: {
+              exists: {
+                field: 'language',
+              },
+            },
+          },
+        },
+      ],
+      minimum_should_match: 1,
+    },
+  };
+  esQuery.query ??= {};
+  esQuery.query.bool ??= {};
+  esQuery.query.bool.filter ??= [];
+  esQuery.query.bool.filter.push(boolQuery);
+}
+
+/**
+ * For the default date range query, we only want documents (events) that
+ * have already started OR have no start date.
+ * @param esQuery
+ * @param searchParams
+ */
 export function addDefaultQueryBoolDateRange(esQuery: any) {
   const boolQuery: T.QueryDslQueryContainer = {
     bool: {

@@ -131,3 +131,4 @@ http://localhost:3000/api/searchAsYouType?query=spike
 - "language" or "locale"? (e.g. "en-US")
 - Derek: converting block text to plain text not working too well?
 - Doesn't collection object have an "image" property? (sometimes it's not rank 0)
+- Many objectDateEnd are 0, even though objectDateStart is not 0. (e.g. 2019)
