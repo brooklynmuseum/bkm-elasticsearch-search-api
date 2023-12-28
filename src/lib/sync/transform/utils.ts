@@ -1,6 +1,7 @@
 import type { JsonData, ElasticsearchDocument } from '@/types';
 import { toPlainText } from '@portabletext/toolkit';
 import { convertDateToUTC } from '@/lib/time';
+import sanitizeHtml from 'sanitize-html';
 
 /**
  * Assigns a value to a key in a JSON object if the value is neither undefined nor null.
@@ -55,17 +56,6 @@ export function getLegacyId(id: string): string {
 }
 
 /**
- * Converts Portable Text to plain text. If conversion fails, returns undefined.
- * TODO: This function doesn't seem to work with page content
- *
- * @param {any} portableTextBlocks - The Portable Text to convert.
- * @returns {string | undefined} The plain text or undefined if conversion fails.
- */
-export function portableTextToPlaintext(portableTextBlocks: any): string | undefined {
-  return toPlainText(portableTextBlocks)?.trim();
-}
-
-/**
  * Gets the value of a boolean from a string or boolean, or return false.
  *
  * @param x the value to check
@@ -78,4 +68,79 @@ export function getBooleanValue(x?: boolean | string | string[] | number | null)
   }
   if (typeof x === 'number') return x === 1;
   return false; // undefined, null, string[]
+}
+
+/**
+ * Removes all HTML tags from a string.
+ * @param str The string to remove HTML from
+ * @returns The string with HTML removed
+ */
+export function removeHtml(str: string): string {
+  if (!str) return '';
+  return sanitizeHtml(str, { allowedTags: [] });
+}
+
+/**
+ * Replace non-breaking spaces, tabs, and other non-standard spaces.
+ * @param str The string to replace
+ * @returns The string with non-standard spaces replaced with standard spaces
+ */
+export function replaceNonStandardSpaces(str: string): string {
+  if (!str) return '';
+  return str.replace(/[\s\u00A0]+/g, ' ').trim();
+}
+
+/**
+ * Replace all newlines with spaces.
+ * @param str The string to replace
+ * @returns The string with newlines replaced with spaces
+ */
+export function replaceAllNewlinesWithSpaces(str: string): string {
+  if (!str) return '';
+  return str.replace(/(\r\n|\n|\r)/g, ' ').trim();
+}
+
+/**
+ * Remove HTML, replace non-standard spaces, and replace newlines with spaces.
+ * @param str The string to replace
+ * @returns The string with HTML removed, non-standard spaces replaced, and newlines replaced with spaces
+ */
+export function getPlainSearchText(str: string): string {
+  return replaceAllNewlinesWithSpaces(replaceNonStandardSpaces(removeHtml(str)));
+}
+
+/**
+ * Converts Portable Text to plain text. If conversion fails, returns undefined.
+ *
+ * @param {any} portableTextBlocks - The Portable Text to convert.
+ * @returns {string | undefined} The plain text or undefined if conversion fails.
+ */
+export function portableTextToPlaintext(portableTextBlocks: any): string | undefined {
+  return replaceNonStandardSpaces(toPlainText(portableTextBlocks));
+}
+
+/**
+ * Recursively converts structured content to plain text.
+ * Convert all block text to strings, and join them with string values.
+ *
+ * @param content Arbitrary structured content to convert
+ * @returns The plain text
+ */
+export function recursivePortableTextToPlaintext(content: any): string {
+  if (Array.isArray(content)) {
+    return content
+      .map((item) => recursivePortableTextToPlaintext(item))
+      .join(' ')
+      .trim();
+  } else if (content && typeof content === 'object') {
+    if (content?._type === 'block') {
+      return portableTextToPlaintext(content) || '';
+    } else {
+      return Object.values(content)
+        .map((value) => recursivePortableTextToPlaintext(value))
+        .join(' ')
+        .trim();
+    }
+  }
+  return '';
 }

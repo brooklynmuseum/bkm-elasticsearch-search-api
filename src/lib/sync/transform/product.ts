@@ -1,4 +1,4 @@
-import { setIfHasValue, splitCommaSeparatedString } from './utils';
+import { setIfHasValue, splitCommaSeparatedString, getPlainSearchText } from './utils';
 import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 
 const transform: ElasticsearchTransformFunction = (
@@ -13,6 +13,7 @@ const transform: ElasticsearchTransformFunction = (
 
   const store = sanityDoc.store;
   if (!store) return; // can't index a product without a store
+  if (store.isDeleted === true) return; // don't index deleted products
 
   const slug = store.slug?.current?.trim();
   const url = `https://shop.brooklynmuseum.org/products/${slug}`;
@@ -21,7 +22,7 @@ const transform: ElasticsearchTransformFunction = (
   setIfHasValue(esDoc, 'url', url);
   setIfHasValue(esDoc, 'title', store.title?.trim());
   setIfHasValue(esDoc, 'imageUrl', imageUrl);
-  setIfHasValue(esDoc, 'searchText', store.vendor?.trim());
+  setIfHasValue(esDoc, 'searchText', getPlainSearchText(store.descriptionHtml?.trim()));
   setIfHasValue(esDoc, 'tags', splitCommaSeparatedString(store.tags));
   setIfHasValue(esDoc, 'imageUrl', store.previewImageUrl);
   return esDoc;
