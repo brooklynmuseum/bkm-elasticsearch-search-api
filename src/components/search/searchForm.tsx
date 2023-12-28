@@ -29,7 +29,7 @@ export function SearchForm() {
         </div>
       )}
       {/* Left pane */}
-      <div className="bg-neutral-50 md:col-span-6 lg:col-span-4 xl:col-span-3 flex flex-col gap-4 p-4 overflow-auto md:pb-12">
+      <div className="bg-neutral-50 md:col-span-6 lg:col-span-4 xl:col-span-3 flex flex-col gap-2 p-4 overflow-auto md:pb-12">
         <div className="mb-4">
           <SearchAsYouTypeForm
             setSearchResults={setSearchResults}
@@ -78,12 +78,12 @@ export function SearchForm() {
             )}
           </TabsContent>
           <TabsContent value="inspect">
-            <div className="flex flex-col gap-4 overflow-auto">
+            <div className="flex flex-col gap-4">
               <SearchPagination searchResults={searchResults} />
-              <pre className="rounded-md bg-neutral-950 p-4 overflow-x-auto overflow-y-auto font-mono text-sm text-white">
+              <pre className="rounded-md bg-neutral-950 p-4 overflow-x-auto font-mono text-sm text-white">
                 <code>{url}</code>
               </pre>
-              <pre className="h-[80vh] rounded-md bg-neutral-950 p-4 overflow-x-auto overflow-y-auto font-mono text-sm text-white">
+              <pre className="rounded-md bg-neutral-950 p-4 overflow-x-auto font-mono text-sm text-white">
                 <code>{JSON.stringify(searchResults, null, 2)}</code>
               </pre>
             </div>
