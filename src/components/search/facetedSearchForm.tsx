@@ -19,6 +19,7 @@ import type { ApiSearchResponse, AggOption } from '@/types';
 import { aggFields } from '@/lib/elasticsearch/config/indexSettings';
 import { DateRange } from 'react-day-picker';
 import { format } from 'date-fns';
+import { allTopSearchQuerySets } from './topSearches2023';
 
 type FacetedSearchFormProps = {
   setSearchResults: (results: ApiSearchResponse | null) => void;
@@ -47,6 +48,7 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     hasPhoto: false,
     rawSource: false,
   });
+  const [tempSearchQuery, setTempSearchQuery] = useState<string>('');
 
   const debouncedSearch = useDebounce(() => {
     executeSearch();
@@ -133,6 +135,7 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
   }, [setError, setSearchResultsLocal, setSearchResults, setUrl]);
 
   const handleSearchQueryInputChange = (value: string) => {
+    if (value === '-1') return;
     setFormState({ ...formState, searchQuery: value, pageNumber: 1 });
     debouncedSearch();
   };
@@ -195,6 +198,29 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
           placeholder="Type here..."
           onChange={(e) => handleSearchQueryInputChange(e.target.value)}
         />
+      </div>
+
+      <div className="bg-neutral-200 p-3 rounded-md flex flex-col gap-1.5">
+        <Label className="text-sm leading-none mb-2">Test Top Search Queries for 2023</Label>
+        {allTopSearchQuerySets.map((querySet) => (
+          <div className="" key={querySet.name}>
+            <Select
+              value={tempSearchQuery}
+              onValueChange={(value) => handleSearchQueryInputChange(value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={querySet.name} />
+              </SelectTrigger>
+              <SelectContent>
+                {querySet.queries.map((value: string) => (
+                  <SelectItem key={value} value={value}>
+                    {value}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        ))}
       </div>
 
       {searchResults &&
