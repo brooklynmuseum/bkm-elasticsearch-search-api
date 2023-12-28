@@ -20,7 +20,7 @@ export function SearchForm() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 md:h-screen">
       {error && (
-        <div className="flex flex-col gap-4 col-span-2">
+        <div className="flex flex-col gap-4 col-span-1 md:col-span-12 p-4">
           <Alert variant="destructive">
             <MessageCircleWarningIcon className="h-5 w-5" />
             <AlertTitle>Error!</AlertTitle>

@@ -157,7 +157,8 @@ describe('transformExhibition', () => {
       url: 'https://brooklynmuseum.org/exhibitions/spike-lee-creative-sources',
       title: 'Spike Lee: Creative Sources',
       description:
-        'Take a rare glimpse into the world of Spike Lee (born Atlanta, Georgia, 1957; raised in Brooklyn, New York), one of the most influential and prolific American filmmakers and directors. Through an immersive installation of objects drawn from Lee’s personal collection, visitors will discover the sources of inspiration that have fueled his creative output.',
+        'Take a rare glimpse into the world of Spike Lee (born Atlanta, Georgia, 1957; raised in Brooklyn, New York), one of the most influential and prolific American filmmakers and directors. Through an immersive installation of objects drawn from Lee’s personal collection, visitors will discover the sources of inspiration that have fueled his creative output.',
+      searchText: 'More info!',
       imageUrl:
         'https://cdn.sanity.io/images/kzj21sz4/production/e35c538870b3a61e48fc359fbc167f6832c61d57-600x600.png',
       startDate: '2023-10-07T04:00:00.000Z',
@@ -168,7 +169,6 @@ describe('transformExhibition', () => {
       rawSource,
     };
     const result = transformExhibition(rawSource, 'https://brooklynmuseum.org');
-    console.log('yyyy', result);
     expect(result).toEqual(expected);
   });
 });
