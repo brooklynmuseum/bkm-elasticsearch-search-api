@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
         <div className="relative flex min-h-screen flex-col">
           <Header />
-          <main className="md:container md:mx-auto">{children}</main>
+          <main className="flex-grow">{children}</main>
         </div>
       </body>
     </html>

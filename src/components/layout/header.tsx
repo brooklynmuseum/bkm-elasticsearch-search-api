@@ -16,20 +16,13 @@ const logsUrl = 'https://vercel.com/derekphilipau-s-team/bkm-elasticsearch-searc
 export function Header() {
   return (
     <header className="top-0 z-40 w-full">
-      <div className="container flex flex-wrap items-center sm:justify-between sm:space-x-4">
+      <div className="px-4 flex flex-wrap items-center sm:justify-between sm:space-x-4">
         <div className="flex items-center h-16 justify-end">
           <Logo className="w-48 inline mr-3" />
           <span className="text-lg font-bold text-muted-foreground">Search API</span>
         </div>
         <div className="flex items-center justify-start h-12 sm:h-16">
           <NavigationMenu className="">
-            <NavigationMenuItem>
-              <Link href="/" legacyBehavior passHref>
-                <NavigationMenuLink active className={navigationMenuTriggerStyle()}>
-                  Playground
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href={logsUrl} legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>

@@ -159,6 +159,13 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
         endDate: format(newDateRange.to, 'yyyy-MM-dd'),
         pageNumber: 1,
       });
+    } else {
+      setFormState({
+        ...formState,
+        startDate: '',
+        endDate: '',
+        pageNumber: 1,
+      });
     }
     debouncedSearch();
   };
@@ -179,13 +186,13 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2">
       <h2 className="text-lg font-bold">Faceted Search</h2>
-      <div className="grid items-center gap-1.5">
-        <Label htmlFor="searchQuery">Search Query</Label>
+      <div className="">
         <Input
           id="searchQuery"
           value={formState.searchQuery}
+          placeholder="Type here..."
           onChange={(e) => handleSearchQueryInputChange(e.target.value)}
         />
       </div>
@@ -195,17 +202,16 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
           (field) =>
             searchResults.options &&
             searchResults.options?.[field]?.length > 0 && (
-              <div key={field} className="grid items-center gap-1.5">
-                <Label htmlFor={field}>{field}</Label>
+              <div key={field} className="">
                 <Select
                   value={formState.aggFieldValues[field]}
                   onValueChange={(value) => handleSelectChange(field, value)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="All" />
+                    <SelectValue placeholder={`All ${field}`} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="-1">All</SelectItem>
+                    <SelectItem value="-1">All {field}</SelectItem>
                     {searchResults.options[field].map((agg: AggOption) => (
                       <SelectItem key={agg.key} value={agg.key}>
                         {agg.key}
@@ -218,24 +224,23 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
             ),
         )}
 
-      <div className="grid items-center gap-1.5">
-        <Label htmlFor="dateRange">Date Range</Label>
+      <div className="">
         <DatePickerWithRange id="dateRange" onDateChange={handleDateRangeChange} />
       </div>
 
       <div className="flex items-center gap-x-4">
-        <div className="grid items-center gap-1.5">
-          <Label htmlFor="startYear">Start Year</Label>
+        <div className="">
           <Input
             id="startYear"
+            placeholder="Start Year"
             value={formState.startYear}
             onChange={(e) => handleFormValueChange('startYear', e.target.value)}
           />
         </div>
-        <div className="grid items-center gap-1.5">
-          <Label htmlFor="endYear">End Year</Label>
+        <div className="">
           <Input
             id="endYear"
+            placeholder="End Year"
             value={formState.endYear}
             onChange={(e) => handleFormValueChange('endYear', e.target.value)}
           />
@@ -305,7 +310,7 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
         </div>
       </div>
 
-      <div className="flex items-center gap-x-2">
+      <div className="grid grid-cols-2 gap-y-2 gap-x-4">
         <Select
           value={formState.language}
           onValueChange={(value) => handleFormValueChange('language', value)}
@@ -328,14 +333,16 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
             <SelectItem value="48">48</SelectItem>
           </SelectContent>
         </Select>
+      </div>
+      <div className="grid grid-cols-2 gap-y-2 gap-x-4">
         <Button
           disabled={formState.pageNumber <= 1}
           className="w-full"
-          variant="secondary"
+          variant="default"
           onClick={() => handlePageChange(formState.pageNumber - 1)}
         >
           <ChevronLeftIcon className="w-5 h-5 mr-2" />
-          <span className="hidden sm:inline-block">Previous</span>
+          <span className="">Previous</span>
         </Button>
         <Button
           disabled={
@@ -343,10 +350,10 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
             formState.pageNumber >= searchResults?.metadata?.pages
           }
           className="w-full"
-          variant="secondary"
+          variant="default"
           onClick={() => handlePageChange(formState.pageNumber + 1)}
         >
-          <span className="hidden sm:inline-block">Next</span>
+          <span className="">Next</span>
           <ChevronRightIcon className="w-5 h-5 ml-2" />
         </Button>
       </div>
