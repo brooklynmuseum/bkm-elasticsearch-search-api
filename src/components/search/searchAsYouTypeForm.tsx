@@ -48,7 +48,7 @@ export const SearchAsYouTypeForm: FC<SearchAsYouTypeFormProps> = ({
 
   return (
     <>
-      <h2 className="text-lg font-bold mb-4">Search as you type</h2>
+      <h2 className="text-lg font-bold mb-2">Search as you type</h2>
       <Input
         type="search"
         id="searchAsYouType"

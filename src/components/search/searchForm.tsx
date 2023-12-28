@@ -18,7 +18,7 @@ export function SearchForm() {
   const [error, setError] = useState('');
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-12 md:h-screen">
       {error && (
         <div className="flex flex-col gap-4 col-span-2">
           <Alert variant="destructive">
@@ -28,7 +28,8 @@ export function SearchForm() {
           </Alert>
         </div>
       )}
-      <div className="flex flex-col gap-4">
+      {/* Left pane */}
+      <div className="bg-neutral-50 md:col-span-6 lg:col-span-4 xl:col-span-3 flex flex-col gap-2 p-4 overflow-auto md:pb-12">
         <div className="mb-4">
           <SearchAsYouTypeForm
             setSearchResults={setSearchResults}
@@ -47,7 +48,8 @@ export function SearchForm() {
           />
         </div>
       </div>
-      <div className="">
+      {/* Right pane */}
+      <div className="md:col-span-6 lg:col-span-8 xl:col-span-9 overflow-auto p-4 md:pb-12">
         <Tabs defaultValue="results">
           <TabsList className="mb-4 flex items-center justify-center">
             <TabsTrigger value="results" className="w-full">
@@ -64,7 +66,7 @@ export function SearchForm() {
               <SearchPagination searchResults={searchResults} />
             </div>
             {searchResults && searchResults.data?.length > 0 && (
-              <div className="grid grid-cols-1 gap-2">
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2">
                 {searchResults.data.map((result: ElasticsearchDocument | AggOption, i: Key) =>
                   'key' in result ? (
                     <AggOptionResult key={i} result={result as AggOption} />
@@ -76,12 +78,12 @@ export function SearchForm() {
             )}
           </TabsContent>
           <TabsContent value="inspect">
-            <div className="flex flex-col gap-4 overflow-auto">
+            <div className="flex flex-col gap-4">
               <SearchPagination searchResults={searchResults} />
-              <pre className="rounded-md bg-neutral-950 p-4 overflow-x-auto overflow-y-auto font-mono text-sm text-white">
+              <pre className="rounded-md bg-neutral-950 p-4 overflow-x-auto font-mono text-sm text-white">
                 <code>{url}</code>
               </pre>
-              <pre className="h-[80vh] rounded-md bg-neutral-950 p-4 overflow-x-auto overflow-y-auto font-mono text-sm text-white">
+              <pre className="rounded-md bg-neutral-950 p-4 overflow-x-auto font-mono text-sm text-white">
                 <code>{JSON.stringify(searchResults, null, 2)}</code>
               </pre>
             </div>

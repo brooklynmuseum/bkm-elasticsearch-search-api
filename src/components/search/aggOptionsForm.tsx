@@ -53,7 +53,7 @@ export const AggOptionsForm: FC<AggOptionsFormProps> = ({ setSearchResults, setU
 
   return (
     <div className="">
-      <h2 className="text-lg font-bold mb-4">Aggregations Options</h2>
+      <h2 className="text-lg font-bold mb-2">Aggregations Options</h2>
       <div className="grid grid-cols-2 items-center gap-x-2">
         <Input
           type="search"
