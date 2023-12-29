@@ -1,4 +1,4 @@
-import transformCollectionObject from '@/lib/sync/transform/collectionObject';
+import transformCollectionObject from '@/lib/sanity/transform/collectionObject';
 
 describe('transformCollectionObject', () => {
   it('transforms collectionObject raw source correctly', () => {

@@ -91,10 +91,10 @@ Before running a sync, ensure that you are using the correct Elasticsearch serve
 
 ### Run the sync
 
-Sync test data from local test file: `npm run sync:test`
+Sync test data from local test file: `npm run sync:sanitytest`
 (WARNING: this will delete all data in the index. Can only be used with a non-cloud Elasticsearch instance.)
 
-Sync the live Sanity dataset: `npm run sync`
+Sync the live Sanity dataset: `npm run sync:sanity`
 (Creates a new index if one doesn't exist. Otherwise, updates the existing index.)
 
 ## Run

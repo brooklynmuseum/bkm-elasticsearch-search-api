@@ -1,4 +1,4 @@
-import transformPage from '@/lib/sync/transform/page';
+import transformPage from '@/lib/sanity/transform/page';
 
 describe('transformPage', () => {
   it('transforms page raw source correctly', () => {
