@@ -11,7 +11,7 @@ import sanitizeHtml from 'sanitize-html';
  * @param {any} value - The value to set for the key.
  */
 export function setIfHasValue(obj: JsonData, key: string, value: any) {
-  if (value !== undefined && value !== null && value !== '') {
+  if (value !== undefined && value !== null && value !== '' && value !== isNaN) {
     obj[key] = value;
   }
 }
