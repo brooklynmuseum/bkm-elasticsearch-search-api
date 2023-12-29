@@ -29,8 +29,6 @@ interface Display {
   format?: string[]; // Format information.
   identifier?: string[]; // Unique identifiers like ISBN.
   creationdate?: string[]; // Date of creation or publication.
-  lds18?: string[]; // Custom field, possibly related to specific objects or collections.
-  lds02?: string[]; // Custom field, possibly additional descriptive text.
   publisher?: string[]; // Publisher information.
   description?: string[]; // Description or abstract of the document.
   mms?: string[]; // MMS ID.
@@ -42,9 +40,13 @@ interface Display {
   place?: string[]; // Place of publication.
   version?: string[]; // Version of the document.
   lds01?: string[]; // Custom field, possibly related to specific categorizations.
+  lds02?: string[]; // Custom field, possibly additional descriptive text.
+  lds18?: string[]; // Custom field, possibly related to specific objects or collections.
   lds19?: string[]; // Custom field.
   lds27?: string[]; // Custom field, possibly including bibliographic references.
   lds34?: string[]; // Custom field.
+  // any field:
+  [key: string]: string[] | undefined;
 }
 
 // Control information of the document.
@@ -76,6 +78,7 @@ interface Addata {
   cop?: string[]; // Place of publication.
   pub?: string[]; // Publisher information.
   oclcid?: string[]; // OCLC ID.
+  lccn?: string[]; // Library of Congress Control Number.
   format?: string[]; // PrimoDocument format.
   genre?: string[]; // PrimoDocument genre.
   ristype?: string[]; // Resource type.
