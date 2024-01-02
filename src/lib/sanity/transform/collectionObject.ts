@@ -50,8 +50,8 @@ const transform: ElasticsearchTransformFunction = (
         id: getLegacyId(constituent.artist._id),
         ...(constituent.artist.name && { name: constituent.artist.name }),
         ...(constituent.artist.dates && { dates: constituent.artist.dates }),
-        ...(constituent.artist.startYear && { birthYear: constituent.artist.startYear }),
-        ...(constituent.artist.endYear && { deathYear: constituent.artist.endYear }),
+        ...(constituent.artist.startYear && { startYear: constituent.artist.startYear }),
+        ...(constituent.artist.endYear && { endYear: constituent.artist.endYear }),
         ...(constituent.nationality && { nationality: constituent.artist.nationality }),
         ...(constituent.role?.name && { role: constituent.role.name }),
       };
