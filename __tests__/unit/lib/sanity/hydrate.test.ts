@@ -23,6 +23,27 @@ describe('hydrateDocument', () => {
     ],
     ['docE', { _id: 'docE', title: 'Document E' }],
     ['docLoop', { _id: 'docLoop', title: 'Document Loop', refItem: { _ref: 'docA' } }],
+    [
+      'docArray',
+      {
+        _id: 'docArray',
+        title: 'Document Array',
+        refArray: [{ _ref: 'docA' }, { _ref: 'docA' }, { _ref: 'docB' }],
+      },
+    ],
+    // Similar to constituents array:
+    [
+      'docObjectArray',
+      {
+        _id: 'docArray',
+        title: 'Document Array',
+        refArray: [
+          { artist: { _ref: 'docA' }, role: { _ref: 'docC' } },
+          { artist: { _ref: 'docA' }, role: { _ref: 'docC' } },
+          { artist: { _ref: 'docB' }, role: { _ref: 'docC' } },
+        ],
+      },
+    ],
   ]);
 
   test('should resolve references correctly', () => {
@@ -33,21 +54,75 @@ describe('hydrateDocument', () => {
       expect(hydratedDoc.refItem.refItem.title).toBe('Document C');
       expect(hydratedDoc.refItem.refItem.refItem.title).toBe('Document D');
       expect(hydratedDoc.refItem.refItem.refItem.refItem.title).toBe('Document E');
-      // Should not resolve loops:
+      // Should not resolve more than max levels deep:
       expect(hydratedDoc.refItem.refItem.refItem.refItem2.refItem).toEqual({ _ref: 'docA' });
     }
   });
 
-  test('should not resolve self-referencing documents', () => {
+  test('should only resolve loops max levels deep', () => {
     const selfRefDoc = { _id: 'docSelf', title: 'Self-Ref Doc', refItem: { _ref: 'docSelf' } };
     mockDataMap.set('docSelf', selfRefDoc);
     const hydratedDoc = hydrateDocument(mockDataMap, selfRefDoc);
-    expect(hydratedDoc.refItem).toEqual({ _ref: 'docSelf' });
+    const result = {
+      _id: 'docSelf',
+      title: 'Self-Ref Doc',
+      refItem: {
+        _id: 'docSelf',
+        title: 'Self-Ref Doc',
+        refItem: {
+          _id: 'docSelf',
+          title: 'Self-Ref Doc',
+          refItem: {
+            _id: 'docSelf',
+            title: 'Self-Ref Doc',
+            refItem: { _id: 'docSelf', title: 'Self-Ref Doc', refItem: { _ref: 'docSelf' } },
+          },
+        },
+      },
+    };
+    expect(hydratedDoc).toEqual(result);
   });
 
   test('should handle non-existing references gracefully', () => {
     const brokenRefDoc = { _id: 'docBroken', title: 'Broken Ref Doc', refItem: { _ref: 'docX' } };
     const hydratedDoc = hydrateDocument(mockDataMap, brokenRefDoc);
     expect(hydratedDoc.refItem).toEqual({ _ref: 'docX' });
+  });
+
+  test('should resolve all references in an array', () => {
+    const docWithArray = mockDataMap.get('docArray');
+    if (docWithArray) {
+      const hydratedDoc = hydrateDocument(mockDataMap, docWithArray);
+
+      // Check if the array has been resolved correctly
+      expect(hydratedDoc.refArray).toBeDefined();
+      expect(Array.isArray(hydratedDoc.refArray)).toBe(true);
+      expect(hydratedDoc.refArray.length).toBe(3); // Assuming the array has 3 elements
+
+      // Check if individual references within the array are resolved
+      expect(hydratedDoc.refArray[0].title).toBe('Document A');
+      expect(hydratedDoc.refArray[1].title).toBe('Document A'); // Both first and second references are 'docA'
+      expect(hydratedDoc.refArray[2].title).toBe('Document B');
+    }
+  });
+
+  test('should resolve all references in an array of objects', () => {
+    const docWithArray = mockDataMap.get('docObjectArray');
+    if (docWithArray) {
+      const hydratedDoc = hydrateDocument(mockDataMap, docWithArray);
+
+      // Check if the array has been resolved correctly
+      expect(hydratedDoc.refArray).toBeDefined();
+      expect(Array.isArray(hydratedDoc.refArray)).toBe(true);
+      expect(hydratedDoc.refArray.length).toBe(3); // Assuming the array has 3 elements
+
+      // Check if individual references within the array are resolved
+      expect(hydratedDoc.refArray[0].artist.title).toBe('Document A');
+      expect(hydratedDoc.refArray[0].role.title).toBe('Document C');
+      expect(hydratedDoc.refArray[1].artist.title).toBe('Document A'); // Both first and second references are 'docA'
+      expect(hydratedDoc.refArray[1].role.title).toBe('Document C');
+      expect(hydratedDoc.refArray[2].artist.title).toBe('Document B');
+      expect(hydratedDoc.refArray[2].role.title).toBe('Document C');
+    }
   });
 });
