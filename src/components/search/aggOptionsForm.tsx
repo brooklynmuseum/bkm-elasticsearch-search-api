@@ -21,7 +21,7 @@ type AggOptionsFormProps = {
 
 export const AggOptionsForm: FC<AggOptionsFormProps> = ({ setSearchResults, setUrl, setError }) => {
   const [optionsQuery, setOptionsQuery] = useState('');
-  const [optionsField, setOptionsField] = useState('primaryConstituent.name');
+  const [optionsField, setOptionsField] = useState('constituents.name');
 
   const debouncedOptions = useDebounce(() => {
     const myQuery = optionsQuery?.trim();

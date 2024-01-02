@@ -1,5 +1,7 @@
 import { DataMap, JsonData } from '@/types';
 
+const MAX_HYDRATION_DEPTH = 4;
+
 /**
  * Recursively resolve references within an object, avoiding loops.
  *
@@ -13,20 +15,29 @@ function resolveReferences(
   dataMap: DataMap,
   obj: JsonData,
   documentId: string,
-  processedRefs: Set<string> = new Set(),
+  currentLevel: number,
+  maxLevels: number,
 ): JsonData {
-  processedRefs.add(documentId); // Remember current document
+  if (currentLevel >= maxLevels) {
+    return obj; // Stop recursion when max level is reached
+  }
 
   Object.keys(obj).forEach((key) => {
     const value = obj[key];
     if (typeof value === 'object' && value !== null) {
-      if (value._ref && !processedRefs.has(value._ref)) {
+      if (value._ref) {
         const refData = dataMap.get(value._ref);
         if (refData) {
-          obj[key] = resolveReferences(dataMap, { ...refData }, value._ref, processedRefs);
+          obj[key] = resolveReferences(
+            dataMap,
+            { ...refData },
+            value._ref,
+            currentLevel + 1,
+            maxLevels,
+          );
         }
       } else {
-        resolveReferences(dataMap, value, documentId, processedRefs);
+        resolveReferences(dataMap, value, documentId, currentLevel + 1, maxLevels);
       }
     }
   });
@@ -41,9 +52,14 @@ function resolveReferences(
  *
  * @param dataMap Map of all documents in the dataset.
  * @param document The document to resolve references within.
+ * @param maxLevels The maximum number of levels to recurse.
  * @returns The document with resolved references.
  */
-export function hydrateDocument(dataMap: DataMap, document: JsonData): JsonData {
+export function hydrateDocument(
+  dataMap: DataMap,
+  document: JsonData,
+  maxLevels = MAX_HYDRATION_DEPTH,
+): JsonData {
   const processedRefs = new Set<string>();
-  return resolveReferences(dataMap, document, document._id, processedRefs);
+  return resolveReferences(dataMap, document, document._id, 0, MAX_HYDRATION_DEPTH);
 }

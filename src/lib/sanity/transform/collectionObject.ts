@@ -44,31 +44,20 @@ const transform: ElasticsearchTransformFunction = (
     esDoc.classification = sanityDoc.classification;
   }
 
-  if (sanityDoc.constituents && Array.isArray(sanityDoc.constituents)) {
-    // find 'Artist' constituent
-    const primaryConstituent = sanityDoc.constituents.find(
-      (constituent) => constituent.role && constituent.role.name === 'Artist' && constituent.artist,
-    );
-    if (primaryConstituent && primaryConstituent.artist?.name) {
-      esDoc.primaryConstituent = {
-        id: primaryConstituent.artist._id,
-        name: primaryConstituent.artist.name,
-        role: primaryConstituent.role.name,
+  if (Array.isArray(sanityDoc.constituents) && sanityDoc.constituents.length > 0) {
+    esDoc.constituents = sanityDoc.constituents.map((constituent) => {
+      return {
+        id: getLegacyId(constituent.artist._id),
+        ...(constituent.artist.name && { name: constituent.artist.name }),
+        ...(constituent.artist.dates && { dates: constituent.artist.dates }),
+        ...(constituent.artist.startYear && { birthYear: constituent.artist.startYear }),
+        ...(constituent.artist.endYear && { deathYear: constituent.artist.endYear }),
+        ...(constituent.nationality && { nationality: constituent.artist.nationality }),
+        ...(constituent.role?.name && { role: constituent.role.name }),
       };
-    } else {
-      // find 'Culture' constituent
-      const cultureConstituent = sanityDoc.constituents.find(
-        (constituent) => constituent.role && constituent.role.name === 'Culture',
-      );
-      if (cultureConstituent && cultureConstituent.artist?.name) {
-        esDoc.primaryConstituent = {
-          id: cultureConstituent.artist._id,
-          name: cultureConstituent.artist.name,
-          role: cultureConstituent.role.name,
-        };
-      }
-    }
+    });
   }
+
   return esDoc;
 };
 

@@ -44,7 +44,7 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
           operator: 'and',
           fields: [
             'boostedKeywords^20',
-            'primaryConstituent.name.search^4',
+            'constituents.name.search^4',
             'title.search^2',
             'tags^2',
             'description',

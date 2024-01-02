@@ -11,7 +11,7 @@ import sanitizeHtml from 'sanitize-html';
  * @param {any} value - The value to set for the key.
  */
 export function setIfHasValue(obj: JsonData, key: string, value: any) {
-  if (value !== undefined && value !== null && value !== '') {
+  if (value !== undefined && value !== null && value !== '' && value !== isNaN) {
     obj[key] = value;
   }
 }
@@ -52,6 +52,9 @@ export function splitCommaSeparatedString(s: string): string[] {
  * exhibition_1234 -> 1234
  */
 export function getLegacyId(id: string): string {
+  if (!id) {
+    throw new Error('ID is undefined: ' + id);
+  }
   return id.split('_').pop() || '';
 }
 

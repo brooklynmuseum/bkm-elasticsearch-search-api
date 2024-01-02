@@ -1,4 +1,4 @@
-import transformCollectionArtist from '@/lib/sync/transform/collectionArtist';
+import transformCollectionArtist from '@/lib/sanity/transform/collectionArtist';
 
 describe('transformCollectionArtist', () => {
   it('transforms collectionArtist raw source correctly', () => {

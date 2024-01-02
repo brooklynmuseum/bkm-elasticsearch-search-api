@@ -15,8 +15,9 @@
     "test:unit": "jest --config=jest.unit.config.js",
     "test:integration": "jest --config=jest.integration.config.js",
     "test:ci": "jest --ci",
-    "sync": "ts-node src/lib/commands/sync",
-    "sync:test": "ts-node src/lib/commands/syncTestData"
+    "sync:sanity": "ts-node src/lib/commands/syncSanity",
+    "sync:sanitytest": "ts-node src/lib/commands/syncSanityTestData",
+    "sync:primo": "ts-node src/lib/commands/syncPrimo"
   },
   "keywords": [],
   "author": "",

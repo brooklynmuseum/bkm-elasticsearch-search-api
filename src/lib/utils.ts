@@ -16,3 +16,7 @@ export function getEnvVar(key: string, defaultValue?: string): string {
   }
   return value;
 }
+
+export function sleep(seconds: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
+}

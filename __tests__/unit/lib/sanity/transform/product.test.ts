@@ -1,4 +1,4 @@
-import transformProduct from '@/lib/sync/transform/product';
+import transformProduct from '@/lib/sanity/transform/product';
 
 describe('transformPage', () => {
   it('transforms product raw source correctly', () => {

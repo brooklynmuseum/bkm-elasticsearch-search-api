@@ -3,7 +3,7 @@ import {
   getBooleanValue,
   portableTextToPlaintext,
   recursivePortableTextToPlaintext,
-} from '@/lib/sync/transform/utils';
+} from '@/lib/sanity/transform/utils';
 import type { JsonData } from '@/types';
 
 describe('setIfHasValue', () => {
