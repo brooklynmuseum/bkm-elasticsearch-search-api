@@ -52,6 +52,9 @@ export function splitCommaSeparatedString(s: string): string[] {
  * exhibition_1234 -> 1234
  */
 export function getLegacyId(id: string): string {
+  if (!id) {
+    throw new Error('ID is undefined: ' + id);
+  }
   return id.split('_').pop() || '';
 }
 

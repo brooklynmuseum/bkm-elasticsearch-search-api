@@ -5,7 +5,7 @@ export const aggFields = [
   'type',
   'collection',
   'classification',
-  'primaryConstituent.name',
+  'constituents.name',
   'museumLocation',
   'tags',
   'categories',
@@ -28,7 +28,7 @@ export const indexSettings: T.IndicesIndexSettings = {
       categories: S.searchableAggregatedKeywordAnalyzerField, // Agg
       tags: S.searchableAggregatedKeywordAnalyzerField, // Agg
       boostedKeywords: S.unaggregatedStandardAnalyzerTextField,
-      primaryConstituent: S.constituentObjectField,
+      constituents: S.constituentObjectField,
 
       // Two date fields for date range queries, accomodates artworks which
       // have start/end years stretching back far beyond unix epoch, e.g. -500 (500 BCE)

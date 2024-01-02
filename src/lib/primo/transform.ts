@@ -107,12 +107,13 @@ export function transform(document: PrimoDocument): ElasticsearchDocument | unde
   // Assume the first contributor is the primary
   const primaryContributor =
     document.pnx.display.creator?.[0] || document.pnx.display.contributor?.[0];
-  let primaryConstituent: ElasticsearchConstituent | undefined = undefined;
+  let constituent: ElasticsearchConstituent | undefined = undefined;
 
   if (primaryContributor) {
+    // TODO: Include ALL constitents and roles if possible.
     // "Little, Myles, 1984- editor.$$QLittle, Myles", "Dyer, Geoff, author.$$QDyer, Geoff", "Stiglitz, Joseph E., author.$$QStiglitz, Joseph E."
     const parts = primaryContributor.split('$$Q');
-    primaryConstituent = {
+    constituent = {
       id: parts[0],
       name: parts[1],
     };
@@ -141,7 +142,9 @@ export function transform(document: PrimoDocument): ElasticsearchDocument | unde
   setIfHasValue(esDoc, 'description', document.pnx.display.description?.join(' ')?.trim());
   setIfHasValue(esDoc, 'searchText', document.pnx.display.contents?.join(' ')?.trim());
   setIfHasValue(esDoc, 'language', mapLanguage(document.pnx.display.language?.[0]));
-  setIfHasValue(esDoc, 'primaryConstituent', primaryConstituent);
+  if (constituent) {
+    setIfHasValue(esDoc, 'constituents', [constituent]);
+  }
   setIfHasValue(esDoc, 'startDate', startDate);
   setIfHasValue(esDoc, 'startYear', startYear);
   setIfHasValue(esDoc, 'endDate', startDate);

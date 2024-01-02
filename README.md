@@ -14,7 +14,7 @@
 - **_Search Text (searchText)_**: Full text of the item, used for full-text search.
 - **_Tags (tags)_**: A list of keywords or tags associated with the item. TODO: Rename to "keywords"?
 - **_Boosted Keywords (boostedKeywords)_**: A list of keywords or tags associated with the item that should be boosted in search results.
-- **_Primary Constituent (primaryConstituent)_**: The name of the individual or organization responsible for creating the item.
+- **_Constituents (constituents)_**: Array of the individuals or organizations related to the item.
 - **_Start Date (startDate)_**: The relevant start date for the item, such as publication, creation, event, or release date.
 - **_Start Year (startYear)_**: The relevant start year for the item, such as publication, creation, event, or release date.
 - **_End Date (endDate)_**: The relevant end date for the item, such as publication, creation, event, or release date.
@@ -129,6 +129,11 @@ http://localhost:3000/api/searchAsYouType?query=spike
 - Artist: is it a "collectionArtist" or an "Artist" augmented with collectionArtist data?
 - Documents, esp. Page, might need a "Summary", "Description", or "CTA" field for short text. Can be used in search results. (will still index all page content)
 - "language" or "locale"? (e.g. "en-US")
-- Derek: converting block text to plain text not working too well?
 - Doesn't collection object have an "image" property? (sometimes it's not rank 0)
 - Many objectDateEnd are 0, even though objectDateStart is not 0. (e.g. 2019)
+- constituent prefix & suffix fields should be inside artist object?
+
+## This week:
+
+- add vercel cron jobs
+- import all constituents, use rank 0 for constituent?

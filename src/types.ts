@@ -56,7 +56,7 @@ export interface ElasticsearchDocument {
   categories?: string[];
   tags?: string[];
   boostedKeywords?: string[];
-  primaryConstituent?: ElasticsearchConstituent;
+  constituents?: ElasticsearchConstituent[];
   startDate?: string;
   endDate?: string;
   language?: string;
@@ -103,7 +103,7 @@ export interface ApiSearchParams {
   query?: string;
   type?: string;
   classification?: string;
-  'primaryConstituent.name'?: string;
+  'constituents.name'?: string;
   tags?: string;
   categories?: string;
   startDate?: Date;

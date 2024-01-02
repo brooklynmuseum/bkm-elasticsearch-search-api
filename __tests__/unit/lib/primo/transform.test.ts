@@ -104,10 +104,12 @@ describe('primo transform', () => {
         'Private libraries',
         'Forests and forestry -- Pictorial works',
       ],
-      primaryConstituent: {
-        id: 'Schulz, David, 1967- artist.',
-        name: 'Schulz, David',
-      },
+      constituents: [
+        {
+          id: 'Schulz, David, 1967- artist.',
+          name: 'Schulz, David',
+        },
+      ],
       startDate: '01-01-2019',
       startYear: 2019,
       endDate: '01-01-2019',
@@ -252,10 +254,12 @@ describe('primo transform', () => {
         'Photography, Artistic',
         'Poor',
       ],
-      primaryConstituent: {
-        id: 'Little, Myles, 1984- editor.',
-        name: 'Little, Myles',
-      },
+      constituents: [
+        {
+          id: 'Little, Myles, 1984- editor.',
+          name: 'Little, Myles',
+        },
+      ],
       startDate: '01-01-2016',
       startYear: 2016,
       endDate: '01-01-2016',
