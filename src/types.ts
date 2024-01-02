@@ -28,10 +28,9 @@ export interface ElasticsearchConstituent {
   prefix?: string;
   suffix?: string;
   dates?: string;
-  birthYear?: number;
-  deathYear?: number;
+  startYear?: number;
+  endYear?: number;
   nationality?: string[];
-  gender?: string;
   role?: string;
   rank?: number;
 }

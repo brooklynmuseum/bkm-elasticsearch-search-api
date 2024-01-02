@@ -14,7 +14,17 @@
 - **_Search Text (searchText)_**: Full text of the item, used for full-text search.
 - **_Tags (tags)_**: A list of keywords or tags associated with the item. TODO: Rename to "keywords"?
 - **_Boosted Keywords (boostedKeywords)_**: A list of keywords or tags associated with the item that should be boosted in search results.
-- **_Constituents (constituents)_**: Array of the individuals or organizations related to the item.
+- **_Constituents (constituents)_**: Array of the individuals or organizations related to the item. Each constituent has the following fields:
+  - id: The unique OpenCollection ID of the constituent.
+  - name: The name of the constituent.
+  - prefix: The prefix of the constituent's name.
+  - suffix: The suffix of the constituent's name.
+  - dates: Formatted nationality, bith/death dates, e.g. "Jamaican, born 1981"
+  - birthYear: Constituent's start/birth year
+  - deathYear: Constituent's end/death year
+  - nationality: Constituent's nationality
+  - role: Role, e.g. "Artist", "Designer"
+  - rank: The rank of the constituent in the list of constituents, 0 being the primary constituent.
 - **_Start Date (startDate)_**: The relevant start date for the item, such as publication, creation, event, or release date.
 - **_Start Year (startYear)_**: The relevant start year for the item, such as publication, creation, event, or release date.
 - **_End Date (endDate)_**: The relevant end date for the item, such as publication, creation, event, or release date.
@@ -136,4 +146,4 @@ http://localhost:3000/api/searchAsYouType?query=spike
 ## This week:
 
 - add vercel cron jobs
-- import all constituents, use rank 0 for constituent?
+- add "now" search filter (occurring now)
