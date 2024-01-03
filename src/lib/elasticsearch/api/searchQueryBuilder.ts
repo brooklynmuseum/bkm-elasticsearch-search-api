@@ -230,8 +230,8 @@ export function addQueryBoolFilterTerms(esQuery: any, searchParams: ApiSearchPar
             addQueryBoolFilterTerm(esQuery, 'onView', true);
           }
           break;
-        case 'hasPhoto':
-          if (searchParams.hasPhoto) {
+        case 'hasImage':
+          if (searchParams.hasImage) {
             addQueryBoolFilterExists(esQuery, 'image.url');
           }
           break;

@@ -45,7 +45,8 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     language: '',
     visible: false,
     publicAccess: false,
-    hasPhoto: false,
+    hasImage: false,
+    isNow: false,
     rawSource: false,
   });
   const [tempSearchQuery, setTempSearchQuery] = useState<string>('');
@@ -74,8 +75,11 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
     if (formState.publicAccess === true) {
       queryParams.append('publicAccess', 'true');
     }
-    if (formState.hasPhoto === true) {
-      queryParams.append('hasPhoto', 'true');
+    if (formState.hasImage === true) {
+      queryParams.append('hasImage', 'true');
+    }
+    if (formState.isNow === true) {
+      queryParams.append('isNow', 'true');
     }
     if (formState.startDate && formState.endDate) {
       queryParams.append('startDate', formState.startDate);
@@ -306,17 +310,32 @@ export const FacetedSearchForm: FC<FacetedSearchFormProps> = ({
         </div>
         <div className="flex items-center gap-x-2">
           <Switch
-            id="hasPhoto"
-            onCheckedChange={(checked) => handleFormValueChange('hasPhoto', checked)}
-            checked={formState.hasPhoto}
-            aria-labelledby={'label-hasPhoto'}
+            id="hasImage"
+            onCheckedChange={(checked) => handleFormValueChange('hasImage', checked)}
+            checked={formState.hasImage}
+            aria-labelledby={'label-hasImage'}
           />
           <Label
-            htmlFor="hasPhoto"
-            id={'label-hasPhoto'}
+            htmlFor="hasImage"
+            id={'label-hasImage'}
             className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
-            Has Photo
+            Has Image
+          </Label>
+        </div>
+        <div className="flex items-center gap-x-2">
+          <Switch
+            id="isNow"
+            onCheckedChange={(checked) => handleFormValueChange('isNow', checked)}
+            checked={formState.isNow}
+            aria-labelledby={'label-isNow'}
+          />
+          <Label
+            htmlFor="isNow"
+            id={'label-isNow'}
+            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            What&apos;s on Now?
           </Label>
         </div>
         <div className="flex items-center gap-x-2">
