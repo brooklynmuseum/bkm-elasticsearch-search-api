@@ -74,8 +74,11 @@ export function getSanitizedSearchParams(params: GenericSearchParams): ApiSearch
   if (params.rawSource === 'true') {
     sanitizedParams.rawSource = true;
   }
-  if (params.hasPhoto === 'true') {
-    sanitizedParams.hasPhoto = true;
+  if (params.hasImage === 'true') {
+    sanitizedParams.hasImage = true;
+  }
+  if (params.isNow === 'true') {
+    sanitizedParams.isNow = true;
   }
 
   // date/year ranges
@@ -95,7 +98,6 @@ export function getSanitizedSearchParams(params: GenericSearchParams): ApiSearch
     sanitizedParams.endYear = parseInt(params.endYear);
   }
 
-  // language
   sanitizedParams.language = parseString(params.language);
 
   return sanitizedParams as ApiSearchParams;

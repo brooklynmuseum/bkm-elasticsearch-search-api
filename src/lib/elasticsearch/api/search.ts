@@ -74,7 +74,7 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
     addQueryBoolFilterTerm(esQuery, 'publicAccess', true);
   }
 
-  if (searchParams.hasPhoto === true) {
+  if (searchParams.hasImage === true) {
     addQueryBoolFilterExists(esQuery, 'imageUrl');
   }
 
@@ -88,8 +88,8 @@ export async function search(searchParams: ApiSearchParams): Promise<ApiSearchRe
     // addDefaultQueryBoolDateRange(esQuery, searchParams);  TODO
   }
 
-  if ((searchParams.type === 'event' || searchParams.type === 'exhibition') && searchParams.isNow) {
-    // Events & Exhibitions search has special date range filter
+  if (searchParams.isNow) {
+    // Find Events & Exhibitions search that are going on right now
     addQueryBoolDateRange(esQuery, new Date(), new Date());
   }
 
