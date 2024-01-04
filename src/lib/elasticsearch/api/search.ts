@@ -9,6 +9,8 @@ import type {
   AggOptions,
 } from '@/types';
 import {
+  getFunctionScoreBoolQuery,
+  getMatchAllBoolQuery,
   addQueryBoolFilterTerm,
   addQueryAggs,
   addDefaultQueryBoolDateRange,
@@ -28,38 +30,17 @@ const INDEX_NAME = getEnvVar('ELASTIC_INDEX_NAME');
  * @returns Elasticsearch search response
  */
 export async function search(searchParams: ApiSearchParams): Promise<ApiSearchResponse> {
+  let boolQuery: T.QueryDslQueryContainer = searchParams.query
+    ? getFunctionScoreBoolQuery(searchParams.query)
+    : getMatchAllBoolQuery();
+
   const esQuery: T.SearchRequest = {
     index: INDEX_NAME,
-    query: { bool: { must: {} } },
+    query: boolQuery,
     from: (searchParams.pageNumber - 1) * searchParams.size || 0,
     size: searchParams.size,
     track_total_hits: true,
   };
-  if (searchParams.query && esQuery?.query?.bool) {
-    esQuery.query.bool.must = [
-      {
-        multi_match: {
-          query: searchParams.query,
-          type: 'cross_fields',
-          operator: 'and',
-          fields: [
-            'boostedKeywords^20',
-            'constituents.name.search^4',
-            'title.search^2',
-            'tags^2',
-            'description',
-            'searchText',
-          ],
-        },
-      },
-    ];
-  } else if (esQuery?.query?.bool) {
-    esQuery.query.bool.must = [
-      {
-        match_all: {},
-      },
-    ];
-  }
 
   // Add search filters:
   for (const aggField of aggFields) {

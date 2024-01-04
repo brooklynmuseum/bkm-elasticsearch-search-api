@@ -4,28 +4,59 @@ import { format, formatISO } from 'date-fns';
 
 const SEARCH_AGG_SIZE = 100;
 
-/**
- * Add a term to a bool filter query
- *
- * @param esQuery   The ES query
- * @param name    The name of the field to filter on
- * @param value   The value to filter on
- * @returns  Void.  The ES Query is modified in place
- */
-export function addQueryBoolFilterTerm(
-  esQuery: any,
-  name: string,
-  value: string | boolean | number | undefined,
-): void {
-  if (!value) return;
-  esQuery.query ??= {};
-  esQuery.query.bool ??= {};
-  esQuery.query.bool.filter ??= [];
-  esQuery.query.bool.filter.push({
-    term: {
-      [name]: value,
+export function getFunctionScoreBoolQuery(query: string): T.QueryDslQueryContainer {
+  return {
+    function_score: {
+      query: {
+        bool: {
+          must: [
+            {
+              multi_match: {
+                query,
+                type: 'cross_fields',
+                operator: 'and',
+                fields: [
+                  'boostedKeywords^20',
+                  'constituents.name.search^4',
+                  'title.search^2',
+                  'tags^2',
+                  'description',
+                  'searchText',
+                ],
+              },
+            },
+          ],
+        },
+      },
+      functions: [
+        {
+          filter: { match: { type: 'page' } },
+          weight: 3,
+        },
+        {
+          filter: { match: { type: 'collectionObject' } },
+          weight: 2,
+        },
+        {
+          filter: { match: { type: 'archives' } },
+          weight: 0.5,
+        },
+      ],
+      score_mode: 'sum',
     },
-  });
+  };
+}
+
+export function getMatchAllBoolQuery(): T.QueryDslQueryContainer {
+  return {
+    bool: {
+      must: [
+        {
+          match_all: {},
+        },
+      ],
+    },
+  };
 }
 
 export function addQueryAggs(esQuery: any) {
@@ -41,6 +72,39 @@ export function addQueryAggs(esQuery: any) {
   esQuery.aggs = aggs;
 }
 
+export function addQueryBoolFilter(esQuery: any, filter: T.QueryDslQueryContainer): void {
+  if (esQuery.query.bool) {
+    // Simple match_all bool query
+    esQuery.query.bool.filter ??= [];
+    esQuery.query.bool.filter.push(filter);
+  } else {
+    // Function score bool query for user search query
+    esQuery.query.function_score.query.bool.filter ??= [];
+    esQuery.query.function_score.query.bool.filter.push(filter);
+  }
+}
+
+/**
+ * Add a term to a bool filter query
+ *
+ * @param esQuery   The ES query
+ * @param name    The name of the field to filter on
+ * @param value   The value to filter on
+ * @returns  Void.  The ES Query is modified in place
+ */
+export function addQueryBoolFilterTerm(
+  esQuery: any,
+  name: string,
+  value: string | boolean | number | undefined,
+): void {
+  if (!value) return;
+  addQueryBoolFilter(esQuery, {
+    term: {
+      [name]: value,
+    },
+  });
+}
+
 /**
  * For the default date range query, we only want documents (events) that
  * have already started OR have no start date.
@@ -49,7 +113,7 @@ export function addQueryAggs(esQuery: any) {
  */
 export function addQueryBoolLanguage(esQuery: any, language: string | undefined) {
   if (!language) return;
-  const boolQuery: T.QueryDslQueryContainer = {
+  addQueryBoolFilter(esQuery, {
     bool: {
       should: [
         {
@@ -69,11 +133,7 @@ export function addQueryBoolLanguage(esQuery: any, language: string | undefined)
       ],
       minimum_should_match: 1,
     },
-  };
-  esQuery.query ??= {};
-  esQuery.query.bool ??= {};
-  esQuery.query.bool.filter ??= [];
-  esQuery.query.bool.filter.push(boolQuery);
+  });
 }
 
 /**
@@ -84,10 +144,7 @@ export function addQueryBoolLanguage(esQuery: any, language: string | undefined)
  * @returns  Void.  The ES Query is modified in place
  */
 export function addQueryBoolFilterExists(esQuery: any, name: string): void {
-  esQuery.query ??= {};
-  esQuery.query.bool ??= {};
-  esQuery.query.bool.filter ??= [];
-  esQuery.query.bool.filter.push({
+  addQueryBoolFilter(esQuery, {
     exists: {
       field: name,
     },
@@ -101,7 +158,7 @@ export function addQueryBoolFilterExists(esQuery: any, name: string): void {
  * @param searchParams
  */
 export function addDefaultQueryBoolDateRange(esQuery: any) {
-  const boolQuery: T.QueryDslQueryContainer = {
+  addQueryBoolFilter(esQuery, {
     bool: {
       should: [
         {
@@ -123,11 +180,7 @@ export function addDefaultQueryBoolDateRange(esQuery: any) {
       ],
       minimum_should_match: 1,
     },
-  };
-  esQuery.query ??= {};
-  esQuery.query.bool ??= {};
-  esQuery.query.bool.filter ??= [];
-  esQuery.query.bool.filter.push(boolQuery);
+  });
 }
 
 export function addQueryBoolDateRange(
@@ -135,11 +188,8 @@ export function addQueryBoolDateRange(
   startDate: Date | undefined,
   endDate: Date | undefined,
 ) {
-  if (!startDate && !endDate) return;
-  console.log('startdate', startDate, endDate);
-  const ranges: T.QueryDslQueryContainer[] = [];
   if (startDate) {
-    ranges.push({
+    addQueryBoolFilter(esQuery, {
       range: {
         startDate: {
           lte: formatISO(startDate, { representation: 'date' }),
@@ -148,19 +198,13 @@ export function addQueryBoolDateRange(
     });
   }
   if (endDate) {
-    ranges.push({
+    addQueryBoolFilter(esQuery, {
       range: {
         endDate: {
           gte: formatISO(endDate, { representation: 'date' }),
         },
       },
     });
-  }
-  if (ranges.length > 0) {
-    esQuery.query ??= {};
-    esQuery.query.bool ??= {};
-    esQuery.query.bool.filter ??= [];
-    esQuery.query.bool.filter.push(...ranges);
   }
 }
 
@@ -175,9 +219,8 @@ export function addQueryBoolYearRange(
   startYear: number | undefined,
   endYear: number | undefined,
 ) {
-  const ranges: T.QueryDslQueryContainer[] = [];
   if (startYear !== undefined && endYear !== undefined && startYear <= endYear) {
-    ranges.push({
+    addQueryBoolFilter(esQuery, {
       range: {
         startYear: {
           gte: startYear,
@@ -185,7 +228,7 @@ export function addQueryBoolYearRange(
         },
       },
     });
-    ranges.push({
+    addQueryBoolFilter(esQuery, {
       range: {
         endYear: {
           gte: startYear,
@@ -194,7 +237,7 @@ export function addQueryBoolYearRange(
       },
     });
   } else if (startYear !== undefined) {
-    ranges.push({
+    addQueryBoolFilter(esQuery, {
       range: {
         startYear: {
           gte: startYear,
@@ -202,7 +245,7 @@ export function addQueryBoolYearRange(
       },
     });
   } else if (endYear !== undefined) {
-    ranges.push({
+    addQueryBoolFilter(esQuery, {
       range: {
         endYear: {
           lte: endYear,
@@ -210,77 +253,4 @@ export function addQueryBoolYearRange(
       },
     });
   }
-  if (ranges.length > 0) {
-    esQuery.query ??= {};
-    esQuery.query.bool ??= {};
-    esQuery.query.bool.filter ??= [];
-    esQuery.query.bool.filter.push(...ranges);
-  }
 }
-
-/*
-
-
-export function addQueryBoolFilterTerms(esQuery: any, searchParams: ApiSearchParams) {
-  if (indicesMeta[searchParams.index]?.filters?.length > 0) {
-    for (const filter of indicesMeta[searchParams.index].filters) {
-      switch (filter) {
-        case 'onView':
-          if (searchParams.onView) {
-            addQueryBoolFilterTerm(esQuery, 'onView', true);
-          }
-          break;
-        case 'hasImage':
-          if (searchParams.hasImage) {
-            addQueryBoolFilterExists(esQuery, 'image.url');
-          }
-          break;
-        case 'isUnrestricted':
-          if (searchParams.isUnrestricted) {
-            addQueryBoolFilterTerm(esQuery, 'copyrightRestricted', true);
-          }
-          break;
-        default:
-          if (searchParams?.aggFilters[filter]) {
-            addQueryBoolFilterTerm(esQuery, filter, searchParams?.aggFilters[filter]);
-          }
-      }
-    }
-  }
-}
-
-
-
-export function addQueryBoolFilter(esQuery: any, filter: any): void {
-  if (!filter) return;
-  esQuery.query ??= {};
-  esQuery.query.bool ??= {};
-  esQuery.query.bool.filter ??= [];
-  esQuery.query.bool.filter.push(filter);
-}
-
-/**
- * Add a term to a bool must not section of query
- *
- * @param esQuery The ES query
- * @param name  The name of the field that must exist
- * @returns  Void.  The ES Query is modified in place
- */ /*
-export function addQueryBoolMustNotFilter(
-  esQuery: any,
-  name: string,
-  value: string | boolean | number | undefined,
-): void {
-  if (!value) return;
-  esQuery.query ??= {};
-  esQuery.query.bool ??= {};
-  esQuery.query.bool.must_not ??= [];
-  esQuery.query.bool.must_not.push({
-    term: {
-      [name]: value,
-    },
-  });
-}
-
-
-*/
