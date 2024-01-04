@@ -62,8 +62,8 @@ async function* fetchArchivesSpaceData(session: string): AsyncGenerator<any[], v
 export async function* crawlArchivesSpace(): AsyncGenerator<any[], void, undefined> {
   try {
     const sessionToken = await authenticate();
-    for await (const docsBatch of fetchArchivesSpaceData(sessionToken)) {
-      yield docsBatch;
+    for await (const docs of fetchArchivesSpaceData(sessionToken)) {
+      yield docs;
     }
   } catch (error) {
     console.error('Error in ArchivesSpace crawling:', error);

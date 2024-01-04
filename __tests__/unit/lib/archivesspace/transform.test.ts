@@ -24,6 +24,7 @@ describe('ArchivesSpace transform', () => {
   it('transforms ArchivesSpaceDocument to ElasticsearchDocument correctly', () => {
     const asDocument: ArchivesSpaceDocument = {
       id: '/repositories/2/resources/2',
+      uri: '/repositories/2/resources/2',
       title: 'Office of the Director records',
       primary_type: 'resource',
       repository: '/repositories/2',
@@ -41,13 +42,15 @@ describe('ArchivesSpace transform', () => {
     };
 
     const expected: ElasticsearchDocument = {
-      _id: '/repositories/2/resources/2',
-      type: 'resource',
+      _id: 'https://archives.brooklynmuseum.org//repositories/2/resources/2',
+      url: 'https://archives.brooklynmuseum.org//repositories/2/resources/2',
+      type: 'archives',
+      subtype: 'resource',
       title: 'Office of the Director records',
       description:
         'The collection is comprised of documents pertaining to the Directors of the Brooklyn Museum...',
-      startDate: '01-01-1913',
-      endDate: '01-01-2015',
+      startDate: '1913-01-01',
+      endDate: '2015-01-01',
       language: 'en-US',
     };
 

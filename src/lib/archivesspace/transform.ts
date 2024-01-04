@@ -4,6 +4,7 @@ import { setIfHasValue, removeHtml } from '../utils';
 
 export interface ArchivesSpaceDocument {
   id: string;
+  uri: string;
   title?: string;
   primary_type?: string;
   types?: string[];
@@ -56,13 +57,17 @@ export function transform(asDoc: ArchivesSpaceDocument): ElasticsearchDocument {
   let startDate: string | undefined = undefined;
   let endDate: string | undefined = undefined;
   if (startYear && endYear) {
-    startDate = '01-01-' + startYear;
-    endDate = '01-01-' + endYear;
+    startDate = `${startYear}-01-01`;
+    endDate = `${endYear}-01-01`;
   }
 
+  const link = `https://archives.brooklynmuseum.org/${asDoc.uri}`;
+
   const esDoc: ElasticsearchDocument = {
-    _id: asDoc.id,
-    type: asDoc.primary_type,
+    _id: link,
+    type: 'archives',
+    url: link,
+    subtype: asDoc.primary_type,
     title: asDoc.title,
     description: removeHtml(asDoc.summary),
     // tags: asDoc.resource_type_enum_s, TODO

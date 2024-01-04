@@ -117,7 +117,7 @@ export function transform(document: PrimoDocument): ElasticsearchDocument | unde
   let startDate: string | undefined = undefined;
   let startYear: number | undefined = undefined;
   if (document.pnx.display.creationdate?.[0]) {
-    startDate = '01-01-' + document.pnx.display.creationdate?.[0];
+    startDate = `${document.pnx.display.creationdate?.[0]}-01-01`;
     startYear = parseInt(document.pnx.display.creationdate?.[0]);
   }
 

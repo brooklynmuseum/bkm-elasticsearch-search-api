@@ -47,6 +47,7 @@ export interface ElasticsearchDocument {
   _id?: string;
   _index?: string;
   type?: string;
+  subtype?: string;
   url?: string;
   title?: string;
   description?: string;
