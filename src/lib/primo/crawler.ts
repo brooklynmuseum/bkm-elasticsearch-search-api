@@ -106,7 +106,7 @@ async function* fetchCollectionDocuments(
 
     // Check if we should continue fetching
     // keepFetching = /* logic to determine if there are more pages, based on the response data */;
-    keepFetching = searchParams.offset < 10;
+    keepFetching = searchParams.offset < 10; // TODO
     //keepFetching = data.info.total < searchParams.offset + searchParams.limit;
     //keepFetching = false;
 

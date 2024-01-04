@@ -1,4 +1,5 @@
-import { setIfHasValue, splitCommaSeparatedString, getPlainSearchText } from './utils';
+import { splitCommaSeparatedString, getPlainSearchText } from './utils';
+import { setIfHasValue } from '@/lib/utils';
 import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 
 const transform: ElasticsearchTransformFunction = (

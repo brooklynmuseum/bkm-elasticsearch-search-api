@@ -1,9 +1,5 @@
-import {
-  setIfHasValue,
-  portableTextToPlaintext,
-  recursivePortableTextToPlaintext,
-  setDateAndYear,
-} from './utils';
+import { portableTextToPlaintext, recursivePortableTextToPlaintext, setDateAndYear } from './utils';
+import { setIfHasValue } from '@/lib/utils';
 import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 
 const transform: ElasticsearchTransformFunction = (

@@ -1,4 +1,5 @@
-import { setIfHasValue, getLegacyId, getBooleanValue } from './utils';
+import { getLegacyId, getBooleanValue } from './utils';
+import { setIfHasValue } from '@/lib/utils';
 import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 import { museumLocations } from './dictionaries/museumLocations';
 import { collections } from './dictionaries/collections';

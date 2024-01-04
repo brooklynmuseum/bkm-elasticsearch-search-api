@@ -1,20 +1,7 @@
 import type { JsonData, ElasticsearchDocument } from '@/types';
 import { toPlainText } from '@portabletext/toolkit';
 import { convertDateToUTC } from '@/lib/time';
-import sanitizeHtml from 'sanitize-html';
-
-/**
- * Assigns a value to a key in a JSON object if the value is neither undefined nor null.
- *
- * @param {JsonData} obj - The object to be updated.
- * @param {string} key - The key in the object to be set.
- * @param {any} value - The value to set for the key.
- */
-export function setIfHasValue(obj: JsonData, key: string, value: any) {
-  if (value !== undefined && value !== null && value !== '' && value !== isNaN) {
-    obj[key] = value;
-  }
-}
+import { removeHtml } from '@/lib/utils';
 
 /**
  * Since we're using two fields for dates (date and year), we need to make sure they're both set.
@@ -71,16 +58,6 @@ export function getBooleanValue(x?: boolean | string | string[] | number | null)
   }
   if (typeof x === 'number') return x === 1;
   return false; // undefined, null, string[]
-}
-
-/**
- * Removes all HTML tags from a string.
- * @param str The string to remove HTML from
- * @returns The string with HTML removed
- */
-export function removeHtml(str: string): string {
-  if (!str) return '';
-  return sanitizeHtml(str, { allowedTags: [] });
 }
 
 /**

@@ -82,6 +82,9 @@ ELASTIC_CLOUD_PASSWORD=yourCloudPassword
 ELASTIC_INDEX_NAME=content # name of the index to create
 CHUNK_SIZE=1000 # number of documents to index in one batch
 WEBSITE_URL=https://brooklynmuseum.org # used for generating URLs for search results
+ARCHIVES_INDEX_NAME=archives
+ARCHIVESSPACE_USERNAME=myusername
+ARCHIVESSPACE_PASSWORD=mypassword
 ```
 
 ## Testing
