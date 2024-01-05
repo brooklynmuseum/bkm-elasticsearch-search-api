@@ -12,9 +12,11 @@ export interface ArchivesSpaceDocument {
   publish?: boolean;
   repository?: string;
   level_enum_s?: string[];
+  subjects?: string[];
   user_mtime?: string; // User last modified time
   system_mtime?: string; // System last modified time
   agents?: string[];
+  agent_uris?: string[];
   creators?: string[];
   resource_type_enum_s?: string[];
   finding_aid_language_enum_s?: string[];
@@ -52,7 +54,10 @@ export function extractYears(dates: string[] | undefined): {
   return { startYear, endYear };
 }
 
-export function transform(asDoc: ArchivesSpaceDocument): ElasticsearchDocument {
+export function transform(asDoc: ArchivesSpaceDocument): ElasticsearchDocument | undefined {
+  if (!asDoc || asDoc.publish === false || asDoc.suppressed === true) {
+    return undefined;
+  }
   const { startYear, endYear } = extractYears(asDoc.dates);
   let startDate: string | undefined = undefined;
   let endDate: string | undefined = undefined;
@@ -70,11 +75,26 @@ export function transform(asDoc: ArchivesSpaceDocument): ElasticsearchDocument {
     subtype: asDoc.primary_type,
     title: asDoc.title,
     description: removeHtml(asDoc.summary),
-    // tags: asDoc.resource_type_enum_s, TODO
   };
   setIfHasValue(esDoc, 'startDate', startDate);
   setIfHasValue(esDoc, 'endDate', endDate);
   setIfHasValue(esDoc, 'language', mapLanguageToLocale(asDoc.langcode?.[0]));
-
+  if (asDoc.subjects && asDoc.subjects?.length > 0) {
+    esDoc.tags = asDoc.subjects;
+  }
+  if (asDoc.creators && asDoc.creators?.length > 0) {
+    esDoc.constituents = asDoc.creators.map((creator) => ({ name: creator }));
+  }
+  if (asDoc.agents && asDoc.agents?.length > 0) {
+    const constituents = [];
+    for (let i = 0; i < asDoc.agents.length; i++) {
+      if (asDoc.agent_uris?.[i]) {
+        constituents.push({ name: asDoc.agents[i], link: asDoc.agent_uris[i] });
+      }
+    }
+    if (constituents.length > 0) {
+      esDoc.constituents = constituents;
+    }
+  }
   return esDoc;
 }

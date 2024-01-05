@@ -30,17 +30,14 @@ export function getFunctionScoreBoolQuery(query: string): T.QueryDslQueryContain
       },
       functions: [
         {
-          filter: { match: { type: 'page' } },
+          filter: { terms: { type: ['page', 'exhibition', 'event', 'collectionartist'] } },
+          weight: 4,
+        },
+        {
+          filter: { terms: { type: ['collectionObject', 'product'] } },
           weight: 3,
         },
-        {
-          filter: { match: { type: 'collectionObject' } },
-          weight: 2,
-        },
-        {
-          filter: { match: { type: 'archives' } },
-          weight: 0.5,
-        },
+        // archives and other types ranked lower
       ],
       score_mode: 'sum',
     },

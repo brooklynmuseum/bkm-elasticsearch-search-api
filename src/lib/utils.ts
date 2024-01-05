@@ -47,6 +47,10 @@ export function setIfHasValue(obj: JsonData, key: string, value: any) {
 }
 
 export function mapLanguageToLocale(language: string | undefined): string | undefined {
-  if (language === 'eng') return 'en-US';
-  if (language === 'spa') return 'es-ES';
+  if (!language) return undefined;
+  const lang = language?.toLowerCase();
+  if (language === 'eng' || language === 'english') return 'en-US';
+  if (language === 'spa' || language === 'spanish') return 'es-ES';
+  if (language === 'fre' || language === 'french') return 'fr-FR';
+  if (language === 'ger' || language === 'german') return 'de-DE';
 }
