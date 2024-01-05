@@ -15,8 +15,9 @@ export function getFunctionScoreBoolQuery(query: string): T.QueryDslQueryContain
                 query,
                 type: 'cross_fields',
                 operator: 'and',
+                // Adjust these fields and boosts to rank fields higher or lower
                 fields: [
-                  'boostedKeywords^20',
+                  'boostedKeywords^20', // super-strong boost
                   'constituents.name.search^4',
                   'title.search^2',
                   'tags^2',
@@ -29,6 +30,7 @@ export function getFunctionScoreBoolQuery(query: string): T.QueryDslQueryContain
         },
       },
       functions: [
+        // Adjust these function scores to rank document types higher or lower
         {
           filter: { terms: { type: ['page', 'exhibition', 'event', 'collectionartist'] } },
           weight: 4,

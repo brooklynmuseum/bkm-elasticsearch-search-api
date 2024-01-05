@@ -66,7 +66,7 @@ export function transform(asDoc: ArchivesSpaceDocument): ElasticsearchDocument |
     endDate = `${endYear}-01-01`;
   }
 
-  const link = `https://archives.brooklynmuseum.org/${asDoc.uri}`;
+  const link = `https://archives.brooklynmuseum.org${asDoc.uri}`;
 
   const esDoc: ElasticsearchDocument = {
     _id: link,

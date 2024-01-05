@@ -42,8 +42,8 @@ describe('ArchivesSpace transform', () => {
     };
 
     const expected: ElasticsearchDocument = {
-      _id: 'https://archives.brooklynmuseum.org//repositories/2/resources/2',
-      url: 'https://archives.brooklynmuseum.org//repositories/2/resources/2',
+      _id: 'https://archives.brooklynmuseum.org/repositories/2/resources/2',
+      url: 'https://archives.brooklynmuseum.org/repositories/2/resources/2',
       type: 'archives',
       subtype: 'resource',
       title: 'Office of the Director records',
