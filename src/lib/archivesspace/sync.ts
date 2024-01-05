@@ -7,20 +7,19 @@ const INDEX_NAME = getEnvVar('ELASTIC_INDEX_NAME');
 const CHUNK_SIZE = parseInt(getEnvVar('CHUNK_SIZE', '1000'), 10);
 
 export async function sync() {
-  console.log('Starting ArchivesSpace sync');
+  console.log(`Starting ArchivesSpace sync with chunk size ${CHUNK_SIZE} and index ${INDEX_NAME}`);
   const esBatch = [];
   for await (const batch of crawlArchivesSpace()) {
     if (batch.length === 0) {
       break;
     }
-    console.log(`Transforming batch of size ${batch.length}`);
     for (const doc of batch) {
       const esDoc = transform(doc);
       if (esDoc) {
         esBatch.push(esDoc);
       }
     }
-    console.log(`Transformed batch of size ${esBatch.length}`, esBatch);
+    console.log(`Transformed batch of size ${esBatch.length} archives documents`);
     if (esBatch.length >= CHUNK_SIZE) {
       console.log(`Upserting batch of size ${batch.length} to Elasticsearch index ${INDEX_NAME}`);
       await bulkUpsert(INDEX_NAME, esBatch);

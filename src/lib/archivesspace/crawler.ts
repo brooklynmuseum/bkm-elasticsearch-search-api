@@ -1,7 +1,9 @@
 import { getEnvVar } from '../utils';
+import { sleep } from '@/lib/utils';
 
 const SEARCH_URL = 'https://brooklynmuseum-api.libraryhost.com/search';
 const SEARCH_PAGE_SIZE = 100;
+const SLEEP_SECONDS = 1;
 
 /**
  * Authenticates with ArchivesSpace and returns a session token
@@ -37,6 +39,7 @@ async function* fetchArchivesSpaceData(session: string): AsyncGenerator<any[], v
 
   while (keepFetching) {
     const url = `${SEARCH_URL}?page=${page}&page_size=${SEARCH_PAGE_SIZE}`;
+    console.log(`Fetching ${url}`);
     const response = await fetch(url, {
       headers: { 'X-ArchivesSpace-Session': session },
     });
@@ -49,6 +52,7 @@ async function* fetchArchivesSpaceData(session: string): AsyncGenerator<any[], v
     if (data.results && data.results.length > 0) {
       yield data.results;
       page++;
+      await sleep(SLEEP_SECONDS);
     } else {
       keepFetching = false;
     }
