@@ -23,7 +23,7 @@ const transform: ElasticsearchTransformFunction = (
   setIfHasValue(esDoc, 'url', url);
   setIfHasValue(esDoc, 'title', store.title?.trim());
   setIfHasValue(esDoc, 'imageUrl', imageUrl);
-  setIfHasValue(esDoc, 'searchText', getPlainSearchText(store.descriptionHtml?.trim()));
+  setIfHasValue(esDoc, 'description', getPlainSearchText(store.descriptionHtml?.trim()));
   setIfHasValue(esDoc, 'tags', splitCommaSeparatedString(store.tags));
   setIfHasValue(esDoc, 'imageUrl', store.previewImageUrl);
   return esDoc;
