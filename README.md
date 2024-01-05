@@ -1,8 +1,24 @@
 # bkm-elasticsearch-search-api
 
-## Architecture
+## System Design
 
 ![Search Architecture](./docs/img/architecture.png)
+
+[Diagram Link](https://docs.google.com/presentation/d/1SFEbPwCiJGZgYmpTX07yaUYXWs0Hl61msZQBlxooPJo/edit?usp=sharing)
+
+## Datasources
+
+### Sanity
+
+Sanity is the primary datasource for the search API. It uses Sanity's [Export](https://www.sanity.io/docs/export) to export all documents in a dataset.
+
+### ArchivesSpace
+
+ArchivesSpace holds BkM Archives data. The search API syncs ArchivesSpace data via the API [tech-docs](https://archivesspace.github.io/tech-docs/api/), [documentation](https://archivesspace.github.io/archivesspace/api/#introduction)
+
+Note: Rather than crawling all documents within ArchivesSpace, ideally we would use a last modified date to limit the crawl to recently updated documents. Unfortunately this capability is not currently available in the ArchivesSpace API. See [this discussion](http://lyralists.lyrasis.org/pipermail/archivesspace_users_group/2019-November/007101.html):
+
+> Ideally, we would be able to add a 'modified_since' parameter to each entity's endpoint to get the most recent set. The capability exists in the code, but hasn't been exposed to the REST end-point.
 
 ## Unified Search Fields
 
