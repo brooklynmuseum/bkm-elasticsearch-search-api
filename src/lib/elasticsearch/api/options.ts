@@ -40,13 +40,12 @@ export async function options(
     },
   };
 
-  // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-fuzzy-query.html
   if (query) {
+    const wildcardQuery = `*${query}*`;
     request.query = {
-      match: {
+      wildcard: {
         [`${field}.search`]: {
-          query,
-          fuzziness: 'AUTO',
+          value: wildcardQuery,
         },
       },
     };
