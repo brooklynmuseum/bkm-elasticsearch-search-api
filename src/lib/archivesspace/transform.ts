@@ -1,4 +1,4 @@
-import type { ElasticsearchDocument } from '@/types';
+import type { ElasticsearchDocument, ElasticsearchConstituent } from '@/types';
 import { mapLanguageToLocale } from '../utils';
 import { setIfHasValue, removeHtml } from '../utils';
 
@@ -82,14 +82,15 @@ export function transform(asDoc: ArchivesSpaceDocument): ElasticsearchDocument |
   if (asDoc.subjects && asDoc.subjects?.length > 0) {
     esDoc.tags = asDoc.subjects;
   }
-  if (asDoc.creators && asDoc.creators?.length > 0) {
-    esDoc.constituents = asDoc.creators.map((creator) => ({ name: creator }));
-  }
   if (asDoc.agents && asDoc.agents?.length > 0) {
-    const constituents = [];
+    const constituents: ElasticsearchConstituent[] = [];
     for (let i = 0; i < asDoc.agents.length; i++) {
       if (asDoc.agent_uris?.[i]) {
-        constituents.push({ name: asDoc.agents[i], link: asDoc.agent_uris[i] });
+        // Don't add constituent if already in list:
+        const existing = constituents.find((c) => c.id === asDoc.agent_uris?.[i]);
+        if (!existing) {
+          constituents.push({ name: asDoc.agents[i], id: asDoc.agent_uris[i] });
+        }
       }
     }
     if (constituents.length > 0) {

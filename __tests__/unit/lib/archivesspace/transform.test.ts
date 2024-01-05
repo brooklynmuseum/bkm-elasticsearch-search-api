@@ -34,6 +34,8 @@ describe('ArchivesSpace transform', () => {
       summary:
         'The collection is comprised of documents pertaining to the Directors of the Brooklyn Museum...',
       extents: ['353.5416 linear_feet'],
+      agents: ['Ghent, Henri, 1926-2009', 'Waller, Richard', 'Waller, Richard'],
+      agent_uris: ['uri1', 'uri2', 'uri2'],
       identifier: 'DIR',
       resource_type: 'records',
       restrictions: 'true',
@@ -51,6 +53,10 @@ describe('ArchivesSpace transform', () => {
         'The collection is comprised of documents pertaining to the Directors of the Brooklyn Museum...',
       startDate: '1913-01-01',
       endDate: '2015-01-01',
+      constituents: [
+        { id: 'uri1', name: 'Ghent, Henri, 1926-2009' },
+        { id: 'uri2', name: 'Waller, Richard' },
+      ],
       language: 'en-US',
     };
 
