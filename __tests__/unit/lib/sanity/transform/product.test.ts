@@ -127,7 +127,7 @@ describe('transformPage', () => {
       title: 'Together We Ride by Valerie Bolling',
       imageUrl:
         'https://cdn.shopify.com/s/files/1/0780/5601/products/togetherweride.png?v=1680211207',
-      searchText:
+      description:
         'Learning to ride is no easy feat! But with a little courage, a guiding hand from her dad, and an enthusiastic bark from her pup, one brave girl quickly learns the freedom that comes from an afternoon spent outside on a bike. Experience the fear, the anticipation, and the delight of achieving the ultimate milestone in this energetic, warm story that celebrates the precious bond between parent and child. Product Details Hardcover 36 pages 9.05 x 0.5 x 9.9 in. ISBN: 9781797212487 Ages 4-7',
       tags: ['Brand_Chronicle Books', 'Type_Books'],
       rawSource,

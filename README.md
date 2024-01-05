@@ -160,6 +160,12 @@ http://localhost:3000/api/searchAsYouType?query=spike
 - Doesn't collection object have an "image" property? (sometimes it's not rank 0)
 - Many objectDateEnd are 0, even though objectDateStart is not 0. (e.g. 2019)
 - constituent prefix & suffix fields should be inside artist object?
+- shop links are broken, slugs are different:
+  - https://shop.brooklynmuseum.org/products/alice-ate-an-apple-the-world-of-letters-hardcover-by-anne-marie-labrecque
+  - sanity slug: alice-ate-an-apple
+  - seem to be multiple records for same product:
+    - shopifyProduct-7480138170564
+    - shopifyProduct-7337635250372
 
 Possible filter for archivesspace (wip):
 

@@ -19,9 +19,9 @@ export function getFunctionScoreBoolQuery(query: string): T.QueryDslQueryContain
                 fields: [
                   'boostedKeywords^20', // super-strong boost
                   'constituents.name.search^4',
-                  'title.search^2',
-                  'tags^2',
-                  'description',
+                  'title.search^4',
+                  'tags^3',
+                  'description^2',
                   'searchText',
                 ],
               },
