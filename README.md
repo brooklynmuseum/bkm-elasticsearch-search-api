@@ -145,6 +145,22 @@ http://localhost:3000/api/searchAsYouType?query=spike
 - Many objectDateEnd are 0, even though objectDateStart is not 0. (e.g. 2019)
 - constituent prefix & suffix fields should be inside artist object?
 
+Possible filter for archivesspace (wip):
+
+```
+{"query":{"comparator":"greater_than","field":"system_mtime","value":"2019-10-02","jsonmodel_type":"date_field_query"}}
+{
+  "jsonmodel_type": "advanced_query",
+  "query": {
+    "jsonmodel_type": "boolean_query",
+    "op": "AND",
+    "subqueries": [
+      {"comparator":"greater_than","field":"system_mtime","value":"2019-10-02","jsonmodel_type":"date_field_query"}
+    ]
+  }
+}
+```
+
 ## This week:
 
 - add vercel cron jobs

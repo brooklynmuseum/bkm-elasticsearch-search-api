@@ -3,7 +3,7 @@ import { sleep } from '@/lib/utils';
 
 const SEARCH_URL = 'https://brooklynmuseum-api.libraryhost.com/search';
 const SEARCH_PAGE_SIZE = 100;
-const SLEEP_SECONDS = 1;
+const SLEEP_SECONDS = 2;
 
 /**
  * Authenticates with ArchivesSpace and returns a session token

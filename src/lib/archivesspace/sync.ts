@@ -19,7 +19,7 @@ export async function sync() {
         esBatch.push(esDoc);
       }
     }
-    console.log(`Transformed batch of size ${esBatch.length} archives documents`);
+    console.log(`Current transformed batch size ${esBatch.length} archives documents`);
     if (esBatch.length >= CHUNK_SIZE) {
       console.log(`Upserting batch of size ${batch.length} to Elasticsearch index ${INDEX_NAME}`);
       await bulkUpsert(INDEX_NAME, esBatch);
