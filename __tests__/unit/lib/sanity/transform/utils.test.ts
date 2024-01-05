@@ -1,48 +1,9 @@
 import {
-  setIfHasValue,
   getBooleanValue,
   portableTextToPlaintext,
   recursivePortableTextToPlaintext,
 } from '@/lib/sanity/transform/utils';
 import type { JsonData } from '@/types';
-
-describe('setIfHasValue', () => {
-  it('should set the key with a non-empty value', () => {
-    const obj: JsonData = {};
-    setIfHasValue(obj, 'testKey', 'testValue');
-    expect(obj).toEqual({ testKey: 'testValue' });
-  });
-
-  it('should not set the key if value is undefined', () => {
-    const obj: JsonData = {};
-    setIfHasValue(obj, 'testKey', undefined);
-    expect(obj).toEqual({});
-  });
-
-  it('should not set the key if value is null', () => {
-    const obj: JsonData = {};
-    setIfHasValue(obj, 'testKey', null);
-    expect(obj).toEqual({});
-  });
-
-  it('should not set the key if value is an empty string', () => {
-    const obj: JsonData = {};
-    setIfHasValue(obj, 'testKey', '');
-    expect(obj).toEqual({});
-  });
-
-  it('should set the key with a numeric value', () => {
-    const obj: JsonData = {};
-    setIfHasValue(obj, 'testKey', 123);
-    expect(obj).toEqual({ testKey: 123 });
-  });
-
-  it('should set the key with a boolean value', () => {
-    const obj: JsonData = {};
-    setIfHasValue(obj, 'testKey', true);
-    expect(obj).toEqual({ testKey: true });
-  });
-});
 
 describe('getBooleanValue', () => {
   it('should return the same boolean value for boolean inputs', () => {

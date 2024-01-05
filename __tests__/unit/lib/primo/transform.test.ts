@@ -110,9 +110,9 @@ describe('primo transform', () => {
           name: 'Schulz, David',
         },
       ],
-      startDate: '01-01-2019',
+      startDate: '2019-01-01',
       startYear: 2019,
-      endDate: '01-01-2019',
+      endDate: '2019-01-01',
       endYear: 2019,
       rawSource: primoDocument,
     };
@@ -260,9 +260,9 @@ describe('primo transform', () => {
           name: 'Little, Myles',
         },
       ],
-      startDate: '01-01-2016',
+      startDate: '2016-01-01',
       startYear: 2016,
-      endDate: '01-01-2016',
+      endDate: '2016-01-01',
       endYear: 2016,
       rawSource: primoDocument,
     };

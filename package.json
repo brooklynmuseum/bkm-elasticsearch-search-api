@@ -17,7 +17,8 @@
     "test:ci": "jest --ci",
     "sync:sanity": "ts-node src/lib/commands/syncSanity",
     "sync:sanitytest": "ts-node src/lib/commands/syncSanityTestData",
-    "sync:primo": "ts-node src/lib/commands/syncPrimo"
+    "sync:primo": "ts-node src/lib/commands/syncPrimo",
+    "sync:archivesspace": "ts-node src/lib/commands/syncArchivesSpace"
   },
   "keywords": [],
   "author": "",

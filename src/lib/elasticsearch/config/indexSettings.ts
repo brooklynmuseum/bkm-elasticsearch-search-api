@@ -20,6 +20,7 @@ export const indexSettings: T.IndicesIndexSettings = {
     properties: {
       // Universal search fields:
       type: S.searchableAggregatedKeywordAnalyzerField, // Agg
+      subtype: S.searchableAggregatedKeywordAnalyzerField, // Agg
       url: S.keywordField,
       title: S.suggestUnaggregatedStandardAnalyzerField,
       description: S.unaggregatedStandardAnalyzerTextField,

@@ -1,5 +1,5 @@
-import { setIfHasValue } from '../sanity/transform/utils';
 import type { ElasticsearchDocument, ElasticsearchConstituent } from '@/types';
+import { setIfHasValue, mapLanguageToLocale } from '../utils';
 
 // Represents a document with metadata and detailed information.
 export interface PrimoDocument {
@@ -98,11 +98,6 @@ interface Facets {
   frbrgroupid?: string[]; // FRBR group ID.
 }
 
-export function mapLanguage(language: string | undefined): string | undefined {
-  if (language === 'eng') return 'en-US';
-  if (language === 'spa') return 'es-ES';
-}
-
 export function transform(document: PrimoDocument): ElasticsearchDocument | undefined {
   // Assume the first contributor is the primary
   const primaryContributor =
@@ -122,7 +117,7 @@ export function transform(document: PrimoDocument): ElasticsearchDocument | unde
   let startDate: string | undefined = undefined;
   let startYear: number | undefined = undefined;
   if (document.pnx.display.creationdate?.[0]) {
-    startDate = '01-01-' + document.pnx.display.creationdate?.[0];
+    startDate = `${document.pnx.display.creationdate?.[0]}-01-01`;
     startYear = parseInt(document.pnx.display.creationdate?.[0]);
   }
 
@@ -141,7 +136,7 @@ export function transform(document: PrimoDocument): ElasticsearchDocument | unde
 
   setIfHasValue(esDoc, 'description', document.pnx.display.description?.join(' ')?.trim());
   setIfHasValue(esDoc, 'searchText', document.pnx.display.contents?.join(' ')?.trim());
-  setIfHasValue(esDoc, 'language', mapLanguage(document.pnx.display.language?.[0]));
+  setIfHasValue(esDoc, 'language', mapLanguageToLocale(document.pnx.display.language?.[0]));
   if (constituent) {
     setIfHasValue(esDoc, 'constituents', [constituent]);
   }

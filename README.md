@@ -82,6 +82,8 @@ ELASTIC_CLOUD_PASSWORD=yourCloudPassword
 ELASTIC_INDEX_NAME=content # name of the index to create
 CHUNK_SIZE=1000 # number of documents to index in one batch
 WEBSITE_URL=https://brooklynmuseum.org # used for generating URLs for search results
+ARCHIVESSPACE_USERNAME=myusername
+ARCHIVESSPACE_PASSWORD=mypassword
 ```
 
 ## Testing
@@ -142,6 +144,22 @@ http://localhost:3000/api/searchAsYouType?query=spike
 - Doesn't collection object have an "image" property? (sometimes it's not rank 0)
 - Many objectDateEnd are 0, even though objectDateStart is not 0. (e.g. 2019)
 - constituent prefix & suffix fields should be inside artist object?
+
+Possible filter for archivesspace (wip):
+
+```
+{"query":{"comparator":"greater_than","field":"system_mtime","value":"2019-10-02","jsonmodel_type":"date_field_query"}}
+{
+  "jsonmodel_type": "advanced_query",
+  "query": {
+    "jsonmodel_type": "boolean_query",
+    "op": "AND",
+    "subqueries": [
+      {"comparator":"greater_than","field":"system_mtime","value":"2019-10-02","jsonmodel_type":"date_field_query"}
+    ]
+  }
+}
+```
 
 ## This week:
 
