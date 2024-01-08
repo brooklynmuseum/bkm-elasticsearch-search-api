@@ -10,8 +10,8 @@ import {
 import { navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
 import { GithubIcon } from 'lucide-react';
 
-const githubUrl = 'https://github.com/derekphilipau/bkm-elasticsearch-search-api';
-const logsUrl = 'https://vercel.com/derekphilipau-s-team/bkm-elasticsearch-search-api/logs';
+const githubUrl = 'https://github.com/brooklynmuseum/bkm-elasticsearch-search-api';
+const logsUrl = 'https://vercel.com/brooklynmuseum/bkm-elasticsearch-search-api/logs';
 
 export function Header() {
   return (
