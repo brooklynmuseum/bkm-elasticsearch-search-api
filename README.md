@@ -140,7 +140,7 @@ npm run dev
 Search for "spike" filtered by "exhibition" type:
 
 ```
-http://localhost:3000/api/search?query=spike&type=exhibition
+/api/search?query=spike&type=exhibition
 ```
 
 ### Search-as-you-type
@@ -148,7 +148,31 @@ http://localhost:3000/api/search?query=spike&type=exhibition
 Search-as-you-type for "spike":
 
 ```
-http://localhost:3000/api/searchAsYouType?query=spike
+/api/searchAsYouType?query=spike
+```
+
+### Aggregation Options
+
+To search for an option within an aggregation, use the `/api/options` endpoint. For example, to search for "smith" within the "constituents.name" aggregation:
+
+```
+/api/options?field=constituents.name&query=smith
+```
+
+### Get Documents
+
+Retrieve one or more documents by id.
+
+Get a single document by ID:
+
+```
+/api/documents?id=collection_object_225441
+```
+
+Get multiple documents by ID:
+
+```
+/api/documents?id=collection_object_225441&id=collection_object_225439
 ```
 
 ## TODO
