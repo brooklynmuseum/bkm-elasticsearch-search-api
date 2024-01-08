@@ -5,6 +5,7 @@ import { SearchResult } from './searchResult';
 import { AggOptionResult } from './aggOptionResult';
 import { SearchPagination } from './searchPagination';
 import { SearchAsYouTypeForm } from './searchAsYouTypeForm';
+import { SearchAsYouTypeStreamForm } from './searchAsYouTypeStreamForm';
 import { AggOptionsForm } from './aggOptionsForm';
 import { FacetedSearchForm } from './facetedSearchForm';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -32,6 +33,13 @@ export function SearchForm() {
       <div className="bg-neutral-50 md:col-span-6 lg:col-span-4 xl:col-span-3 flex flex-col gap-2 p-4 overflow-auto md:pb-12">
         <div className="mb-4">
           <SearchAsYouTypeForm
+            setSearchResults={setSearchResults}
+            setUrl={setUrl}
+            setError={setError}
+          />
+        </div>
+        <div className="mb-4">
+          <SearchAsYouTypeStreamForm
             setSearchResults={setSearchResults}
             setUrl={setUrl}
             setError={setError}
