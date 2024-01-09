@@ -1,4 +1,4 @@
-import { portableTextToPlaintext } from './utils';
+import { portableTextToPlaintext, SANITY_SOURCE } from './utils';
 import { setIfHasValue } from '@/lib/utils';
 import { transformPageRoute } from './pageRoute';
 import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
@@ -9,6 +9,7 @@ const transform: ElasticsearchTransformFunction = (
 ): ElasticsearchDocument | undefined => {
   const esDoc: ElasticsearchDocument = {
     _id: sanityDoc._id,
+    source: SANITY_SOURCE,
     type: 'page',
     rawSource: sanityDoc,
   };

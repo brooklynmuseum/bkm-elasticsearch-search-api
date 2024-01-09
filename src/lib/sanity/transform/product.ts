@@ -1,4 +1,4 @@
-import { splitCommaSeparatedString, getPlainSearchText } from './utils';
+import { splitCommaSeparatedString, getPlainSearchText, SANITY_SOURCE } from './utils';
 import { setIfHasValue } from '@/lib/utils';
 import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 
@@ -8,6 +8,7 @@ const transform: ElasticsearchTransformFunction = (
 ): ElasticsearchDocument | undefined => {
   const esDoc: ElasticsearchDocument = {
     _id: sanityDoc._id,
+    source: SANITY_SOURCE,
     type: 'product',
     rawSource: sanityDoc,
   };

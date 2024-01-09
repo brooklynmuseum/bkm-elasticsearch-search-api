@@ -189,6 +189,7 @@ describe('transformCollectionObject', () => {
 
     const expected = {
       _id: 'collection_object_149224',
+      source: 'sanity',
       type: 'collectionObject',
       url: 'https://brooklynmuseum.org/opencollection/objects/149224',
       title: 'Hook-shaped Toggle',
@@ -316,6 +317,7 @@ describe('transformCollectionObject', () => {
     };
     const expected = {
       _id: 'collection_object_90411',
+      source: 'sanity',
       type: 'collectionObject',
       url: 'https://brooklynmuseum.org/opencollection/objects/90411',
       title: 'Oil Lamp',

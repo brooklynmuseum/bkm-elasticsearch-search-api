@@ -8,5 +8,5 @@ if (getEnvVar('ELASTIC_USE_CLOUD') === 'true') {
     'ERROR: Cannot sync test data to Elasticsearch cloud.  Please use a local Elasticsearch instance.',
   );
 } else {
-  sync(true, './data/output.ndjson');
+  sync(false, './data/sanity_production.ndjson');
 }

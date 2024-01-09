@@ -153,6 +153,7 @@ describe('transformExhibition', () => {
 
     const expected = {
       _id: '232b72a6-3b97-41fe-bfc4-33c5649dda83',
+      source: 'sanity',
       type: 'exhibition',
       url: 'https://brooklynmuseum.org/exhibitions/spike-lee-creative-sources',
       title: 'Spike Lee: Creative Sources',

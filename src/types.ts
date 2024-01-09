@@ -46,7 +46,8 @@ export interface ElasticsearchGeographicalLocation {
 export interface ElasticsearchDocument {
   _id?: string;
   _index?: string;
-  type?: string;
+  source: string;
+  type: string;
   subtype?: string;
   url?: string;
   title?: string;

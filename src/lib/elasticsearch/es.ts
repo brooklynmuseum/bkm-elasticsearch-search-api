@@ -15,10 +15,12 @@ export async function createIndex(
   deleteIndexIfExists = false,
 ) {
   if (deleteIndexIfExists) {
+    console.log(`Deleting index ${indexName}...`);
     await deleteIndex(indexName);
   }
   const indexExists = await existsIndex(indexName);
   if (!indexExists) {
+    console.log(`Creating index ${indexName}...`);
     await client.indices.create({
       index: indexName,
       body: indexSettings,
@@ -89,5 +91,101 @@ export async function bulkUpsert(indexName: string, documents: JsonData[]): Prom
     }
   } catch (err) {
     console.error('Failed to upload documents:', err);
+  }
+}
+
+/**
+ * Searches all documents in a given Elasticsearch index that match the specified query.
+ * Used for ingest and updating.
+ *
+ * @param {string} index - index to search within.
+ * @param {T.QueryDslQueryContainer} [query] - Elasticsearch query to apply. If none is provided, default to matching all documents.
+ * @param {any} [sourceFilter] - Optional, select which fields from the documents should be returned.
+ * @returns {Promise<any[]>} - A promise that resolves to an array of the matching documents.
+ */
+export async function searchAll(
+  index: string,
+  query?: T.QueryDslQueryContainer,
+  includeSource = true,
+  sourceFilter?: any,
+): Promise<any[]> {
+  const results: any[] = [];
+  const responseQueue: any[] = [];
+  const esQuery: T.SearchRequest = {
+    index,
+    scroll: '30s',
+    size: 10000,
+  };
+  if (query) {
+    esQuery.query = query;
+  } else {
+    esQuery.query = {
+      match_all: {},
+    };
+  }
+
+  if (!includeSource) {
+    // Exclude all source fields
+    esQuery._source = false;
+  } else if (sourceFilter) {
+    // Include only specified source fields
+    esQuery._source = sourceFilter;
+  }
+
+  const response = await client.search(esQuery);
+  responseQueue.push(response);
+
+  while (responseQueue.length) {
+    const body = responseQueue.shift();
+    results.push(...body.hits.hits);
+    if (body.hits.total.value === results.length) {
+      break;
+    }
+    responseQueue.push(
+      await client.scroll({
+        scroll_id: body._scroll_id,
+        scroll: '30s',
+      }),
+    );
+  }
+  return results;
+}
+
+/**
+ * Get IDs for all documents in a given Elasticsearch index that match the specified query.
+ *
+ * @param indexName Name of the index.
+ * @param query Elasticsearch query to apply. If none is provided, default to matching all documents.
+ * @returns A promise that resolves to an array of the matching document IDs.
+ */
+export async function searchAllIds(indexName: string, query?: T.QueryDslQueryContainer) {
+  const results = await searchAll(indexName, query, false);
+  return results.map((result) => result._id);
+}
+
+/**
+ * Delete all documents in an Elasticsearch index with the specified IDs.
+ *
+ * @param indexName Name of the index.
+ * @param idsToDelete IDs of the documents to delete.
+ */
+export async function deleteIds(indexName: string, idsToDelete: string[]) {
+  if (!indexName || !idsToDelete || idsToDelete.length === 0) return;
+
+  console.log(`Deleting ${idsToDelete.length} ids from index ${indexName}...`);
+
+  const deleteChunkSize = 10000;
+  for (let i = 0; i < idsToDelete.length; i += deleteChunkSize) {
+    const chunk = idsToDelete.slice(i, i + deleteChunkSize);
+    await client.deleteByQuery({
+      index: indexName,
+      body: {
+        query: {
+          ids: {
+            values: chunk,
+          },
+        },
+      },
+    });
   }
 }

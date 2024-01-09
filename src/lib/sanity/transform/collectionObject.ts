@@ -1,4 +1,4 @@
-import { getLegacyId, getBooleanValue } from './utils';
+import { getLegacyId, getBooleanValue, SANITY_SOURCE } from './utils';
 import { setIfHasValue } from '@/lib/utils';
 import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 import { museumLocations } from './dictionaries/museumLocations';
@@ -10,6 +10,7 @@ const transform: ElasticsearchTransformFunction = (
 ): ElasticsearchDocument => {
   const esDoc: ElasticsearchDocument = {
     _id: sanityDoc._id,
+    source: SANITY_SOURCE,
     type: 'collectionObject',
     rawSource: sanityDoc,
   };

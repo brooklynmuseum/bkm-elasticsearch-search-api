@@ -148,6 +148,7 @@ describe('transformPage', () => {
 
     const expected = {
       _id: '37d28e2e-fa8c-4e27-9c72-f3d236125613',
+      source: 'sanity',
       type: 'page',
       url: 'https://brooklynmuseum.org/admisiones/boletos',
       title: 'Boletos',

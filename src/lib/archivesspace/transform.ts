@@ -70,6 +70,7 @@ export function transform(asDoc: ArchivesSpaceDocument): ElasticsearchDocument |
 
   const esDoc: ElasticsearchDocument = {
     _id: link,
+    source: 'archivesspace',
     type: 'archives',
     url: link,
     subtype: asDoc.primary_type,

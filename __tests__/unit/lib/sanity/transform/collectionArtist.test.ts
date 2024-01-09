@@ -17,6 +17,7 @@ describe('transformCollectionArtist', () => {
     };
     const expected = {
       _id: 'collection_artist_21279',
+      source: 'sanity',
       type: 'collectionArtist',
       url: 'https://brooklynmuseum.org/opencollection/artists/21279',
       title: 'Guadalupe Maravilla',

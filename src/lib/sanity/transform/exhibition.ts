@@ -1,4 +1,9 @@
-import { portableTextToPlaintext, recursivePortableTextToPlaintext, setDateAndYear } from './utils';
+import {
+  portableTextToPlaintext,
+  recursivePortableTextToPlaintext,
+  setDateAndYear,
+  SANITY_SOURCE,
+} from './utils';
 import { setIfHasValue } from '@/lib/utils';
 import type { JsonData, ElasticsearchDocument, ElasticsearchTransformFunction } from '@/types';
 
@@ -8,6 +13,7 @@ const transform: ElasticsearchTransformFunction = (
 ): ElasticsearchDocument => {
   const esDoc: ElasticsearchDocument = {
     _id: sanityDoc._id,
+    source: SANITY_SOURCE,
     type: 'exhibition',
     rawSource: sanityDoc,
   };

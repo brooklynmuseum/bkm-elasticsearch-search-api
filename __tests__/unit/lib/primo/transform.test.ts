@@ -92,6 +92,7 @@ describe('primo transform', () => {
 
     const expected: ElasticsearchDocument = {
       _id: 'alma991011746099707141',
+      source: 'primo',
       type: 'L',
       url: 'https://library.brooklynmuseum.org/permalink/01NYA_INST/augm1n/alma991011746099707141',
       title: 'The library',
@@ -238,6 +239,7 @@ describe('primo transform', () => {
 
     const expected: ElasticsearchDocument = {
       _id: 'alma991013564915707141',
+      source: 'primo',
       type: 'L',
       url: 'https://library.brooklynmuseum.org/permalink/01NYA_INST/augm1n/alma991013564915707141',
       title: '1% privilege in a time of global inequality',

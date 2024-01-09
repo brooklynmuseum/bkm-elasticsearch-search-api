@@ -127,6 +127,7 @@ export function transform(document: PrimoDocument): ElasticsearchDocument | unde
 
   const esDoc: ElasticsearchDocument = {
     _id: id,
+    source: 'primo',
     type: document.context,
     url: link,
     title: document.pnx.display.title?.join(', ')?.trim(),

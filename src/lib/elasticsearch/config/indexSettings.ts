@@ -18,6 +18,8 @@ export const indexSettings: T.IndicesIndexSettings = {
   },
   mappings: {
     properties: {
+      // e.g. "sanity", "archivesspace"
+      source: S.keywordField,
       // Universal search fields:
       type: S.searchableAggregatedKeywordAnalyzerField, // Agg
       subtype: S.searchableAggregatedKeywordAnalyzerField, // Agg

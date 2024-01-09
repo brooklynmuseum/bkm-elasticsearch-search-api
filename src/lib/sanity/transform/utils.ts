@@ -3,6 +3,8 @@ import { toPlainText } from '@portabletext/toolkit';
 import { convertDateToUTC } from '@/lib/time';
 import { removeHtml } from '@/lib/utils';
 
+export const SANITY_SOURCE = 'sanity';
+
 /**
  * Since we're using two fields for dates (date and year), we need to make sure they're both set.
  * Sets either the start or end date and year.

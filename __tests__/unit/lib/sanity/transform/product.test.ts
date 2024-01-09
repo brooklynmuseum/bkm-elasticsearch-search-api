@@ -44,6 +44,7 @@ describe('transformPage', () => {
 
     const expected = {
       _id: 'shopifyProduct-7480139612356',
+      source: 'sanity',
       type: 'product',
       url: 'https://shop.brooklynmuseum.org/products/investigators-ants-in-pants',
       title: 'Investigators: Ants In Pants',
@@ -122,6 +123,7 @@ describe('transformPage', () => {
 
     const expected = {
       _id: 'shopifyProduct-7343089516740',
+      source: 'sanity',
       type: 'product',
       url: 'https://shop.brooklynmuseum.org/products/together-we-ride',
       title: 'Together We Ride by Valerie Bolling',

@@ -12,6 +12,12 @@
 
 Sanity is the primary datasource for the search API. It uses Sanity's [Export](https://www.sanity.io/docs/export) to export all documents in a dataset.
 
+Example export command:
+
+```
+curl https://[projectId].api.sanity.io/v2021-06-07/data/export/production/ > sanity_production.ndjson
+```
+
 ### ArchivesSpace
 
 ArchivesSpace holds BkM Archives data. The search API syncs ArchivesSpace data via the API [tech-docs](https://archivesspace.github.io/tech-docs/api/), [documentation](https://archivesspace.github.io/archivesspace/api/#introduction)
@@ -210,4 +216,16 @@ Possible filter for archivesspace (wip):
 ## This week:
 
 - add vercel cron jobs
-- add "now" search filter (occurring now)
+- handle deleted documents in sanity
+
+Content Model:
+
+exhibition & event:
+featuredMedia
+may also need a featuredImage for callout purposes
+
+startsAt,endsAt: UTC?
+
+"object" or "artwork"?
+
+audience: only for eventType? Can be applied to edu resources?
