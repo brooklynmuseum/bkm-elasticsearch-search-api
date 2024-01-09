@@ -169,7 +169,7 @@ export async function searchAllIds(indexName: string, query?: T.QueryDslQueryCon
  * @param indexName Name of the index.
  * @param idsToDelete IDs of the documents to delete.
  */
-export async function deleteIds(indexName: string, idsToDelete: string[]) {
+export async function deleteIds(indexName: string, idsToDelete: string[], forceRefresh = false) {
   if (!indexName || !idsToDelete || idsToDelete.length === 0) return;
 
   console.log(`Deleting ${idsToDelete.length} ids from index ${indexName}...`);
@@ -187,5 +187,8 @@ export async function deleteIds(indexName: string, idsToDelete: string[]) {
         },
       },
     });
+  }
+  if (forceRefresh) {
+    await client.indices.refresh({ index: indexName });
   }
 }
